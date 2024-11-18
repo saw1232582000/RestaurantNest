@@ -38,6 +38,7 @@ import { GetOrderResponseSchema } from './documentation/order/ResponseSchema/Get
 import { GetOrderListResponseSchema } from './documentation/order/ResponseSchema/GetOrderListResponseSchema';
 import { CreateOrderResponseSchema } from './documentation/order/ResponseSchema/CreateOrderResponseSchema';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { S3Service } from 'src/core/common/file-upload/UploadS3Service';
 
 @Controller('Order')
 @ApiTags('order')
@@ -47,6 +48,7 @@ export class OrderController {
     private createOrderUseCase: CreateorderUseCase,
     private getOrderUseCase: GetOrderUseCase,
     private getOrderListUseCase: GetOrderListWithFilterUseCase,
+    private s3Service: S3Service,
   ) {}
 
   @ApiBearerAuth()
@@ -109,8 +111,8 @@ export class OrderController {
     return CoreApiResonseSchema.success(orderList);
   }
 
-  @ApiBearerAuth()
-  @UseGuards(JwtGuard)
+  // @ApiBearerAuth()
+  // @UseGuards(JwtGuard)
   @Post('/upload')
   @ApiConsumes('multipart/form-data')
   @UseInterceptors(FileInterceptor('file'))
@@ -118,14 +120,13 @@ export class OrderController {
     @UploadedFile(
       new ParseFilePipe({
         validators: [
-          new MaxFileSizeValidator({ maxSize: 5 * 1024 * 1024 }),//max size 5MB
+          new MaxFileSizeValidator({ maxSize: 5 * 1024 * 1024 }), //max size 5MB
           new FileTypeValidator({ fileType: /\/(jpg|jpeg|png|gif|bmp|webp)$/ }),
         ],
       }),
-    )
-    file // eslint-disable-next-line no-undef
-    : Express.Multer.File,
+    ) // eslint-disable-next-line no-undef
+    file: Express.Multer.File,
   ) {
-    console.log(file);
+    return await this.s3Service.uploadFile(file, 'restaurant/menus');
   }
 }
