@@ -5,8 +5,8 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const config = new DocumentBuilder()
-    .setTitle('Ecommerce')
-    .setDescription('This is Ecommerce REST API')
+    .setTitle('Restaurant')
+    .setDescription('This is Restaurant REST API')
     .setVersion('1.0')
     // .addTag('cats')
     .addBearerAuth()

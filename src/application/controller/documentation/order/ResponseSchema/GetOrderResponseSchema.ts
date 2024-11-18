@@ -1,8 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { BaseResponseSchema } from '../../common/BaseResponseSchema';
 
-
-
 class ProductResponse {
   @ApiProperty()
   id: string;
@@ -48,32 +46,29 @@ class OrderItemResponse {
   @ApiProperty()
   createdDate: string;
 
-  @ApiProperty({type: ProductResponse})
+  @ApiProperty({ type: ProductResponse })
   product: ProductResponse;
 }
 
 export class OrderResponse {
-    @ApiProperty()
-    userId: string;
-  
-    @ApiProperty()
-    address: string;
-  
-    @ApiProperty()
-    status: string;
-  
-    @ApiProperty()
-    billingPhoneNumber: string;
-  
-    @ApiProperty({type:[OrderItemResponse]})
-    orderItems: OrderItemResponse[];
-  
-    @ApiProperty()
-    createdDate: Date;
-  
-    @ApiProperty()
-    updateddDate: Date;
-  }
+  @ApiProperty()
+  userId: string;
+
+  @ApiProperty()
+  table: string;
+
+  @ApiProperty()
+  status: string;
+
+  @ApiProperty({ type: [OrderItemResponse] })
+  orderItems: OrderItemResponse[];
+
+  @ApiProperty()
+  createdDate: Date;
+
+  @ApiProperty()
+  updateddDate: Date;
+}
 
 export class GetOrderResponseSchema extends BaseResponseSchema<OrderResponse> {
   @ApiProperty({ type: OrderResponse })

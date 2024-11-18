@@ -12,8 +12,7 @@ export class CreateorderUseCase implements ICreateOrderUseCase {
     const newOrder = new OrderEntity(
       undefined,
       data?.userId,
-      data?.address,
-      data?.billingPhoneNumber,
+      data?.table,
       data?.status,
       data?.orderItems?.map((orderItem) => {
         return OrderItemEntity.toEntity(orderItem);

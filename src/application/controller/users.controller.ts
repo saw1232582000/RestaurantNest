@@ -52,27 +52,27 @@ export class UsersController {
     );
   }
 
-  @Post()
-  @ApiBody({ type: CreateUserSchema })
-  @ApiResponse({ type: CreateUserResonseSchema })
-  @HttpCode(HttpStatus.OK)
-  public async create(
-    @Body(
-      new ValidationPipe({ errorHttpStatusCode: HttpStatus.NOT_ACCEPTABLE }),
-    )
-    user: CreateUserSchema,
-  ): Promise<CoreApiResonseSchema<any>> {
-    this.createUserUseCase = new CreateUserUseCase(
-      new PrismaUserRepository(new PrismaClient()),
-    );
-    const createUserDto = new CreateUserDto();
-    createUserDto.email = user.email;
-    createUserDto.name = user.name;
-    createUserDto.password = user.password;
-    createUserDto.role = user.role;
+  // @Post()
+  // @ApiBody({ type: CreateUserSchema })
+  // @ApiResponse({ type: CreateUserResonseSchema })
+  // @HttpCode(HttpStatus.OK)
+  // public async create(
+  //   @Body(
+  //     new ValidationPipe({ errorHttpStatusCode: HttpStatus.NOT_ACCEPTABLE }),
+  //   )
+  //   user: CreateUserSchema,
+  // ): Promise<CoreApiResonseSchema<any>> {
+  //   this.createUserUseCase = new CreateUserUseCase(
+  //     new PrismaUserRepository(new PrismaClient()),
+  //   );
+  //   const createUserDto = new CreateUserDto();
+  //   createUserDto.email = user.email;
+  //   createUserDto.name = user.name;
+  //   createUserDto.password = user.password;
+  //   createUserDto.role = user.role;
 
-    return CoreApiResonseSchema.success(
-      await this.createUserUseCase.execute(createUserDto),
-    );
-  }
+  //   return CoreApiResonseSchema.success(
+  //     await this.createUserUseCase.execute(createUserDto),
+  //   );
+  // }
 }

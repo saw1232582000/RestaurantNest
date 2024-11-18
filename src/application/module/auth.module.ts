@@ -9,6 +9,7 @@ import { UsersModule } from './users.module';
 import { PassportModule } from '@nestjs/passport';
 import { JwtStrategy } from '../auth/passport/jwt.strategy';
 import { env } from 'process';
+import { CreateUserUseCase } from 'src/core/domain/user/service/CreateUserUsecase';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { env } from 'process';
     },
     LocalStrategy,
     JwtStrategy,
+    CreateUserUseCase
   ],
 })
 export class AuthModule {}

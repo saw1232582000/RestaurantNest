@@ -25,8 +25,7 @@ export class PrismaOrderRepository implements IOrderRepository {
     try {
       const result = await this.prisma.order.create({
         data: {
-          address: order.address,
-          billingPhoneNumber: order.billingPhoneNumber,
+          table: order.table,
           userId: order.userId,
           orderItems: {
             createMany: {
@@ -73,9 +72,8 @@ export class PrismaOrderRepository implements IOrderRepository {
       const result = await this.prisma.order.update({
         where: { Id: order.Id },
         data: {
-          address: '',
-          billingPhoneNumber: '',
-          userId: '',
+          table: order.table,
+          // userId: '',
         },
       });
       return OrderEntity.toEntity(result);
@@ -175,7 +173,7 @@ export class PrismaOrderRepository implements IOrderRepository {
         },
       },
     });
-    console.log(products)
+    console.log(products);
 
     return products.map((product) => OrderEntity.toEntity(product));
   }

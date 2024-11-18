@@ -1,8 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
 
 export class OrderItemRequest {
-  @ApiProperty()
-  orderId: string;
+  // @ApiProperty()
+  // orderId: string;
 
   @ApiProperty()
   productId: string;
@@ -16,14 +16,11 @@ export class OrderItemRequest {
 
 export class CreateOrderRequestSchema {
   @ApiProperty()
-  address: string;
+  table: string;
 
   @ApiProperty()
   status: string;
 
-  @ApiProperty()
-  billingPhoneNumber: string;
-
-  @ApiProperty({type: [OrderItemRequest]})
+  @ApiProperty({ type: [OrderItemRequest] })
   orderItems: OrderItemRequest[];
 }

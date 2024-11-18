@@ -6,52 +6,45 @@ export class OrderEntity {
 
   userId: string;
 
-  address: string;
+  table: string;
 
   status: string;
-
-  billingPhoneNumber: string;
 
   createdDate: Date;
 
   updatedDate: Date;
 
-  orderItems:OrderItemEntity[]
+  orderItems: OrderItemEntity[];
 
   constructor(
     Id: string = '',
     userId: string,
-    address: string,
+    table: string,
 
-    billingPhoneNumber: string,
     status: string,
-    orderItems:OrderItemEntity[],
+    orderItems: OrderItemEntity[],
     createdDate?: Date,
     updatedDate?: Date,
-    
   ) {
     this.Id = Id;
     this.userId = userId;
-    this.address = address;
+    this.table = table;
 
-    this.billingPhoneNumber = billingPhoneNumber;
     this.status = status;
-    this.orderItems=orderItems;
+    this.orderItems = orderItems;
     this.createdDate = createdDate || new Date();
     this.updatedDate = updatedDate || new Date();
-    
   }
 
   public static toEntity(order: any): OrderEntity {
     return new OrderEntity(
       order?.Id,
       order?.userId,
-      order?.address,
-      order?.billingPhoneNumber,
+      order?.table,
       order?.status,
       order?.orderItems,
       order?.createdDate,
-      order?.updatedDate
+      order?.updatedDate,
     );
   }
 }

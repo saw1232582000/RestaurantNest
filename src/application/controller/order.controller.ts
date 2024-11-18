@@ -1,16 +1,22 @@
 import {
   Body,
   Controller,
+  FileTypeValidator,
   Get,
   Inject,
+  MaxFileSizeValidator,
+  ParseFilePipe,
   Post,
   Query,
   Req,
+  UploadedFile,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
   ApiBody,
+  ApiConsumes,
   ApiQuery,
   ApiResponse,
   ApiTags,
@@ -31,6 +37,7 @@ import { OrderFilter } from 'src/core/domain/order/dto/OrderFilter';
 import { GetOrderResponseSchema } from './documentation/order/ResponseSchema/GetOrderResponseSchema';
 import { GetOrderListResponseSchema } from './documentation/order/ResponseSchema/GetOrderListResponseSchema';
 import { CreateOrderResponseSchema } from './documentation/order/ResponseSchema/CreateOrderResponseSchema';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('Order')
 @ApiTags('order')
@@ -45,7 +52,7 @@ export class OrderController {
   @ApiBearerAuth()
   @UseGuards(JwtGuard)
   //   @ApiBody({ type: CreateorderSchema })
-    @ApiResponse({ type: CreateOrderResponseSchema })
+  @ApiResponse({ type: CreateOrderResponseSchema })
   @Post('/create')
   public async createOrder(
     @Body() order: CreateOrderRequestSchema,
@@ -55,8 +62,8 @@ export class OrderController {
       new PrismaOrderRepository(new PrismaClient()),
     );
     const createOrderDto = new CreateOrderDto();
-    createOrderDto.address = order?.address;
-    createOrderDto.billingPhoneNumber = order.billingPhoneNumber;
+    createOrderDto.table = order?.table;
+
     createOrderDto.status = order.status;
     createOrderDto.userId = req.user?.user?.id;
     createOrderDto.orderItems = order.orderItems.map((orderItem) => {
@@ -100,5 +107,25 @@ export class OrderController {
 
     const orderList = await this.getOrderListUseCase.execute(orderFilter);
     return CoreApiResonseSchema.success(orderList);
+  }
+
+  @ApiBearerAuth()
+  @UseGuards(JwtGuard)
+  @Post('/upload')
+  @ApiConsumes('multipart/form-data')
+  @UseInterceptors(FileInterceptor('file'))
+  public async Upload(
+    @UploadedFile(
+      new ParseFilePipe({
+        validators: [
+          new MaxFileSizeValidator({ maxSize: 5 * 1024 * 1024 }),//max size 5MB
+          new FileTypeValidator({ fileType: /\/(jpg|jpeg|png|gif|bmp|webp)$/ }),
+        ],
+      }),
+    )
+    file // eslint-disable-next-line no-undef
+    : Express.Multer.File,
+  ) {
+    console.log(file);
   }
 }
