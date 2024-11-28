@@ -6,7 +6,7 @@ import { OrderItemEntity } from '../entity/OrderItem';
 
 export class CreateOrderDto {
   @Expose()
-  id: Nullable<string>;
+  Id: Nullable<string>;
 
   @Expose()
   userId: string;

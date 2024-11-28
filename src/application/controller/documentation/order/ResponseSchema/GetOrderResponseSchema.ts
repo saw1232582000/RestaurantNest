@@ -52,6 +52,9 @@ class OrderItemResponse {
 
 export class OrderResponse {
   @ApiProperty()
+  Id: string;
+
+  @ApiProperty()
   userId: string;
 
   @ApiProperty()

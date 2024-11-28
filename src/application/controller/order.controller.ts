@@ -39,16 +39,18 @@ import { GetOrderListResponseSchema } from './documentation/order/ResponseSchema
 import { CreateOrderResponseSchema } from './documentation/order/ResponseSchema/CreateOrderResponseSchema';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { S3Service } from 'src/core/common/file-upload/UploadS3Service';
+import { ChatGateWay } from 'src/core/common/chat/ChatGateWay';
 
 @Controller('Order')
 @ApiTags('order')
 export class OrderController {
   constructor(
-    @Inject()
+    @Inject('CreateorderUseCase')
     private createOrderUseCase: CreateorderUseCase,
     private getOrderUseCase: GetOrderUseCase,
     private getOrderListUseCase: GetOrderListWithFilterUseCase,
     private s3Service: S3Service,
+    private readonly chatGateWay: ChatGateWay,
   ) {}
 
   @ApiBearerAuth()
@@ -61,7 +63,7 @@ export class OrderController {
     @Req() req,
   ) {
     this.createOrderUseCase = new CreateorderUseCase(
-      new PrismaOrderRepository(new PrismaClient()),
+      new PrismaOrderRepository(new PrismaClient())
     );
     const createOrderDto = new CreateOrderDto();
     createOrderDto.table = order?.table;
@@ -71,7 +73,7 @@ export class OrderController {
     createOrderDto.orderItems = order.orderItems.map((orderItem) => {
       return OrderItemEntity.toEntity(orderItem);
     });
-
+    this.chatGateWay.setNewOrder('New Order submitted');
     await this.createOrderUseCase.execute(createOrderDto);
     return CoreApiResonseSchema.success({
       message: 'Order Created Successfully',
