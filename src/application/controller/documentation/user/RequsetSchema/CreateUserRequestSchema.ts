@@ -12,12 +12,14 @@ export class CreateUserSchema {
   @IsEmail()
   email: string;
 
-  @ApiProperty(
-    {
-      enum:UserRole,
-      enumName:'UserRole',
-    }
-  )
+  @ApiProperty()
+  @IsNotEmpty()
+  phone: string;
+
+  @ApiProperty({
+    enum: UserRole,
+    enumName: 'UserRole',
+  })
   @IsEnum(UserRole, { message: 'Valid Role is required' })
   role: UserRole;
 

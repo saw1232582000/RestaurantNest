@@ -16,6 +16,7 @@ export class UpdateProductUseCase implements IUpdateProductUseCase {
       data?.userId,
       data?.name,
       data?.price,
+      data?.image,
       data?.category,
       data?.description,
     );

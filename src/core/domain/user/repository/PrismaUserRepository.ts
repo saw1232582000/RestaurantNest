@@ -22,6 +22,7 @@ export class PrismaUserRepository implements IUserRepository {
     try {
       const result = await this.prisma.user.create({
         data: {
+          phone: user.phone,
           email: user.email,
           name: user.name,
           password: user.password,
@@ -45,11 +46,15 @@ export class PrismaUserRepository implements IUserRepository {
             description: 'Cannot create user',
           });
         }
-      }
-      if (e instanceof PrismaClientValidationError) {
+      } else if (e instanceof PrismaClientValidationError) {
         throw new InternalServerErrorException('Something bad happened', {
           cause: new Error(),
           description: e.message,
+        });
+      } else {
+        throw new BadRequestException('Internal server error', {
+          cause: new Error(),
+          description: 'Cannot create user',
         });
       }
     }
@@ -107,6 +112,7 @@ export class PrismaUserRepository implements IUserRepository {
     id?: string;
     email?: string;
     name?: string;
+    phone?: string;
   }): Promise<UserEntity | null> {
     try {
       const user = await this.prisma.user.findFirst({

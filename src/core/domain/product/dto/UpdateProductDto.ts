@@ -17,6 +17,9 @@ export class UpdateProductDto {
   
     @Expose()
     price: number;
+
+    @Expose()
+    image: string;
   
     @Expose()
     description: string;

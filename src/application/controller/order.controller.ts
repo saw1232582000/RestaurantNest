@@ -49,7 +49,7 @@ export class OrderController {
     private createOrderUseCase: CreateorderUseCase,
     private getOrderUseCase: GetOrderUseCase,
     private getOrderListUseCase: GetOrderListWithFilterUseCase,
-    private s3Service: S3Service,
+
     private readonly chatGateWay: ChatGateWay,
   ) {}
 
@@ -63,7 +63,7 @@ export class OrderController {
     @Req() req,
   ) {
     this.createOrderUseCase = new CreateorderUseCase(
-      new PrismaOrderRepository(new PrismaClient())
+      new PrismaOrderRepository(new PrismaClient()),
     );
     const createOrderDto = new CreateOrderDto();
     createOrderDto.table = order?.table;
@@ -111,24 +111,5 @@ export class OrderController {
 
     const orderList = await this.getOrderListUseCase.execute(orderFilter);
     return CoreApiResonseSchema.success(orderList);
-  }
-
-  // @ApiBearerAuth()
-  // @UseGuards(JwtGuard)
-  @Post('/upload')
-  @ApiConsumes('multipart/form-data')
-  @UseInterceptors(FileInterceptor('file'))
-  public async Upload(
-    @UploadedFile(
-      new ParseFilePipe({
-        validators: [
-          new MaxFileSizeValidator({ maxSize: 5 * 1024 * 1024 }), //max size 5MB
-          new FileTypeValidator({ fileType: /\/(jpg|jpeg|png|gif|bmp|webp)$/ }),
-        ],
-      }),
-    ) // eslint-disable-next-line no-undef
-    file: Express.Multer.File,
-  ) {
-    return await this.s3Service.uploadFile(file, 'restaurant/menus');
   }
 }

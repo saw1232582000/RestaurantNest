@@ -14,6 +14,9 @@ export class CreateProductDto {
 
     @Expose()
     name: string;
+
+    @Expose()
+    image: string;
   
     @Expose()
     price: number;

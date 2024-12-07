@@ -27,6 +27,7 @@ export class PrismaProductRepository implements IProductRepository {
           name: product.name,
           category: product.category,
           description: product.description,
+          image: product.image,
           price: product.price,
           userId: product.userId,
         },
@@ -147,7 +148,7 @@ export class PrismaProductRepository implements IProductRepository {
   }
 
   async findAllWithSchema(filter: ProductFilter): Promise<ProductEntity[]> {
-    console.log(filter)
+    console.log(filter);
     const products = await this.prisma.product.findMany({
       where: {
         name: { contains: filter.name },

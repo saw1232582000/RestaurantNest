@@ -1,4 +1,4 @@
-import { UserRole } from "src/core/common/type/UserEnum";
+import { UserRole } from 'src/core/common/type/UserEnum';
 
 export class UserEntity {
   id: string;
@@ -6,6 +6,8 @@ export class UserEntity {
   name: string;
 
   email: string;
+
+  phone: string;
 
   role: UserRole;
 
@@ -16,9 +18,10 @@ export class UserEntity {
   updatedDate: Date;
 
   constructor(
-    id: string = "",
+    id: string = '',
     name: string,
     email: string,
+    phone: string,
     role: UserRole,
     password: string,
     createdDate?: Date,
@@ -27,6 +30,7 @@ export class UserEntity {
     this.id = id;
     this.name = name;
     this.email = email;
+    this.phone = phone;
     this.role = role;
     this.password = password;
     this.createdDate = createdDate || new Date();
@@ -38,6 +42,7 @@ export class UserEntity {
       user?.id,
       user?.name,
       user?.email,
+      user?.phone,
       user?.role,
       user?.password,
       user?.createdDate,
