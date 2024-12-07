@@ -9,6 +9,8 @@ export class ProductEntity {
 
   price: number;
 
+  image:string;
+
   description: string;
 
   category: string;
@@ -22,6 +24,7 @@ export class ProductEntity {
     userId: string,
     name: string,
     price: number,
+    image: string,
     category: string,
     description: string,
     createdDate?: Date,
@@ -31,6 +34,7 @@ export class ProductEntity {
     this.userId = userId;
     this.name = name;
     this.price = price;
+    this.image = image;
     this.category = category;
     this.description = description;
     this.createdDate = createdDate || new Date();
@@ -43,6 +47,7 @@ export class ProductEntity {
       user?.userId,
       user?.name,
       user?.price,
+      user?.image,
       user?.category,
       user?.description,
       user?.createdDate,

@@ -32,7 +32,7 @@ import { ChatGateWay } from '../../core/common/chat/ChatGateWay';
       inject: ['OrderRepository', ChatGateWay],
     },
     ChatGateWay,
-    S3Service,
+    
     
   ],
 })

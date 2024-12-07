@@ -36,6 +36,8 @@ model Product{
 
   description String
 
+  image       String?
+
   category String
 
   createdDate DateTime         @default(now())

@@ -11,6 +11,11 @@ export class CreateProductSchema {
   @ApiProperty()
   @IsString()
   @IsNotEmpty()
+  image: string;
+
+  @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
   price: number;
 
   @ApiProperty()

@@ -1,17 +1,23 @@
 import {
   Body,
   Controller,
+  FileTypeValidator,
   Get,
+  MaxFileSizeValidator,
   Param,
+  ParseFilePipe,
   Post,
   Put,
   Query,
   Req,
+  UploadedFile,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
   ApiBody,
+  ApiConsumes,
   ApiQuery,
   ApiResponse,
   ApiTags,
@@ -37,6 +43,9 @@ import { GetProductResponseSchema } from './documentation/product/ResponseSchema
 import { GetProductListResponseSchema } from './documentation/product/ResponseSchema/GetProductListResponseSchema';
 import { ProdcutFilterSchama } from './documentation/product/RequestSchema/ProductFilterSchema';
 import { ProductFilter } from 'src/core/domain/product/dto/ProductFilter';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { S3Service } from 'src/core/common/file-upload/UploadS3Service';
+import { UploadProductImageResponseSchema } from './documentation/product/ResponseSchema/UploadProductResponseSchema';
 
 @Controller('Product')
 @ApiTags('product')
@@ -47,6 +56,7 @@ export class ProductController {
     private getProductUsecase: GetProductUseCase,
     private getProductListUsecase: GetProductListUseCase,
     private getProductListWithFilter: GetProductListWithFilterUseCase,
+    private s3Service: S3Service,
   ) {}
 
   @ApiBearerAuth()
@@ -61,6 +71,7 @@ export class ProductController {
     const createProductDto = new CreateProductDto();
     createProductDto.userId = req.user?.user?.id;
     createProductDto.name = product.name;
+    createProductDto.image = product.image;
     createProductDto.description = product.description;
     createProductDto.category = product.category;
     createProductDto.price = product.price;
@@ -105,7 +116,7 @@ export class ProductController {
   public async get(@Req() req, @Query() params: { id: string }) {
     this.getProductUsecase = new GetProductUseCase(
       new PrismaProductRepository(new PrismaClient()),
-    );  
+    );
 
     return CoreApiResonseSchema.success(
       await this.getProductUsecase.execute(params.id),
@@ -145,5 +156,38 @@ export class ProductController {
     return CoreApiResonseSchema.success(
       await this.getProductListWithFilter.execute(filter),
     );
+  }
+
+  @ApiBearerAuth()
+  @UseGuards(JwtGuard)
+  @Post('/upload')
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        file: {
+          type: 'string',
+          format: 'binary',
+        },
+      },
+    },
+  })
+  @ApiResponse({ type: UploadProductImageResponseSchema })
+  @UseInterceptors(FileInterceptor('file'))
+  public async Upload(
+    @UploadedFile(
+      new ParseFilePipe({
+        validators: [
+          new MaxFileSizeValidator({ maxSize: 5 * 1024 * 1024 }), //max size 5MB
+          new FileTypeValidator({ fileType: /\/(jpg|jpeg|png|gif|bmp|webp)$/ }),
+        ],
+      }),
+    ) // eslint-disable-next-line no-undef
+    file: Express.Multer.File,
+  ) {
+    return CoreApiResonseSchema.success({
+      url: await this.s3Service.uploadFile(file, 'restaurant/menus'),
+    });
   }
 }
