@@ -21,7 +21,7 @@ model User {
   password  String
   createdDate            DateTime         @default(now())
   updatedDate            DateTime         @default(now())
-  
+  phone     String  @unique
   products   Product[]
   cart       Cart?  
   orders      Order[]

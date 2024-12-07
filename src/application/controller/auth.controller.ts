@@ -26,7 +26,6 @@ import { PrismaUserRepository } from 'src/core/domain/user/repository/PrismaUser
 import { PrismaClient } from '@prisma/client';
 import { CreateUserDto } from 'src/core/domain/user/dto/CreateUserDto';
 
-
 @ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
@@ -65,6 +64,7 @@ export class AuthController {
     );
     const createUserDto = new CreateUserDto();
     createUserDto.email = user.email;
+    createUserDto.phone = user.phone;
     createUserDto.name = user.name;
     createUserDto.password = user.password;
     createUserDto.role = user.role;

@@ -14,6 +14,9 @@ export class CreateUserDto {
   email: string;
 
   @Expose()
+  phone: string;
+
+  @Expose()
   role: UserRole;
 
   password: string;

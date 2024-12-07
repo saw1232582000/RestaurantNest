@@ -15,7 +15,7 @@ export class AuthService {
   ) {}
   async validateUser(credentials: SinginUserDto): Promise<string> {
     this.userRepository = new PrismaUserRepository(new PrismaClient());
-    const result = await this.userRepository.find({ email: credentials.email });
+    const result = await this.userRepository.find({ phone: credentials.phone });
     let isValid;
     if (result) {
       try {
@@ -25,7 +25,12 @@ export class AuthService {
       }
 
       if (isValid) {
-        return this.jwtService.sign({ id: result.id, email: result.email });
+        return this.jwtService.sign({
+          id: result.id,
+          email: result.email,
+          role: result.role,
+          phone: result.phone,
+        });
       } else return null;
     }
     return null;
