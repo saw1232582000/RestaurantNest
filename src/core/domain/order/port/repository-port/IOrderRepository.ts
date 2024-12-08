@@ -14,5 +14,5 @@ export abstract class IOrderRepository implements IBaseRepository<OrderEntity,{i
     find: (by: {id?:string,name?:string}) => Promise<OrderEntity | null>;
     findAll: () => Promise<OrderEntity[]>;
     update: (entity: OrderEntity) => Promise<OrderEntity>;
-    findAllWithSchema: (filter:OrderFilter) => Promise<OrderEntity[]>;
+    findAllWithSchema: (filter:OrderFilter) => Promise<{orders:OrderEntity[],totalCounts:number}>;
 }

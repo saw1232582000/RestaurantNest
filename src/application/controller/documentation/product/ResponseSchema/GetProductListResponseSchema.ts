@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { BaseResponseSchema } from '../../common/BaseResponseSchema';
 
-class GetProductResponse {
+class Product {
   @ApiProperty()
   id: string;
 
@@ -27,7 +27,15 @@ class GetProductResponse {
   updateddDate: Date;
 }
 
-export class GetProductListResponseSchema extends BaseResponseSchema<GetProductResponse[]> {
-  @ApiProperty({ type: [GetProductResponse] })
-  public data: GetProductResponse[];
+class GetProductList {
+  @ApiProperty({ type: [Product] })
+  products: Product[];
+
+  @ApiProperty()
+  totalCount: number;
+}
+
+export class GetProductListResponseSchema extends BaseResponseSchema<GetProductList> {
+  @ApiProperty({ type: GetProductList })
+  public data: GetProductList;
 }

@@ -157,8 +157,12 @@ export class PrismaOrderRepository implements IOrderRepository {
     return orders.map((order) => OrderEntity.toEntity(order));
   }
 
-  async findAllWithSchema(filter: OrderFilter): Promise<OrderEntity[]> {
-    console.log(filter);
+  async findAllWithSchema(
+    filter: OrderFilter,
+  ): Promise<{ orders: OrderEntity[]; totalCounts: number }> {
+    const totalCounts = await this.prisma.order.count({
+      where: {},
+    });
     const products = await this.prisma.order.findMany({
       where: {},
       take: filter.take,
@@ -175,6 +179,9 @@ export class PrismaOrderRepository implements IOrderRepository {
     });
     console.log(products);
 
-    return products.map((product) => OrderEntity.toEntity(product));
+    return {
+      orders:products.map((product) => OrderEntity.toEntity(product)),
+      totalCounts:totalCounts
+    }
   }
 }

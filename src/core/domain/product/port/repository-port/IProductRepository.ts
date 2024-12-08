@@ -13,5 +13,5 @@ export abstract class IProductRepository implements IBaseRepository<ProductEntit
     find: (by: {id?:string,name?:string}) => Promise<ProductEntity | null>;
     findAll: () => Promise<ProductEntity[]>;
     update: (entity: ProductEntity) => Promise<ProductEntity>;
-    findAllWithSchema: (filter:ProductFilter) => Promise<ProductEntity[]>;
+    findAllWithSchema: (filter:ProductFilter) => Promise<{products:ProductEntity[],totalCounts:number}>;
 }
