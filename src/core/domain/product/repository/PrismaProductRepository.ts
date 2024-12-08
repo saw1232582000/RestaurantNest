@@ -147,8 +147,15 @@ export class PrismaProductRepository implements IProductRepository {
     return products.map((product) => ProductEntity.toEntity(product));
   }
 
-  async findAllWithSchema(filter: ProductFilter): Promise<ProductEntity[]> {
+  async findAllWithSchema(
+    filter: ProductFilter,
+  ): Promise<{ products: ProductEntity[]; totalCounts: number }> {
     console.log(filter);
+    const totalCounts = await this.prisma.product.count({
+      where: {
+        name: { contains: filter.name },
+      },
+    });
     const products = await this.prisma.product.findMany({
       where: {
         name: { contains: filter.name },
@@ -157,6 +164,9 @@ export class PrismaProductRepository implements IProductRepository {
       skip: filter.skip,
     });
 
-    return products.map((product) => ProductEntity.toEntity(product));
+    return {
+      products: products.map((product) => ProductEntity.toEntity(product)),
+      totalCounts: totalCounts,
+    };
   }
 }
