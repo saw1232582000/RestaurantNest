@@ -15,6 +15,7 @@ export class CreateProductUseCase implements ICreateProductUseCase {
       data?.userId,
       data?.name,
       data?.price,
+      data?.image,
       data?.category,
       data?.description,
     );

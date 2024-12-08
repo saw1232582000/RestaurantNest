@@ -13,6 +13,7 @@ export class CreateUserUseCase implements ICreateUserUseCase {
       null,
       data?.name,
       data?.email,
+      data?.phone,
       data?.role,
       await hash(data?.password),
     );

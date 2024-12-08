@@ -2,7 +2,7 @@ import { IsEmail, IsEnum, IsNotEmpty, IsString } from 'class-validator';
 
 export class SinginUserDto {
   @IsEmail()
-  email: string;
+  phone: string;
 
   @IsString()
   @IsNotEmpty()

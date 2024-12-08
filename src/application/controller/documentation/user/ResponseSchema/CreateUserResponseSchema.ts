@@ -14,6 +14,9 @@ class CreateUserResponse {
   email: string;
 
   @ApiProperty()
+  phone: string;
+
+  @ApiProperty()
   role: UserRole;
 
   @ApiProperty()

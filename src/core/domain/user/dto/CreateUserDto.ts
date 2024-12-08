@@ -1,6 +1,6 @@
 import { Expose, plainToInstance } from 'class-transformer';
 import { UserRole } from 'src/core/common/type/UserEnum';
-import { UserEntity } from '../entity/user';
+import { UserEntity } from '../entity/User';
 import { Nullable } from 'src/core/common/type/CommonTypes';
 
 export class CreateUserDto {
@@ -12,6 +12,9 @@ export class CreateUserDto {
 
   @Expose()
   email: string;
+
+  @Expose()
+  phone: string;
 
   @Expose()
   role: UserRole;
