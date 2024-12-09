@@ -15,7 +15,6 @@ const PrismaOrderRepository_1 = require("../../core/domain/order/repository/Pris
 const GetOrderUseCase_1 = require("../../core/domain/order/service/GetOrderUseCase");
 const CreateOrderUseCase_1 = require("../../core/domain/order/service/CreateOrderUseCase");
 const GetOrderListUseCase_1 = require("../../core/domain/order/service/GetOrderListUseCase");
-const ChatGateWay_1 = require("../../core/common/chat/ChatGateWay");
 let OrderModule = class OrderModule {
 };
 exports.OrderModule = OrderModule;
@@ -31,18 +30,6 @@ exports.OrderModule = OrderModule = __decorate([
                 provide: IOrderRepository_1.IOrderRepository,
                 useClass: PrismaOrderRepository_1.PrismaOrderRepository,
             },
-            {
-                provide: "PrismaOrderRepository",
-                useClass: PrismaOrderRepository_1.PrismaOrderRepository
-            },
-            {
-                provide: "CreateorderUseCase",
-                useClass: CreateOrderUseCase_1.CreateorderUseCase, useFactory: (orderRepository, chatGateway) => {
-                    return new CreateOrderUseCase_1.CreateorderUseCase(orderRepository);
-                },
-                inject: ['OrderRepository', ChatGateWay_1.ChatGateWay],
-            },
-            ChatGateWay_1.ChatGateWay,
         ],
     })
 ], OrderModule);

@@ -33,7 +33,7 @@ let CreateorderUseCase = class CreateorderUseCase {
 exports.CreateorderUseCase = CreateorderUseCase;
 exports.CreateorderUseCase = CreateorderUseCase = __decorate([
     (0, common_1.Injectable)(),
-    __param(0, (0, common_1.Inject)('PrismaOrderRepository')),
+    __param(0, (0, common_1.Inject)()),
     __metadata("design:paramtypes", [IOrderRepository_1.IOrderRepository])
 ], CreateorderUseCase);
 //# sourceMappingURL=CreateOrderUseCase.js.map

@@ -4,13 +4,11 @@ import { GetOrderListWithFilterUseCase } from 'src/core/domain/order/service/Get
 import { CoreApiResonseSchema } from 'src/core/common/schema/ApiResponseSchema';
 import { CreateOrderRequestSchema } from './documentation/order/RequestSchema/CreateOrderRequestSchema';
 import { OrderFilterSchama } from './documentation/order/RequestSchema/OrderFilterSchema';
-import { ChatGateWay } from 'src/core/common/chat/ChatGateWay';
 export declare class OrderController {
     private createOrderUseCase;
     private getOrderUseCase;
     private getOrderListUseCase;
-    private readonly chatGateWay;
-    constructor(createOrderUseCase: CreateorderUseCase, getOrderUseCase: GetOrderUseCase, getOrderListUseCase: GetOrderListWithFilterUseCase, chatGateWay: ChatGateWay);
+    constructor(createOrderUseCase: CreateorderUseCase, getOrderUseCase: GetOrderUseCase, getOrderListUseCase: GetOrderListWithFilterUseCase);
     createOrder(order: CreateOrderRequestSchema, req: any): Promise<CoreApiResonseSchema<{
         message: string;
     }>>;

@@ -31,13 +31,11 @@ const OrderFilter_1 = require("../../core/domain/order/dto/OrderFilter");
 const GetOrderResponseSchema_1 = require("./documentation/order/ResponseSchema/GetOrderResponseSchema");
 const GetOrderListResponseSchema_1 = require("./documentation/order/ResponseSchema/GetOrderListResponseSchema");
 const CreateOrderResponseSchema_1 = require("./documentation/order/ResponseSchema/CreateOrderResponseSchema");
-const ChatGateWay_1 = require("../../core/common/chat/ChatGateWay");
 let OrderController = class OrderController {
-    constructor(createOrderUseCase, getOrderUseCase, getOrderListUseCase, chatGateWay) {
+    constructor(createOrderUseCase, getOrderUseCase, getOrderListUseCase) {
         this.createOrderUseCase = createOrderUseCase;
         this.getOrderUseCase = getOrderUseCase;
         this.getOrderListUseCase = getOrderListUseCase;
-        this.chatGateWay = chatGateWay;
     }
     async createOrder(order, req) {
         this.createOrderUseCase = new CreateOrderUseCase_1.CreateorderUseCase(new PrismaOrderRepository_1.PrismaOrderRepository(new client_1.PrismaClient()));
@@ -48,7 +46,6 @@ let OrderController = class OrderController {
         createOrderDto.orderItems = order.orderItems.map((orderItem) => {
             return OrderItem_1.OrderItemEntity.toEntity(orderItem);
         });
-        this.chatGateWay.setNewOrder('New Order submitted');
         await this.createOrderUseCase.execute(createOrderDto);
         return ApiResponseSchema_1.CoreApiResonseSchema.success({
             message: 'Order Created Successfully',
@@ -104,10 +101,9 @@ __decorate([
 exports.OrderController = OrderController = __decorate([
     (0, common_1.Controller)('Order'),
     (0, swagger_1.ApiTags)('order'),
-    __param(0, (0, common_1.Inject)('CreateorderUseCase')),
+    __param(0, (0, common_1.Inject)()),
     __metadata("design:paramtypes", [CreateOrderUseCase_1.CreateorderUseCase,
         GetOrderUseCase_1.GetOrderUseCase,
-        GetOrderListUseCase_1.GetOrderListWithFilterUseCase,
-        ChatGateWay_1.ChatGateWay])
+        GetOrderListUseCase_1.GetOrderListWithFilterUseCase])
 ], OrderController);
 //# sourceMappingURL=order.controller.js.map
