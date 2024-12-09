@@ -7,7 +7,7 @@ import { GetOrderUseCase } from 'src/core/domain/order/service/GetOrderUseCase';
 import { CreateorderUseCase } from 'src/core/domain/order/service/CreateOrderUseCase';
 import { GetOrderListWithFilterUseCase } from 'src/core/domain/order/service/GetOrderListUseCase';
 import { S3Service } from 'src/core/common/file-upload/UploadS3Service';
-import { ChatGateWay } from '../../core/common/chat/ChatGateWay';
+
 
 @Module({
   controllers: [OrderController],
@@ -20,18 +20,15 @@ import { ChatGateWay } from '../../core/common/chat/ChatGateWay';
       provide: IOrderRepository,
       useClass: PrismaOrderRepository,
     },
-    {
-      provide:"PrismaOrderRepository",
-      useClass:PrismaOrderRepository
-    },
-    {
-      provide:"CreateorderUseCase",
-      useClass:CreateorderUseCase,useFactory: (orderRepository: PrismaOrderRepository, chatGateway: ChatGateWay) => {
-        return new CreateorderUseCase(orderRepository);
-      },
-      inject: ['OrderRepository', ChatGateWay],
-    },
-    ChatGateWay,
+    
+    // {
+    //   provide:"CreateorderUseCase",
+    //   useClass:CreateorderUseCase,useFactory: (orderRepository: PrismaOrderRepository, chatGateway: ChatGateWay) => {
+    //     return new CreateorderUseCase(orderRepository);
+    //   },
+    //   inject: ['OrderRepository', ChatGateWay],
+    // },
+    // ChatGateWay,
     
     
   ],

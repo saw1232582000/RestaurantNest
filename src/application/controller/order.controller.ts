@@ -39,18 +39,18 @@ import { GetOrderListResponseSchema } from './documentation/order/ResponseSchema
 import { CreateOrderResponseSchema } from './documentation/order/ResponseSchema/CreateOrderResponseSchema';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { S3Service } from 'src/core/common/file-upload/UploadS3Service';
-import { ChatGateWay } from 'src/core/common/chat/ChatGateWay';
+// import { ChatGateWay } from 'src/core/common/chat/ChatGateWay';
 
 @Controller('Order')
 @ApiTags('order')
 export class OrderController {
   constructor(
-    @Inject('CreateorderUseCase')
+    @Inject()
     private createOrderUseCase: CreateorderUseCase,
     private getOrderUseCase: GetOrderUseCase,
     private getOrderListUseCase: GetOrderListWithFilterUseCase,
 
-    private readonly chatGateWay: ChatGateWay,
+    // private readonly chatGateWay: ChatGateWay,
   ) {}
 
   @ApiBearerAuth()
@@ -73,7 +73,7 @@ export class OrderController {
     createOrderDto.orderItems = order.orderItems.map((orderItem) => {
       return OrderItemEntity.toEntity(orderItem);
     });
-    this.chatGateWay.setNewOrder('New Order submitted');
+    //this.chatGateWay.setNewOrder('New Order submitted');
     await this.createOrderUseCase.execute(createOrderDto);
     return CoreApiResonseSchema.success({
       message: 'Order Created Successfully',
