@@ -152,7 +152,6 @@ export class ProductController {
       parseInt(params?.take.toString()),
       parseInt(params?.skip.toString()),
     );
-    console.log('params:', filter);
     return CoreApiResonseSchema.success(
       await this.getProductListWithFilter.execute(filter),
     );

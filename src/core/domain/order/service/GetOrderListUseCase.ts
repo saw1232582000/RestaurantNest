@@ -11,8 +11,10 @@ export class GetOrderListWithFilterUseCase implements IGetOrderListUseCase {
     @Inject() private readonly orderRepository: IOrderRepository,
   ) {}
   public async execute(filter:OrderFilter): Promise<any> {
-    const orders = await this.orderRepository.findAllWithSchema(filter);
+    const list = await this.orderRepository.findAllWithSchema(filter);
 
-    return orders.map((order) => CreateOrderDto.convertToClass(order));
+    return {
+      ...list
+    }
   }
 }
