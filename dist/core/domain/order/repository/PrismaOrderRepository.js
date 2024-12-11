@@ -5,6 +5,7 @@ const common_1 = require("@nestjs/common");
 const library_1 = require("@prisma/client/runtime/library");
 const ApiResponseSchema_1 = require("../../../common/schema/ApiResponseSchema");
 const Order_1 = require("../entity/Order");
+const StatusEnum_1 = require("../../../common/type/StatusEnum");
 class PrismaOrderRepository {
     constructor(prisma) {
         this.prisma = prisma;
@@ -15,13 +16,14 @@ class PrismaOrderRepository {
                 data: {
                     table: order.table,
                     userId: order.userId,
+                    status: StatusEnum_1.Status.PROCESSING,
                     orderItems: {
                         createMany: {
                             data: order.orderItems.map((orderItem) => {
                                 return {
                                     productId: orderItem.productId,
                                     quantity: orderItem.quantity,
-                                    status: 'processing',
+                                    status: StatusEnum_1.Status.PROCESSING,
                                 };
                             }),
                         },
@@ -139,11 +141,27 @@ class PrismaOrderRepository {
         return orders.map((order) => Order_1.OrderEntity.toEntity(order));
     }
     async findAllWithSchema(filter) {
+        console.log(filter);
+        const filterValue = filter?.startDate && filter?.endDate
+            ? {
+                status: { contains: filter.status },
+                createdDate: {
+                    gte: new Date(filter.startDate),
+                    lte: new Date(filter.endDate),
+                },
+            }
+            : {
+                status: { contains: filter.status },
+            };
         const totalCounts = await this.prisma.order.count({
-            where: {},
+            where: {
+                ...filterValue,
+            },
         });
         const products = await this.prisma.order.findMany({
-            where: {},
+            where: {
+                ...filterValue,
+            },
             take: filter.take,
             skip: filter.skip,
             include: {
@@ -159,7 +177,7 @@ class PrismaOrderRepository {
         console.log(products);
         return {
             orders: products.map((product) => Order_1.OrderEntity.toEntity(product)),
-            totalCounts: totalCounts
+            totalCounts: totalCounts,
         };
     }
 }

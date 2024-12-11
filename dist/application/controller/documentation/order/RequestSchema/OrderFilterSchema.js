@@ -12,11 +12,26 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.OrderFilterSchama = void 0;
 const swagger_1 = require("@nestjs/swagger");
 const BaseFilterSchema_1 = require("../../common/BaseFilterSchema");
+const StatusEnum_1 = require("../../../../../core/common/type/StatusEnum");
+const class_validator_1 = require("class-validator");
 class OrderFilterSchama extends BaseFilterSchema_1.BaseFilterSchema {
 }
 exports.OrderFilterSchama = OrderFilterSchama;
 __decorate([
     (0, swagger_1.ApiPropertyOptional)(),
     __metadata("design:type", String)
-], OrderFilterSchama.prototype, "date", void 0);
+], OrderFilterSchama.prototype, "startDate", void 0);
+__decorate([
+    (0, swagger_1.ApiPropertyOptional)(),
+    __metadata("design:type", String)
+], OrderFilterSchama.prototype, "endDate", void 0);
+__decorate([
+    (0, swagger_1.ApiPropertyOptional)(),
+    (0, swagger_1.ApiProperty)({
+        enum: StatusEnum_1.Status,
+        enumName: 'StatusValue',
+    }),
+    (0, class_validator_1.IsEnum)(StatusEnum_1.Status, { message: 'Valid Status value is required' }),
+    __metadata("design:type", String)
+], OrderFilterSchama.prototype, "status", void 0);
 //# sourceMappingURL=OrderFilterSchema.js.map

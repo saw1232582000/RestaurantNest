@@ -104,9 +104,11 @@ export class OrderController {
       new PrismaOrderRepository(new PrismaClient()),
     );
     const orderFilter = new OrderFilter(
-      params.date,
+      params.startDate,
+      params.endDate,
       parseInt(params?.take.toString()),
       parseInt(params?.skip.toString()),
+      params.status
     );
 
     const orderList = await this.getOrderListUseCase.execute(orderFilter);
