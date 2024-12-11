@@ -17,6 +17,7 @@ import { CoreApiResonseSchema } from 'src/core/common/schema/ApiResponseSchema';
 import { IOrderRepository } from '../port/repository-port/IOrderRepository';
 import { OrderEntity } from '../entity/Order';
 import { OrderFilter } from '../dto/OrderFilter';
+import { Status } from '@src/core/common/type/StatusEnum';
 
 export class PrismaOrderRepository implements IOrderRepository {
   constructor(public readonly prisma: PrismaClient) {}
@@ -27,13 +28,14 @@ export class PrismaOrderRepository implements IOrderRepository {
         data: {
           table: order.table,
           userId: order.userId,
+          status: Status.PROCESSING,
           orderItems: {
             createMany: {
               data: order.orderItems.map((orderItem) => {
                 return {
                   productId: orderItem.productId,
                   quantity: orderItem.quantity,
-                  status: 'processing',
+                  status: Status.PROCESSING,
                 };
               }),
             },
@@ -160,11 +162,29 @@ export class PrismaOrderRepository implements IOrderRepository {
   async findAllWithSchema(
     filter: OrderFilter,
   ): Promise<{ orders: OrderEntity[]; totalCounts: number }> {
+    console.log(filter);
+    const filterValue =
+      filter?.startDate && filter?.endDate
+        ? {
+            status: { contains: filter.status },
+            createdDate: {
+              gte: new Date(filter.startDate),
+              lte: new Date(filter.endDate),
+            },
+          }
+        : {
+            status: { contains: filter.status },
+          };
     const totalCounts = await this.prisma.order.count({
-      where: {},
+      where: {
+        ...filterValue,
+      },
     });
+
     const products = await this.prisma.order.findMany({
-      where: {},
+      where: {
+        ...filterValue,
+      },
       take: filter.take,
       skip: filter.skip,
       include: {
@@ -180,8 +200,8 @@ export class PrismaOrderRepository implements IOrderRepository {
     console.log(products);
 
     return {
-      orders:products.map((product) => OrderEntity.toEntity(product)),
-      totalCounts:totalCounts
-    }
+      orders: products.map((product) => OrderEntity.toEntity(product)),
+      totalCounts: totalCounts,
+    };
   }
 }

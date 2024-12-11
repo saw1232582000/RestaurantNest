@@ -58,7 +58,7 @@ let OrderController = class OrderController {
     }
     async getOrderList(params, req) {
         this.getOrderListUseCase = new GetOrderListUseCase_1.GetOrderListWithFilterUseCase(new PrismaOrderRepository_1.PrismaOrderRepository(new client_1.PrismaClient()));
-        const orderFilter = new OrderFilter_1.OrderFilter(params.date, parseInt(params?.take.toString()), parseInt(params?.skip.toString()));
+        const orderFilter = new OrderFilter_1.OrderFilter(params.startDate, params.endDate, parseInt(params?.take.toString()), parseInt(params?.skip.toString()), params.status);
         const orderList = await this.getOrderListUseCase.execute(orderFilter);
         return ApiResponseSchema_1.CoreApiResonseSchema.success(orderList);
     }
