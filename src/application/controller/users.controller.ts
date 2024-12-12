@@ -28,6 +28,10 @@ import { CreateUserResonseSchema } from './documentation/user/ResponseSchema/Cre
 import { GetUserUseCase } from 'src/core/domain/user/service/GetUserUsecase';
 import { GetUserResonseSchema } from './documentation/user/ResponseSchema/GetUserResponseSchema';
 import { CreateUserSchema } from './documentation/user/RequsetSchema/CreateUserRequestSchema';
+import { UserFilter } from '@src/core/domain/user/dto/UserFilter';
+import { GetUserListWithFilterUseCase } from '@src/core/domain/user/service/GetUserListUsecase';
+import { UserFilterSchama } from './documentation/user/RequsetSchema/UserFilterSchema';
+import { GetUserListResponseSchema } from './documentation/user/ResponseSchema/GetUserListResponseSchema';
 
 @Controller('User')
 @ApiTags('users')
@@ -36,6 +40,7 @@ export class UsersController {
     // @Inject()
     private getUserUseCase: GetUserUseCase,
     private createUserUseCase: CreateUserUseCase,
+    private getUserListWithFilter: GetUserListWithFilterUseCase,
   ) {}
 
   @ApiBearerAuth()
@@ -49,6 +54,26 @@ export class UsersController {
 
     return CoreApiResonseSchema.success(
       await this.getUserUseCase.execute(req.user?.user?.id),
+    );
+  }
+
+  @ApiBearerAuth()
+  @UseGuards(JwtGuard)
+  @ApiResponse({ type: GetUserListResponseSchema })
+  @Get('/getUserList')
+  public async getAllByFilter(@Query() params: UserFilterSchama) {
+    this.getUserListWithFilter = new GetUserListWithFilterUseCase(
+      new PrismaUserRepository(new PrismaClient()),
+    );
+    console.log(params);
+    const filter = new UserFilter(
+      params.name,
+      params.role,
+      parseInt(params?.take.toString()),
+      parseInt(params?.skip.toString()),
+    );
+    return CoreApiResonseSchema.success(
+      await this.getUserListWithFilter.execute(filter),
     );
   }
 

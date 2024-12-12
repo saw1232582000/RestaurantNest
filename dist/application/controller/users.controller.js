@@ -22,14 +22,25 @@ const ApiResponseSchema_1 = require("../../core/common/schema/ApiResponseSchema"
 const swagger_1 = require("@nestjs/swagger");
 const GetUserUsecase_1 = require("../../core/domain/user/service/GetUserUsecase");
 const GetUserResponseSchema_1 = require("./documentation/user/ResponseSchema/GetUserResponseSchema");
+const UserFilter_1 = require("../../core/domain/user/dto/UserFilter");
+const GetUserListUsecase_1 = require("../../core/domain/user/service/GetUserListUsecase");
+const UserFilterSchema_1 = require("./documentation/user/RequsetSchema/UserFilterSchema");
+const GetUserListResponseSchema_1 = require("./documentation/user/ResponseSchema/GetUserListResponseSchema");
 let UsersController = class UsersController {
-    constructor(getUserUseCase, createUserUseCase) {
+    constructor(getUserUseCase, createUserUseCase, getUserListWithFilter) {
         this.getUserUseCase = getUserUseCase;
         this.createUserUseCase = createUserUseCase;
+        this.getUserListWithFilter = getUserListWithFilter;
     }
     async findOne(req) {
         this.getUserUseCase = new GetUserUsecase_1.GetUserUseCase(new PrismaUserRepository_1.PrismaUserRepository(new client_1.PrismaClient()));
         return ApiResponseSchema_1.CoreApiResonseSchema.success(await this.getUserUseCase.execute(req.user?.user?.id));
+    }
+    async getAllByFilter(params) {
+        this.getUserListWithFilter = new GetUserListUsecase_1.GetUserListWithFilterUseCase(new PrismaUserRepository_1.PrismaUserRepository(new client_1.PrismaClient()));
+        console.log(params);
+        const filter = new UserFilter_1.UserFilter(params.name, params.role, parseInt(params?.take.toString()), parseInt(params?.skip.toString()));
+        return ApiResponseSchema_1.CoreApiResonseSchema.success(await this.getUserListWithFilter.execute(filter));
     }
 };
 exports.UsersController = UsersController;
@@ -43,10 +54,21 @@ __decorate([
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "findOne", null);
+__decorate([
+    (0, swagger_1.ApiBearerAuth)(),
+    (0, common_1.UseGuards)(jwt_guard_1.JwtGuard),
+    (0, swagger_1.ApiResponse)({ type: GetUserListResponseSchema_1.GetUserListResponseSchema }),
+    (0, common_1.Get)('/getUserList'),
+    __param(0, (0, common_1.Query)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [UserFilterSchema_1.UserFilterSchama]),
+    __metadata("design:returntype", Promise)
+], UsersController.prototype, "getAllByFilter", null);
 exports.UsersController = UsersController = __decorate([
     (0, common_1.Controller)('User'),
     (0, swagger_1.ApiTags)('users'),
     __metadata("design:paramtypes", [GetUserUsecase_1.GetUserUseCase,
-        CreateUserUsecase_1.CreateUserUseCase])
+        CreateUserUsecase_1.CreateUserUseCase,
+        GetUserListUsecase_1.GetUserListWithFilterUseCase])
 ], UsersController);
 //# sourceMappingURL=users.controller.js.map

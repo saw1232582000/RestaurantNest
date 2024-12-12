@@ -1,6 +1,7 @@
 import { IBaseRepository } from 'src/core/common/base-repository/port';
 import { UserEntity } from '../../entity/User';
 import { Injectable } from '@nestjs/common';
+import { UserFilter } from '../../dto/UserFilter';
 
 @Injectable()
 export abstract class IUserRepository
@@ -17,4 +18,5 @@ export abstract class IUserRepository
   }) => Promise<UserEntity | null>;
   findAll: () => Promise<UserEntity[]>;
   update: (entity: UserEntity) => Promise<UserEntity>;
+  findAllWithSchema: (filter: UserFilter) => Promise<{ users: UserEntity[]; totalCounts: number }>;
 }
