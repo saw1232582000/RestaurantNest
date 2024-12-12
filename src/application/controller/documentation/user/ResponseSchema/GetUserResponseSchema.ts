@@ -3,7 +3,7 @@ import { IsEmail, IsEnum, IsNotEmpty, IsString } from 'class-validator';
 import { UserRole } from 'src/core/common/type/UserEnum';
 import { BaseResponseSchema } from '../../common/BaseResponseSchema';
 
-class GetUserResponse {
+export class GetUserResponse {
   @ApiProperty()
   id: string;
 

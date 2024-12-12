@@ -9,6 +9,7 @@ import { JwtGuard } from '../auth/guard/jwt.guard';
 import { AuthModule } from './auth.module';
 import { AuthService } from 'src/core/domain/auth/service/Authservice';
 import { GetUserUseCase } from 'src/core/domain/user/service/GetUserUsecase';
+import { GetUserListWithFilterUseCase } from '@src/core/domain/user/service/GetUserListUsecase';
 
 @Module({
   controllers: [UsersController],
@@ -16,6 +17,7 @@ import { GetUserUseCase } from 'src/core/domain/user/service/GetUserUsecase';
     CreateUserUseCase,
     JwtGuard,
     GetUserUseCase,
+    GetUserListWithFilterUseCase,
     {
       provide: IUserRepository,
       useClass: PrismaUserRepository,

@@ -9,12 +9,13 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.GetUserResonseSchema = void 0;
+exports.GetUserResonseSchema = exports.GetUserResponse = void 0;
 const swagger_1 = require("@nestjs/swagger");
 const UserEnum_1 = require("../../../../../core/common/type/UserEnum");
 const BaseResponseSchema_1 = require("../../common/BaseResponseSchema");
 class GetUserResponse {
 }
+exports.GetUserResponse = GetUserResponse;
 __decorate([
     (0, swagger_1.ApiProperty)(),
     __metadata("design:type", String)

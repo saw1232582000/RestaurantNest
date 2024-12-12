@@ -14,6 +14,7 @@ import {
 } from '@prisma/client/runtime/library';
 import { HTTP_CODE_METADATA } from '@nestjs/common/constants';
 import { CoreApiResonseSchema } from 'src/core/common/schema/ApiResponseSchema';
+import { UserFilter } from '../dto/UserFilter';
 
 export class PrismaUserRepository implements IUserRepository {
   constructor(public readonly prisma: PrismaClient) {}
@@ -37,7 +38,9 @@ export class PrismaUserRepository implements IUserRepository {
             CoreApiResonseSchema.error(
               HttpStatus.BAD_REQUEST,
               'Bad Request',
-              'Email already used',
+              e?.meta?.target[0] == 'email'
+                ? 'Email already used'
+                : 'Phone already used',
             ),
           );
         } else {
@@ -142,5 +145,36 @@ export class PrismaUserRepository implements IUserRepository {
     const users = await this.prisma.user.findMany({});
 
     return users.map((user) => UserEntity.toEntity(user));
+  }
+
+  async findAllWithSchema(
+    filter: UserFilter,
+  ): Promise<{ users: UserEntity[]; totalCounts: number }> {
+    try {
+      const totalCounts = await this.prisma.user.count({
+        where: {
+          name: { contains: filter.name },
+          role: { contains: filter.role },
+        },
+      });
+      const users = await this.prisma.user.findMany({
+        where: {
+          name: { contains: filter.name },
+          role: { contains: filter.role },
+        },
+        take: filter.take,
+        skip: filter.skip,
+      });
+
+      return {
+        users: users.map((product) => UserEntity.toEntity(product)),
+        totalCounts: totalCounts,
+      };
+    } catch (e) {
+      throw new InternalServerErrorException('Something bad happened', {
+        cause: new Error(),
+        description: 'Unable to get user list',
+      });
+    }
   }
 }
