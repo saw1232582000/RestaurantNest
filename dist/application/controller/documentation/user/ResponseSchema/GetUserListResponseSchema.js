@@ -9,15 +9,26 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.GetUserListResponseSchema = void 0;
+exports.GetUserListResponseSchema = exports.GetUserListResponse = void 0;
 const swagger_1 = require("@nestjs/swagger");
 const BaseResponseSchema_1 = require("../../common/BaseResponseSchema");
 const GetUserResponseSchema_1 = require("./GetUserResponseSchema");
+class GetUserListResponse {
+}
+exports.GetUserListResponse = GetUserListResponse;
+__decorate([
+    (0, swagger_1.ApiProperty)({ type: [GetUserResponseSchema_1.GetUserResponse] }),
+    __metadata("design:type", Array)
+], GetUserListResponse.prototype, "users", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)(),
+    __metadata("design:type", Number)
+], GetUserListResponse.prototype, "totalCounts", void 0);
 class GetUserListResponseSchema extends BaseResponseSchema_1.BaseResponseSchema {
 }
 exports.GetUserListResponseSchema = GetUserListResponseSchema;
 __decorate([
-    (0, swagger_1.ApiProperty)({ type: [GetUserResponseSchema_1.GetUserResponse] }),
-    __metadata("design:type", Array)
+    (0, swagger_1.ApiProperty)({ type: GetUserListResponse }),
+    __metadata("design:type", GetUserListResponse)
 ], GetUserListResponseSchema.prototype, "data", void 0);
 //# sourceMappingURL=GetUserListResponseSchema.js.map
