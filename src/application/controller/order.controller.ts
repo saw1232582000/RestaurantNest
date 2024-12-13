@@ -62,9 +62,7 @@ export class OrderController {
     @Body() order: CreateOrderRequestSchema,
     @Req() req,
   ) {
-    this.createOrderUseCase = new CreateorderUseCase(
-      new PrismaOrderRepository(new PrismaClient()),
-    );
+    
     const createOrderDto = new CreateOrderDto();
     createOrderDto.table = order?.table;
 
@@ -87,9 +85,7 @@ export class OrderController {
   @ApiResponse({ type: GetOrderResponseSchema })
   @Get('/get')
   public async getOrder(@Req() req, @Query() params: { id: string }) {
-    this.getOrderUseCase = new GetOrderUseCase(
-      new PrismaOrderRepository(new PrismaClient()),
-    );
+    
     const order = await this.getOrderUseCase.execute(params.id);
     return CoreApiResonseSchema.success(order);
   }
@@ -100,9 +96,7 @@ export class OrderController {
   @ApiResponse({ type: GetOrderListResponseSchema })
   @Get('/getList')
   public async getOrderList(@Query() params: OrderFilterSchama, @Req() req) {
-    this.getOrderListUseCase = new GetOrderListWithFilterUseCase(
-      new PrismaOrderRepository(new PrismaClient()),
-    );
+    
     const orderFilter = new OrderFilter(
       params.startDate,
       params.endDate,

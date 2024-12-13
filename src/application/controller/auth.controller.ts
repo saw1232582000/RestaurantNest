@@ -59,9 +59,7 @@ export class AuthController {
     )
     user: CreateUserSchema,
   ): Promise<CoreApiResonseSchema<any>> {
-    this.createUserUseCase = new CreateUserUseCase(
-      new PrismaUserRepository(new PrismaClient()),
-    );
+    
     const createUserDto = new CreateUserDto();
     createUserDto.email = user.email;
     createUserDto.phone = user.phone;

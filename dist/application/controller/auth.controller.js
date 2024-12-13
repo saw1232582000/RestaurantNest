@@ -23,8 +23,6 @@ const ApiResponseSchema_1 = require("../../core/common/schema/ApiResponseSchema"
 const CreateUserRequestSchema_1 = require("./documentation/user/RequsetSchema/CreateUserRequestSchema");
 const CreateUserResponseSchema_1 = require("./documentation/user/ResponseSchema/CreateUserResponseSchema");
 const CreateUserUsecase_1 = require("../../core/domain/user/service/CreateUserUsecase");
-const PrismaUserRepository_1 = require("../../core/domain/user/repository/PrismaUserRepository");
-const client_1 = require("@prisma/client");
 const CreateUserDto_1 = require("../../core/domain/user/dto/CreateUserDto");
 let AuthController = class AuthController {
     constructor(authService, createUserUseCase) {
@@ -36,7 +34,6 @@ let AuthController = class AuthController {
         return ApiResponseSchema_1.CoreApiResonseSchema.success({ token: result });
     }
     async Login(user) {
-        this.createUserUseCase = new CreateUserUsecase_1.CreateUserUseCase(new PrismaUserRepository_1.PrismaUserRepository(new client_1.PrismaClient()));
         const createUserDto = new CreateUserDto_1.CreateUserDto();
         createUserDto.email = user.email;
         createUserDto.phone = user.phone;

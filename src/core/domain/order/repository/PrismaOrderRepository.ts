@@ -5,6 +5,7 @@ import {
   HttpCode,
   HttpException,
   HttpStatus,
+  Inject,
   InternalServerErrorException,
 } from '@nestjs/common';
 import {
@@ -18,9 +19,10 @@ import { IOrderRepository } from '../port/repository-port/IOrderRepository';
 import { OrderEntity } from '../entity/Order';
 import { OrderFilter } from '../dto/OrderFilter';
 import { Status } from '@src/core/common/type/StatusEnum';
+import { PrismaService } from '@src/core/common/prisma/PrismaService';
 
 export class PrismaOrderRepository implements IOrderRepository {
-  constructor(public readonly prisma: PrismaClient) {}
+  constructor(@Inject()public readonly prisma: PrismaService) {}
 
   async create(order: OrderEntity): Promise<OrderEntity> {
     try {

@@ -48,9 +48,7 @@ export class UsersController {
   @ApiResponse({ type: GetUserResonseSchema })
   @Get()
   async findOne(@Request() req): Promise<CoreApiResonseSchema<any>> {
-    this.getUserUseCase = new GetUserUseCase(
-      new PrismaUserRepository(new PrismaClient()),
-    );
+    
 
     return CoreApiResonseSchema.success(
       await this.getUserUseCase.execute(req.user?.user?.id),
@@ -62,9 +60,7 @@ export class UsersController {
   @ApiResponse({ type: GetUserListResponseSchema })
   @Get('/getUserList')
   public async getAllByFilter(@Query() params: UserFilterSchama) {
-    this.getUserListWithFilter = new GetUserListWithFilterUseCase(
-      new PrismaUserRepository(new PrismaClient()),
-    );
+    
     console.log(params);
     const filter = new UserFilter(
       params.name,

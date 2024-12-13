@@ -18,6 +18,7 @@ const product_module_1 = require("./application/module/product.module");
 const cart_module_1 = require("./application/module/cart.module");
 const order_module_1 = require("./application/module/order.module");
 const chat_module_1 = require("./application/module/chat.module");
+const prisma_module_1 = require("./application/module/prisma.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -30,6 +31,7 @@ exports.AppModule = AppModule = __decorate([
             cart_module_1.CartModule,
             order_module_1.OrderModule,
             chat_module_1.ChatModule,
+            prisma_module_1.PrismaModule,
             throttler_1.ThrottlerModule.forRoot([
                 {
                     name: 'short',
