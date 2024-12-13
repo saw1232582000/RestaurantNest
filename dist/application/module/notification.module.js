@@ -6,20 +6,17 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.PrismaService = void 0;
+exports.NotificationModule = void 0;
 const common_1 = require("@nestjs/common");
-const client_1 = require("@prisma/client");
-let PrismaService = class PrismaService extends client_1.PrismaClient {
-    async onModuleInit() {
-        await this.$connect();
-    }
-    async onModuleDestroy() {
-        await this.$disconnect();
-    }
+const NotificationService_1 = require("../../core/common/pusher/NotificationService");
+let NotificationModule = class NotificationModule {
 };
-exports.PrismaService = PrismaService;
-exports.PrismaService = PrismaService = __decorate([
+exports.NotificationModule = NotificationModule;
+exports.NotificationModule = NotificationModule = __decorate([
     (0, common_1.Global)(),
-    (0, common_1.Injectable)()
-], PrismaService);
-//# sourceMappingURL=PrismaService.js.map
+    (0, common_1.Module)({
+        providers: [NotificationService_1.NotificationService],
+        exports: [NotificationService_1.NotificationService],
+    })
+], NotificationModule);
+//# sourceMappingURL=notification.module.js.map
