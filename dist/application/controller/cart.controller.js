@@ -20,8 +20,6 @@ const AddToCartRequestSchema_1 = require("./documentation/cart/RequestSchema/Add
 const ReoveFromCardRequestSchema_1 = require("./documentation/cart/RequestSchema/ReoveFromCardRequestSchema");
 const AddToCartUseCase_1 = require("../../core/domain/cart/service/AddToCartUseCase");
 const RemoveFromCartUseCase_1 = require("../../core/domain/cart/service/RemoveFromCartUseCase");
-const PrismaCartRepository_1 = require("../../core/domain/cart/repository/PrismaCartRepository");
-const client_1 = require("@prisma/client");
 const AddToCartDto_1 = require("../../core/domain/cart/dto/AddToCartDto");
 const ApiResponseSchema_1 = require("../../core/common/schema/ApiResponseSchema");
 const RemoveFromCartDto_1 = require("../../core/domain/cart/dto/RemoveFromCartDto");
@@ -33,7 +31,6 @@ let CartController = class CartController {
         this.removeFromCartUseCase = removeFromCartUseCase;
     }
     async addToCart(product, req) {
-        this.addToCartUseCase = new AddToCartUseCase_1.AddToCartUseCase(new PrismaCartRepository_1.PrismaCartRepository(new client_1.PrismaClient()));
         const addToCartDto = new AddToCartDto_1.AddToCartDto();
         addToCartDto.productId = product.productId;
         addToCartDto.userId = req.user?.user?.id;
@@ -41,7 +38,6 @@ let CartController = class CartController {
         return ApiResponseSchema_1.CoreApiResonseSchema.success({ message: "Item added to cart successfully" });
     }
     async removeFromCart(product, req) {
-        this.removeFromCartUseCase = new RemoveFromCartUseCase_1.RemoveFromCartUseCase(new PrismaCartRepository_1.PrismaCartRepository(new client_1.PrismaClient()));
         const removeFromCartDto = new RemoveFromCartDto_1.RemoveFromCartDto();
         removeFromCartDto.productId = product.productId;
         removeFromCartDto.userId = req.user?.user?.id;

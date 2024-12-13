@@ -65,9 +65,9 @@ export class ProductController {
   @ApiResponse({ type: CreateProductResponseSchema })
   @Post('/create')
   public async create(@Body() product: CreateProductSchema, @Req() req) {
-    this.createProductUseCase = new CreateProductUseCase(
-      new PrismaProductRepository(new PrismaClient()),
-    );
+    // this.createProductUseCase = new CreateProductUseCase(
+    //   new PrismaProductRepository(new PrismaClient()),
+    // );
     const createProductDto = new CreateProductDto();
     createProductDto.userId = req.user?.user?.id;
     createProductDto.name = product.name;
@@ -92,9 +92,9 @@ export class ProductController {
     @Req() req,
     @Query() params: { id: string },
   ) {
-    this.updateProductUsecase = new UpdateProductUseCase(
-      new PrismaProductRepository(new PrismaClient()),
-    );
+    // this.updateProductUsecase = new UpdateProductUseCase(
+    //   new PrismaProductRepository(new PrismaClient()),
+    // );
     const updateProductDto = new UpdateProductDto();
     updateProductDto.id = params.id;
     updateProductDto.userId = req.user?.user?.id;
@@ -114,9 +114,9 @@ export class ProductController {
   @ApiResponse({ type: GetProductResponseSchema })
   @Get('/get')
   public async get(@Req() req, @Query() params: { id: string }) {
-    this.getProductUsecase = new GetProductUseCase(
-      new PrismaProductRepository(new PrismaClient()),
-    );
+    // this.getProductUsecase = new GetProductUseCase(
+    //   new PrismaProductRepository(new PrismaClient()),
+    // );
 
     return CoreApiResonseSchema.success(
       await this.getProductUsecase.execute(params.id),
@@ -128,9 +128,9 @@ export class ProductController {
   @ApiResponse({ type: GetProductListResponseSchema })
   @Get('/getAll')
   public async getAll() {
-    this.getProductListUsecase = new GetProductListUseCase(
-      new PrismaProductRepository(new PrismaClient()),
-    );
+    // this.getProductListUsecase = new GetProductListUseCase(
+    //   new PrismaProductRepository(new PrismaClient()),
+    // );
 
     return CoreApiResonseSchema.success(
       await this.getProductListUsecase.execute(),
@@ -143,9 +143,9 @@ export class ProductController {
   @ApiResponse({ type: GetProductListResponseSchema })
   @Get('/getProductListByName')
   public async getAllByFilter(@Query() params: ProdcutFilterSchama) {
-    this.getProductListWithFilter = new GetProductListWithFilterUseCase(
-      new PrismaProductRepository(new PrismaClient()),
-    );
+    // this.getProductListWithFilter = new GetProductListWithFilterUseCase(
+    //   new PrismaProductRepository(new PrismaClient()),
+    // );
     console.log(params);
     const filter = new ProductFilter(
       params.name,

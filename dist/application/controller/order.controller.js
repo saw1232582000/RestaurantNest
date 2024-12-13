@@ -19,8 +19,6 @@ const jwt_guard_1 = require("../auth/guard/jwt.guard");
 const CreateOrderUseCase_1 = require("../../core/domain/order/service/CreateOrderUseCase");
 const GetOrderUseCase_1 = require("../../core/domain/order/service/GetOrderUseCase");
 const GetOrderListUseCase_1 = require("../../core/domain/order/service/GetOrderListUseCase");
-const PrismaOrderRepository_1 = require("../../core/domain/order/repository/PrismaOrderRepository");
-const client_1 = require("@prisma/client");
 const CreateOrderDto_1 = require("../../core/domain/order/dto/CreateOrderDto");
 const ApiResponseSchema_1 = require("../../core/common/schema/ApiResponseSchema");
 const CreateOrderRequestSchema_1 = require("./documentation/order/RequestSchema/CreateOrderRequestSchema");
@@ -38,7 +36,6 @@ let OrderController = class OrderController {
         this.getOrderListUseCase = getOrderListUseCase;
     }
     async createOrder(order, req) {
-        this.createOrderUseCase = new CreateOrderUseCase_1.CreateorderUseCase(new PrismaOrderRepository_1.PrismaOrderRepository(new client_1.PrismaClient()));
         const createOrderDto = new CreateOrderDto_1.CreateOrderDto();
         createOrderDto.table = order?.table;
         createOrderDto.status = order.status;
@@ -52,12 +49,10 @@ let OrderController = class OrderController {
         });
     }
     async getOrder(req, params) {
-        this.getOrderUseCase = new GetOrderUseCase_1.GetOrderUseCase(new PrismaOrderRepository_1.PrismaOrderRepository(new client_1.PrismaClient()));
         const order = await this.getOrderUseCase.execute(params.id);
         return ApiResponseSchema_1.CoreApiResonseSchema.success(order);
     }
     async getOrderList(params, req) {
-        this.getOrderListUseCase = new GetOrderListUseCase_1.GetOrderListWithFilterUseCase(new PrismaOrderRepository_1.PrismaOrderRepository(new client_1.PrismaClient()));
         const orderFilter = new OrderFilter_1.OrderFilter(params.startDate, params.endDate, parseInt(params?.take.toString()), parseInt(params?.skip.toString()), params.status);
         const orderList = await this.getOrderListUseCase.execute(orderFilter);
         return ApiResponseSchema_1.CoreApiResonseSchema.success(orderList);

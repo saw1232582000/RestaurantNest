@@ -5,6 +5,7 @@ import {
   HttpCode,
   HttpException,
   HttpStatus,
+  Inject,
   InternalServerErrorException,
 } from '@nestjs/common';
 import {
@@ -16,9 +17,10 @@ import { CoreApiResonseSchema } from 'src/core/common/schema/ApiResponseSchema';
 import { IProductRepository } from '../port/repository-port/IProductRepository';
 import { ProductEntity } from '../entity/Product';
 import { ProductFilter } from '../dto/ProductFilter';
+import { PrismaService } from '@src/core/common/prisma/PrismaService';
 
 export class PrismaProductRepository implements IProductRepository {
-  constructor(public readonly prisma: PrismaClient) {}
+  constructor(@Inject() public readonly prisma: PrismaService) {}
 
   async create(product: ProductEntity): Promise<ProductEntity> {
     try {

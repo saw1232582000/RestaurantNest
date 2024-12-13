@@ -14,7 +14,7 @@ export class AuthService {
     @Inject() private jwtService: JwtService,
   ) {}
   async validateUser(credentials: SinginUserDto): Promise<string> {
-    this.userRepository = new PrismaUserRepository(new PrismaClient());
+    
     const result = await this.userRepository.find({ phone: credentials.phone });
     let isValid;
     if (result) {

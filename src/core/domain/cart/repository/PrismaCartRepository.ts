@@ -5,6 +5,7 @@ import {
   HttpCode,
   HttpException,
   HttpStatus,
+  Inject,
   InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
@@ -19,9 +20,10 @@ import { CartEntity } from '../entity/Cart';
 import { filter } from 'rxjs';
 import { AddToCartDto } from '../dto/AddToCartDto';
 import { RemoveFromCartDto } from '../dto/RemoveFromCartDto';
+import { PrismaService } from '@src/core/common/prisma/PrismaService';
 
 export class PrismaCartRepository implements ICartRepository {
-  constructor(public readonly prisma: PrismaClient) {}
+  constructor(@Inject()public readonly prisma: PrismaService) {}
 
   async create(cart: CartEntity): Promise<CartEntity> {
     try {

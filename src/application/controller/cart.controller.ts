@@ -27,9 +27,7 @@ export class CartController {
   @ApiResponse({ type: AddToCartResponseSchema })
   @Post('/AddToCart')
   public async addToCart(@Body() product: AddToCartRequestSchema, @Req() req) {
-    this.addToCartUseCase = new AddToCartUseCase(
-      new PrismaCartRepository(new PrismaClient()),
-    );
+    
     const addToCartDto = new AddToCartDto();
     addToCartDto.productId = product.productId;
     addToCartDto.userId = req.user?.user?.id;
@@ -46,9 +44,7 @@ export class CartController {
     @Body() product: RemoveFromCartRequestSchema,
     @Req() req,
   ) {
-    this.removeFromCartUseCase = new RemoveFromCartUseCase(
-      new PrismaCartRepository(new PrismaClient()),
-    );
+    
     const removeFromCartDto = new RemoveFromCartDto();
     removeFromCartDto.productId = product.productId;
     removeFromCartDto.userId = req.user?.user?.id;

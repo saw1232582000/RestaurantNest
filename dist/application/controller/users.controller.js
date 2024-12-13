@@ -15,8 +15,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.UsersController = void 0;
 const common_1 = require("@nestjs/common");
 const CreateUserUsecase_1 = require("../../core/domain/user/service/CreateUserUsecase");
-const PrismaUserRepository_1 = require("../../core/domain/user/repository/PrismaUserRepository");
-const client_1 = require("@prisma/client");
 const jwt_guard_1 = require("../auth/guard/jwt.guard");
 const ApiResponseSchema_1 = require("../../core/common/schema/ApiResponseSchema");
 const swagger_1 = require("@nestjs/swagger");
@@ -33,11 +31,9 @@ let UsersController = class UsersController {
         this.getUserListWithFilter = getUserListWithFilter;
     }
     async findOne(req) {
-        this.getUserUseCase = new GetUserUsecase_1.GetUserUseCase(new PrismaUserRepository_1.PrismaUserRepository(new client_1.PrismaClient()));
         return ApiResponseSchema_1.CoreApiResonseSchema.success(await this.getUserUseCase.execute(req.user?.user?.id));
     }
     async getAllByFilter(params) {
-        this.getUserListWithFilter = new GetUserListUsecase_1.GetUserListWithFilterUseCase(new PrismaUserRepository_1.PrismaUserRepository(new client_1.PrismaClient()));
         console.log(params);
         const filter = new UserFilter_1.UserFilter(params.name, params.role, parseInt(params?.take.toString()), parseInt(params?.skip.toString()));
         return ApiResponseSchema_1.CoreApiResonseSchema.success(await this.getUserListWithFilter.execute(filter));

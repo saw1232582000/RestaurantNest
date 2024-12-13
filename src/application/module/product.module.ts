@@ -13,6 +13,7 @@ import { UpdateProductUseCase } from 'src/core/domain/product/service/UpdateProd
 import { GetProductUseCase } from 'src/core/domain/product/service/GetProductUseCase';
 import { GetProductListUseCase, GetProductListWithFilterUseCase } from 'src/core/domain/product/service/GetProductListUseCase';
 import { S3Service } from 'src/core/common/file-upload/UploadS3Service';
+import { PrismaService } from '@src/core/common/prisma/PrismaService';
 
 @Module({
   controllers: [ProductController],
@@ -23,6 +24,7 @@ import { S3Service } from 'src/core/common/file-upload/UploadS3Service';
     GetProductListUseCase,
     GetProductListWithFilterUseCase,
     JwtGuard,
+    // PrismaService,
     S3Service,
     {
       provide: IProductRepository,
