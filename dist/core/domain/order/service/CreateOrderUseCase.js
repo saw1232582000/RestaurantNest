@@ -18,22 +18,32 @@ const IOrderRepository_1 = require("../port/repository-port/IOrderRepository");
 const CreateOrderDto_1 = require("../dto/CreateOrderDto");
 const Order_1 = require("../entity/Order");
 const OrderItem_1 = require("../entity/OrderItem");
+const NotificationService_1 = require("../../../common/pusher/NotificationService");
 let CreateorderUseCase = class CreateorderUseCase {
-    constructor(orderRepository) {
+    constructor(orderRepository, notificationService) {
         this.orderRepository = orderRepository;
+        this.notificationService = notificationService;
     }
     async execute(data) {
-        const newOrder = new Order_1.OrderEntity(undefined, data?.userId, data?.table, data?.status, data?.orderItems?.map((orderItem) => {
-            return OrderItem_1.OrderItemEntity.toEntity(orderItem);
-        }));
-        const createdOrder = await this.orderRepository.create(newOrder);
-        return CreateOrderDto_1.CreateOrderDto.convertToClass(createdOrder);
+        try {
+            const newOrder = new Order_1.OrderEntity(undefined, data?.userId, data?.table, data?.status, data?.orderItems?.map((orderItem) => {
+                return OrderItem_1.OrderItemEntity.toEntity(orderItem);
+            }));
+            const createdOrder = await this.orderRepository.create(newOrder);
+            await this.notificationService.notifyNewOrder(createdOrder.Id, createdOrder);
+            return CreateOrderDto_1.CreateOrderDto.convertToClass(createdOrder);
+        }
+        catch (error) {
+            throw new Error(error);
+        }
     }
 };
 exports.CreateorderUseCase = CreateorderUseCase;
 exports.CreateorderUseCase = CreateorderUseCase = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, common_1.Inject)()),
-    __metadata("design:paramtypes", [IOrderRepository_1.IOrderRepository])
+    __param(1, (0, common_1.Inject)()),
+    __metadata("design:paramtypes", [IOrderRepository_1.IOrderRepository,
+        NotificationService_1.NotificationService])
 ], CreateorderUseCase);
 //# sourceMappingURL=CreateOrderUseCase.js.map
