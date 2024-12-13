@@ -10,6 +10,7 @@ import { CartModule } from './application/module/cart.module';
 import { OrderModule } from './application/module/order.module';
 import { ChatModule } from './application/module/chat.module';
 import { PrismaModule } from './application/module/prisma.module';
+import { NotificationModule } from './application/module/notification.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { PrismaModule } from './application/module/prisma.module';
     OrderModule,
     ChatModule,
     PrismaModule,
+    NotificationModule,
     ThrottlerModule.forRoot([
       {
         name: 'short',
