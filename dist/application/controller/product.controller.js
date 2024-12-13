@@ -19,8 +19,6 @@ const CreateProductDto_1 = require("../../core/domain/product/dto/CreateProductD
 const CreateProductUseCase_1 = require("../../core/domain/product/service/CreateProductUseCase");
 const CreateProductRequestSchema_1 = require("./documentation/product/RequestSchema/CreateProductRequestSchema");
 const jwt_guard_1 = require("../auth/guard/jwt.guard");
-const PrismaProductRepository_1 = require("../../core/domain/product/repository/PrismaProductRepository");
-const client_1 = require("@prisma/client");
 const ApiResponseSchema_1 = require("../../core/common/schema/ApiResponseSchema");
 const UpdateProductDto_1 = require("../../core/domain/product/dto/UpdateProductDto");
 const BaseRequestQuerySchema_1 = require("./documentation/common/BaseRequestQuerySchema");
@@ -46,7 +44,6 @@ let ProductController = class ProductController {
         this.s3Service = s3Service;
     }
     async create(product, req) {
-        this.createProductUseCase = new CreateProductUseCase_1.CreateProductUseCase(new PrismaProductRepository_1.PrismaProductRepository(new client_1.PrismaClient()));
         const createProductDto = new CreateProductDto_1.CreateProductDto();
         createProductDto.userId = req.user?.user?.id;
         createProductDto.name = product.name;
@@ -57,7 +54,6 @@ let ProductController = class ProductController {
         return ApiResponseSchema_1.CoreApiResonseSchema.success(await this.createProductUseCase.execute(createProductDto));
     }
     async update(product, req, params) {
-        this.updateProductUsecase = new UpdateProductUseCase_1.UpdateProductUseCase(new PrismaProductRepository_1.PrismaProductRepository(new client_1.PrismaClient()));
         const updateProductDto = new UpdateProductDto_1.UpdateProductDto();
         updateProductDto.id = params.id;
         updateProductDto.userId = req.user?.user?.id;
@@ -68,15 +64,12 @@ let ProductController = class ProductController {
         return ApiResponseSchema_1.CoreApiResonseSchema.success(await this.updateProductUsecase.execute(updateProductDto));
     }
     async get(req, params) {
-        this.getProductUsecase = new GetProductUseCase_1.GetProductUseCase(new PrismaProductRepository_1.PrismaProductRepository(new client_1.PrismaClient()));
         return ApiResponseSchema_1.CoreApiResonseSchema.success(await this.getProductUsecase.execute(params.id));
     }
     async getAll() {
-        this.getProductListUsecase = new GetProductListUseCase_1.GetProductListUseCase(new PrismaProductRepository_1.PrismaProductRepository(new client_1.PrismaClient()));
         return ApiResponseSchema_1.CoreApiResonseSchema.success(await this.getProductListUsecase.execute());
     }
     async getAllByFilter(params) {
-        this.getProductListWithFilter = new GetProductListUseCase_1.GetProductListWithFilterUseCase(new PrismaProductRepository_1.PrismaProductRepository(new client_1.PrismaClient()));
         console.log(params);
         const filter = new ProductFilter_1.ProductFilter(params.name, parseInt(params?.take.toString()), parseInt(params?.skip.toString()));
         return ApiResponseSchema_1.CoreApiResonseSchema.success(await this.getProductListWithFilter.execute(filter));

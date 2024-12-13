@@ -16,8 +16,6 @@ exports.AuthService = void 0;
 const common_1 = require("@nestjs/common");
 const jwt_1 = require("@nestjs/jwt");
 const IUserRepositoryPort_1 = require("../../user/port/repository-port/IUserRepositoryPort");
-const PrismaUserRepository_1 = require("../../user/repository/PrismaUserRepository");
-const client_1 = require("@prisma/client");
 const argon2_1 = require("argon2");
 let AuthService = class AuthService {
     constructor(userRepository, jwtService) {
@@ -25,7 +23,6 @@ let AuthService = class AuthService {
         this.jwtService = jwtService;
     }
     async validateUser(credentials) {
-        this.userRepository = new PrismaUserRepository_1.PrismaUserRepository(new client_1.PrismaClient());
         const result = await this.userRepository.find({ phone: credentials.phone });
         let isValid;
         if (result) {

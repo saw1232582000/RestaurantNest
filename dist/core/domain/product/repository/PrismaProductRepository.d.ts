@@ -1,10 +1,10 @@
-import { PrismaClient } from '@prisma/client';
 import { IProductRepository } from '../port/repository-port/IProductRepository';
 import { ProductEntity } from '../entity/Product';
 import { ProductFilter } from '../dto/ProductFilter';
+import { PrismaService } from '@src/core/common/prisma/PrismaService';
 export declare class PrismaProductRepository implements IProductRepository {
-    readonly prisma: PrismaClient;
-    constructor(prisma: PrismaClient);
+    readonly prisma: PrismaService;
+    constructor(prisma: PrismaService);
     create(product: ProductEntity): Promise<ProductEntity>;
     update(product: ProductEntity): Promise<ProductEntity>;
     delete(id: string): Promise<boolean>;

@@ -14,7 +14,7 @@ export class GetUserListWithFilterUseCase implements IGetUserListUseCase {
     const list = await this.userRepository.findAllWithSchema(filter);
 
     return {
-      products:list.users.map((product) => CreateUserDto.convertToClass(product)),
+      users:list.users.map((product) => CreateUserDto.convertToClass(product)),
       totalCounts:list.totalCounts
     }
   }

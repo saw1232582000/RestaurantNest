@@ -6,6 +6,7 @@ import {
   HttpCode,
   HttpException,
   HttpStatus,
+  Inject,
   InternalServerErrorException,
 } from '@nestjs/common';
 import {
@@ -15,9 +16,10 @@ import {
 import { HTTP_CODE_METADATA } from '@nestjs/common/constants';
 import { CoreApiResonseSchema } from 'src/core/common/schema/ApiResponseSchema';
 import { UserFilter } from '../dto/UserFilter';
+import { PrismaService } from '@src/core/common/prisma/PrismaService';
 
 export class PrismaUserRepository implements IUserRepository {
-  constructor(public readonly prisma: PrismaClient) {}
+  constructor(@Inject()public readonly prisma: PrismaService) {}
 
   async create(user: UserEntity): Promise<UserEntity> {
     try {

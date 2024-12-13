@@ -9,6 +9,7 @@ import { ProductModule } from './application/module/product.module';
 import { CartModule } from './application/module/cart.module';
 import { OrderModule } from './application/module/order.module';
 import { ChatModule } from './application/module/chat.module';
+import { PrismaModule } from './application/module/prisma.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { ChatModule } from './application/module/chat.module';
     CartModule,
     OrderModule,
     ChatModule,
+    PrismaModule,
     ThrottlerModule.forRoot([
       {
         name: 'short',
