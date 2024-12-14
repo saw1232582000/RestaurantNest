@@ -15,7 +15,7 @@ import { CreateUserUseCase } from 'src/core/domain/user/service/CreateUserUsecas
   imports: [
     JwtModule.register({
       secret: env.JWT_SECRET_KEY,
-      signOptions: { expiresIn: '1h' },
+      signOptions: {  },
     }),
     UsersModule,
     PassportModule,
