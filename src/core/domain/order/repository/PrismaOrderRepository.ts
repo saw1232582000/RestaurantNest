@@ -20,6 +20,7 @@ import { OrderEntity } from '../entity/Order';
 import { OrderFilter } from '../dto/OrderFilter';
 import { Status } from '@src/core/common/type/StatusEnum';
 import { PrismaService } from '@src/core/common/prisma/PrismaService';
+import { UpdateOrderStatusDto } from '../dto/UpdateOrderStatusDto';
 
 export class PrismaOrderRepository implements IOrderRepository {
   constructor(@Inject()public readonly prisma: PrismaService) {}
@@ -63,7 +64,7 @@ export class PrismaOrderRepository implements IOrderRepository {
         }
       }
       if (e instanceof PrismaClientValidationError) {
-        console.log(e);
+        
         throw new InternalServerErrorException('Something bad happened', {
           cause: new Error(),
           description: e.message,
@@ -96,6 +97,30 @@ export class PrismaOrderRepository implements IOrderRepository {
       }
     }
   }
+
+  async updateOrderStatus(updateOrderStatusDto: UpdateOrderStatusDto): Promise<Boolean> {
+    try {
+      const result = await this.prisma.order.update({
+        where: { Id: updateOrderStatusDto.id },
+        data: { status: updateOrderStatusDto.status },
+      });
+      return true;
+    } catch (e) {
+      if (e instanceof PrismaClientValidationError) {
+        throw new InternalServerErrorException('Something bad happened', {
+          cause: new Error(),
+          description: e.message,
+        });
+      }
+      if (e instanceof PrismaClientKnownRequestError) {
+        throw new InternalServerErrorException('Something bad happened', {
+          cause: new Error(),
+          description: e.code,
+        });
+      }
+    }
+  }
+
   async delete(id: string): Promise<boolean> {
     try {
       await this.prisma.order.delete({
@@ -164,7 +189,7 @@ export class PrismaOrderRepository implements IOrderRepository {
   async findAllWithSchema(
     filter: OrderFilter,
   ): Promise<{ orders: OrderEntity[]; totalCounts: number }> {
-    console.log(filter);
+    
     const filterValue =
       filter?.startDate && filter?.endDate
         ? {
@@ -199,7 +224,7 @@ export class PrismaOrderRepository implements IOrderRepository {
         },
       },
     });
-    console.log(products);
+    
 
     return {
       orders: products.map((product) => OrderEntity.toEntity(product)),

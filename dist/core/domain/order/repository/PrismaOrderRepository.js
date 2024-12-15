@@ -58,7 +58,6 @@ let PrismaOrderRepository = class PrismaOrderRepository {
                 }
             }
             if (e instanceof library_1.PrismaClientValidationError) {
-                console.log(e);
                 throw new common_1.InternalServerErrorException('Something bad happened', {
                     cause: new Error(),
                     description: e.message,
@@ -75,6 +74,29 @@ let PrismaOrderRepository = class PrismaOrderRepository {
                 },
             });
             return Order_1.OrderEntity.toEntity(result);
+        }
+        catch (e) {
+            if (e instanceof library_1.PrismaClientValidationError) {
+                throw new common_1.InternalServerErrorException('Something bad happened', {
+                    cause: new Error(),
+                    description: e.message,
+                });
+            }
+            if (e instanceof library_1.PrismaClientKnownRequestError) {
+                throw new common_1.InternalServerErrorException('Something bad happened', {
+                    cause: new Error(),
+                    description: e.code,
+                });
+            }
+        }
+    }
+    async updateOrderStatus(updateOrderStatusDto) {
+        try {
+            const result = await this.prisma.order.update({
+                where: { Id: updateOrderStatusDto.id },
+                data: { status: updateOrderStatusDto.status },
+            });
+            return true;
         }
         catch (e) {
             if (e instanceof library_1.PrismaClientValidationError) {
@@ -154,7 +176,6 @@ let PrismaOrderRepository = class PrismaOrderRepository {
         return orders.map((order) => Order_1.OrderEntity.toEntity(order));
     }
     async findAllWithSchema(filter) {
-        console.log(filter);
         const filterValue = filter?.startDate && filter?.endDate
             ? {
                 status: { contains: filter.status },
@@ -187,7 +208,6 @@ let PrismaOrderRepository = class PrismaOrderRepository {
                 },
             },
         });
-        console.log(products);
         return {
             orders: products.map((product) => Order_1.OrderEntity.toEntity(product)),
             totalCounts: totalCounts,

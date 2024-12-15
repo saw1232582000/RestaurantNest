@@ -3,6 +3,7 @@ import { IBaseRepository } from 'src/core/common/base-repository/port';
 import { Injectable } from '@nestjs/common';
 import { OrderEntity } from '../../entity/Order';
 import { OrderFilter } from '../../dto/OrderFilter';
+import { UpdateOrderStatusDto } from '../../dto/UpdateOrderStatusDto';
 
 
 
@@ -15,4 +16,5 @@ export abstract class IOrderRepository implements IBaseRepository<OrderEntity,{i
     findAll: () => Promise<OrderEntity[]>;
     update: (entity: OrderEntity) => Promise<OrderEntity>;
     findAllWithSchema: (filter:OrderFilter) => Promise<{orders:OrderEntity[],totalCounts:number}>;
+    updateOrderStatus:(updateOrderStatusDto: UpdateOrderStatusDto) => Promise<Boolean>
 }

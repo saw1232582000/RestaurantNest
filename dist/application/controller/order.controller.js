@@ -29,11 +29,16 @@ const OrderFilter_1 = require("../../core/domain/order/dto/OrderFilter");
 const GetOrderResponseSchema_1 = require("./documentation/order/ResponseSchema/GetOrderResponseSchema");
 const GetOrderListResponseSchema_1 = require("./documentation/order/ResponseSchema/GetOrderListResponseSchema");
 const CreateOrderResponseSchema_1 = require("./documentation/order/ResponseSchema/CreateOrderResponseSchema");
+const UpdateOrderStatusRequestSchema_1 = require("./documentation/order/RequestSchema/UpdateOrderStatusRequestSchema");
+const UpdateOrderStatusResponseSchema_1 = require("./documentation/order/ResponseSchema/UpdateOrderStatusResponseSchema");
+const UpdateOrderStatusDto_1 = require("../../core/domain/order/dto/UpdateOrderStatusDto");
+const UpdateOrderStatusUseCase_1 = require("../../core/domain/order/service/UpdateOrderStatusUseCase");
 let OrderController = class OrderController {
-    constructor(createOrderUseCase, getOrderUseCase, getOrderListUseCase) {
+    constructor(createOrderUseCase, getOrderUseCase, getOrderListUseCase, updateOrderStatusUseCase) {
         this.createOrderUseCase = createOrderUseCase;
         this.getOrderUseCase = getOrderUseCase;
         this.getOrderListUseCase = getOrderListUseCase;
+        this.updateOrderStatusUseCase = updateOrderStatusUseCase;
     }
     async createOrder(order, req) {
         const createOrderDto = new CreateOrderDto_1.CreateOrderDto();
@@ -47,6 +52,12 @@ let OrderController = class OrderController {
         return ApiResponseSchema_1.CoreApiResonseSchema.success({
             message: 'Order Created Successfully',
         });
+    }
+    async update(order, req, params) {
+        const updateOrderStatusDto = new UpdateOrderStatusDto_1.UpdateOrderStatusDto();
+        updateOrderStatusDto.id = params.id;
+        updateOrderStatusDto.status = order.status;
+        return ApiResponseSchema_1.CoreApiResonseSchema.success(await this.updateOrderStatusUseCase.execute(updateOrderStatusDto));
     }
     async getOrder(req, params) {
         const order = await this.getOrderUseCase.execute(params.id);
@@ -70,6 +81,20 @@ __decorate([
     __metadata("design:paramtypes", [CreateOrderRequestSchema_1.CreateOrderRequestSchema, Object]),
     __metadata("design:returntype", Promise)
 ], OrderController.prototype, "createOrder", null);
+__decorate([
+    (0, swagger_1.ApiBearerAuth)(),
+    (0, common_1.UseGuards)(jwt_guard_1.JwtGuard),
+    (0, swagger_1.ApiBody)({ type: UpdateOrderStatusRequestSchema_1.UpdateOrderStatusRequestSchema }),
+    (0, swagger_1.ApiQuery)({ type: BaseRequestQuerySchema_1.BaseRequestQuerySchema }),
+    (0, swagger_1.ApiResponse)({ type: UpdateOrderStatusResponseSchema_1.UpdateOrderStatusResponseSchema }),
+    (0, common_1.Put)('/update'),
+    __param(0, (0, common_1.Body)()),
+    __param(1, (0, common_1.Req)()),
+    __param(2, (0, common_1.Query)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [UpdateOrderStatusRequestSchema_1.UpdateOrderStatusRequestSchema, Object, Object]),
+    __metadata("design:returntype", Promise)
+], OrderController.prototype, "update", null);
 __decorate([
     (0, swagger_1.ApiBearerAuth)(),
     (0, common_1.UseGuards)(jwt_guard_1.JwtGuard),
@@ -99,6 +124,7 @@ exports.OrderController = OrderController = __decorate([
     __param(0, (0, common_1.Inject)()),
     __metadata("design:paramtypes", [CreateOrderUseCase_1.CreateorderUseCase,
         GetOrderUseCase_1.GetOrderUseCase,
-        GetOrderListUseCase_1.GetOrderListWithFilterUseCase])
+        GetOrderListUseCase_1.GetOrderListWithFilterUseCase,
+        UpdateOrderStatusUseCase_1.UpdateOrderStatusUseCase])
 ], OrderController);
 //# sourceMappingURL=order.controller.js.map

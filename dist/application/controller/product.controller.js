@@ -70,7 +70,6 @@ let ProductController = class ProductController {
         return ApiResponseSchema_1.CoreApiResonseSchema.success(await this.getProductListUsecase.execute());
     }
     async getAllByFilter(params) {
-        console.log(params);
         const filter = new ProductFilter_1.ProductFilter(params.name, parseInt(params?.take.toString()), parseInt(params?.skip.toString()));
         return ApiResponseSchema_1.CoreApiResonseSchema.success(await this.getProductListWithFilter.execute(filter));
     }
