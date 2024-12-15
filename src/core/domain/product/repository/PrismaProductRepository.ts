@@ -56,7 +56,7 @@ export class PrismaProductRepository implements IProductRepository {
         }
       }
       if (e instanceof PrismaClientValidationError) {
-        console.log(e);
+        
         throw new InternalServerErrorException('Something bad happened', {
           cause: new Error(),
           description: e.message,
@@ -152,7 +152,7 @@ export class PrismaProductRepository implements IProductRepository {
   async findAllWithSchema(
     filter: ProductFilter,
   ): Promise<{ products: ProductEntity[]; totalCounts: number }> {
-    console.log(filter);
+    
     const totalCounts = await this.prisma.product.count({
       where: {
         name: { contains: filter.name },

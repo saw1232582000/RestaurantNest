@@ -7,6 +7,7 @@ import { GetOrderUseCase } from 'src/core/domain/order/service/GetOrderUseCase';
 import { CreateorderUseCase } from 'src/core/domain/order/service/CreateOrderUseCase';
 import { GetOrderListWithFilterUseCase } from 'src/core/domain/order/service/GetOrderListUseCase';
 import { S3Service } from 'src/core/common/file-upload/UploadS3Service';
+import { UpdateOrderStatusUseCase } from '@src/core/domain/order/service/UpdateOrderStatusUseCase';
 
 
 @Module({
@@ -16,6 +17,7 @@ import { S3Service } from 'src/core/common/file-upload/UploadS3Service';
     GetOrderUseCase,
     CreateorderUseCase,
     GetOrderListWithFilterUseCase,
+    UpdateOrderStatusUseCase,
     {
       provide: IOrderRepository,
       useClass: PrismaOrderRepository,

@@ -38,7 +38,6 @@ let PrismaCartRepository = class PrismaCartRepository {
                 });
             }
             if (e instanceof library_1.PrismaClientValidationError) {
-                console.log(e);
                 throw new common_1.InternalServerErrorException('Something bad happened', {
                     cause: new Error(),
                     description: e.message,
