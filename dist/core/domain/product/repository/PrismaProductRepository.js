@@ -49,7 +49,6 @@ let PrismaProductRepository = class PrismaProductRepository {
                 }
             }
             if (e instanceof library_1.PrismaClientValidationError) {
-                console.log(e);
                 throw new common_1.InternalServerErrorException('Something bad happened', {
                     cause: new Error(),
                     description: e.message,
@@ -141,7 +140,6 @@ let PrismaProductRepository = class PrismaProductRepository {
         return products.map((product) => Product_1.ProductEntity.toEntity(product));
     }
     async findAllWithSchema(filter) {
-        console.log(filter);
         const totalCounts = await this.prisma.product.count({
             where: {
                 name: { contains: filter.name },

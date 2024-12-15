@@ -41,7 +41,7 @@ export class PrismaCartRepository implements ICartRepository {
         });
       }
       if (e instanceof PrismaClientValidationError) {
-        console.log(e);
+        
         throw new InternalServerErrorException('Something bad happened', {
           cause: new Error(),
           description: e.message,

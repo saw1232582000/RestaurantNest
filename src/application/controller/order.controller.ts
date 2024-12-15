@@ -7,6 +7,7 @@ import {
   MaxFileSizeValidator,
   ParseFilePipe,
   Post,
+  Put,
   Query,
   Req,
   UploadedFile,
@@ -39,6 +40,10 @@ import { GetOrderListResponseSchema } from './documentation/order/ResponseSchema
 import { CreateOrderResponseSchema } from './documentation/order/ResponseSchema/CreateOrderResponseSchema';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { S3Service } from 'src/core/common/file-upload/UploadS3Service';
+import { UpdateOrderStatusRequestSchema } from './documentation/order/RequestSchema/UpdateOrderStatusRequestSchema';
+import { UpdateOrderStatusResponseSchema } from './documentation/order/ResponseSchema/UpdateOrderStatusResponseSchema';
+import { UpdateOrderStatusDto } from '@src/core/domain/order/dto/UpdateOrderStatusDto';
+import { UpdateOrderStatusUseCase } from '@src/core/domain/order/service/UpdateOrderStatusUseCase';
 // import { ChatGateWay } from 'src/core/common/chat/ChatGateWay';
 
 @Controller('Order')
@@ -49,7 +54,7 @@ export class OrderController {
     private createOrderUseCase: CreateorderUseCase,
     private getOrderUseCase: GetOrderUseCase,
     private getOrderListUseCase: GetOrderListWithFilterUseCase,
-
+    private updateOrderStatusUseCase: UpdateOrderStatusUseCase,
     // private readonly chatGateWay: ChatGateWay,
   ) {}
 
@@ -76,6 +81,29 @@ export class OrderController {
     return CoreApiResonseSchema.success({
       message: 'Order Created Successfully',
     });
+  }
+
+  @ApiBearerAuth()
+  @UseGuards(JwtGuard)
+  @ApiBody({ type: UpdateOrderStatusRequestSchema })
+  @ApiQuery({ type: BaseRequestQuerySchema })
+  @ApiResponse({ type: UpdateOrderStatusResponseSchema })
+  @Put('/update')
+  public async update(
+    @Body() order: UpdateOrderStatusRequestSchema,
+    @Req() req,
+    @Query() params: { id: string },
+  ) {
+    // this.updateProductUsecase = new UpdateProductUseCase(
+    //   new PrismaProductRepository(new PrismaClient()),
+    // );
+    const updateOrderStatusDto = new UpdateOrderStatusDto();
+    updateOrderStatusDto.id = params.id;
+    updateOrderStatusDto.status = order.status;
+
+    return CoreApiResonseSchema.success(
+      await this.updateOrderStatusUseCase.execute(updateOrderStatusDto),
+    );
   }
 
   @ApiBearerAuth()
