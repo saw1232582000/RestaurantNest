@@ -67,20 +67,23 @@ export class OrderController {
     @Body() order: CreateOrderRequestSchema,
     @Req() req,
   ) {
-    
-    const createOrderDto = new CreateOrderDto();
-    createOrderDto.table = order?.table;
+    try {
+      const createOrderDto = new CreateOrderDto();
+      createOrderDto.table = order?.table;
 
-    createOrderDto.status = order.status;
-    createOrderDto.userId = req.user?.user?.id;
-    createOrderDto.orderItems = order.orderItems.map((orderItem) => {
-      return OrderItemEntity.toEntity(orderItem);
-    });
-    //this.chatGateWay.setNewOrder('New Order submitted');
-    await this.createOrderUseCase.execute(createOrderDto);
-    return CoreApiResonseSchema.success({
-      message: 'Order Created Successfully',
-    });
+      createOrderDto.status = order.status;
+      createOrderDto.userId = req.user?.user?.id;
+      createOrderDto.orderItems = order.orderItems.map((orderItem) => {
+        return OrderItemEntity.toEntity(orderItem);
+      });
+      //this.chatGateWay.setNewOrder('New Order submitted');
+      await this.createOrderUseCase.execute(createOrderDto);
+      return CoreApiResonseSchema.success({
+        message: 'Order Created Successfully',
+      });
+    } catch (error) {
+      return CoreApiResonseSchema.error(error);
+    }
   }
 
   @ApiBearerAuth()
@@ -113,7 +116,6 @@ export class OrderController {
   @ApiResponse({ type: GetOrderResponseSchema })
   @Get('/get')
   public async getOrder(@Req() req, @Query() params: { id: string }) {
-    
     const order = await this.getOrderUseCase.execute(params.id);
     return CoreApiResonseSchema.success(order);
   }
@@ -124,13 +126,12 @@ export class OrderController {
   @ApiResponse({ type: GetOrderListResponseSchema })
   @Get('/getList')
   public async getOrderList(@Query() params: OrderFilterSchama, @Req() req) {
-    
     const orderFilter = new OrderFilter(
       params.startDate,
       params.endDate,
       parseInt(params?.take.toString()),
       parseInt(params?.skip.toString()),
-      params.status
+      params.status,
     );
 
     const orderList = await this.getOrderListUseCase.execute(orderFilter);
