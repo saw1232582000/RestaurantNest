@@ -41,17 +41,22 @@ let OrderController = class OrderController {
         this.updateOrderStatusUseCase = updateOrderStatusUseCase;
     }
     async createOrder(order, req) {
-        const createOrderDto = new CreateOrderDto_1.CreateOrderDto();
-        createOrderDto.table = order?.table;
-        createOrderDto.status = order.status;
-        createOrderDto.userId = req.user?.user?.id;
-        createOrderDto.orderItems = order.orderItems.map((orderItem) => {
-            return OrderItem_1.OrderItemEntity.toEntity(orderItem);
-        });
-        await this.createOrderUseCase.execute(createOrderDto);
-        return ApiResponseSchema_1.CoreApiResonseSchema.success({
-            message: 'Order Created Successfully',
-        });
+        try {
+            const createOrderDto = new CreateOrderDto_1.CreateOrderDto();
+            createOrderDto.table = order?.table;
+            createOrderDto.status = order.status;
+            createOrderDto.userId = req.user?.user?.id;
+            createOrderDto.orderItems = order.orderItems.map((orderItem) => {
+                return OrderItem_1.OrderItemEntity.toEntity(orderItem);
+            });
+            await this.createOrderUseCase.execute(createOrderDto);
+            return ApiResponseSchema_1.CoreApiResonseSchema.success({
+                message: 'Order Created Successfully',
+            });
+        }
+        catch (error) {
+            return ApiResponseSchema_1.CoreApiResonseSchema.error(error);
+        }
     }
     async update(order, req, params) {
         const updateOrderStatusDto = new UpdateOrderStatusDto_1.UpdateOrderStatusDto();

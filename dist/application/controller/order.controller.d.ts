@@ -12,9 +12,7 @@ export declare class OrderController {
     private getOrderListUseCase;
     private updateOrderStatusUseCase;
     constructor(createOrderUseCase: CreateorderUseCase, getOrderUseCase: GetOrderUseCase, getOrderListUseCase: GetOrderListWithFilterUseCase, updateOrderStatusUseCase: UpdateOrderStatusUseCase);
-    createOrder(order: CreateOrderRequestSchema, req: any): Promise<CoreApiResonseSchema<{
-        message: string;
-    }>>;
+    createOrder(order: CreateOrderRequestSchema, req: any): Promise<CoreApiResonseSchema<unknown>>;
     update(order: UpdateOrderStatusRequestSchema, req: any, params: {
         id: string;
     }): Promise<CoreApiResonseSchema<{
