@@ -92,6 +92,7 @@ let PrismaOrderRepository = class PrismaOrderRepository {
     }
     async updateOrderStatus(updateOrderStatusDto) {
         try {
+            console.log(updateOrderStatusDto);
             const result = await this.prisma.order.update({
                 where: { Id: updateOrderStatusDto.id },
                 data: { status: updateOrderStatusDto.status },
