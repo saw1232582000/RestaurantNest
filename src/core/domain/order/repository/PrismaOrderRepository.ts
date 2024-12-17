@@ -100,6 +100,7 @@ export class PrismaOrderRepository implements IOrderRepository {
 
   async updateOrderStatus(updateOrderStatusDto: UpdateOrderStatusDto): Promise<Boolean> {
     try {
+      console.log(updateOrderStatusDto);
       const result = await this.prisma.order.update({
         where: { Id: updateOrderStatusDto.id },
         data: { status: updateOrderStatusDto.status },
