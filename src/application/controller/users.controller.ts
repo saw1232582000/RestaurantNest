@@ -22,7 +22,7 @@ import { PrismaUserRepository } from 'src/core/domain/user/repository/PrismaUser
 import { PrismaClient } from '@prisma/client';
 import { JwtGuard } from '../auth/guard/jwt.guard';
 import { CoreApiResonseSchema } from 'src/core/common/schema/ApiResponseSchema';
-import { ApiBearerAuth, ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 import { CreateUserResonseSchema } from './documentation/user/ResponseSchema/CreateUserResponseSchema';
 import { GetUserUseCase } from 'src/core/domain/user/service/GetUserUsecase';
@@ -32,6 +32,7 @@ import { UserFilter } from '@src/core/domain/user/dto/UserFilter';
 import { GetUserListWithFilterUseCase } from '@src/core/domain/user/service/GetUserListUsecase';
 import { UserFilterSchama } from './documentation/user/RequsetSchema/UserFilterSchema';
 import { GetUserListResponseSchema } from './documentation/user/ResponseSchema/GetUserListResponseSchema';
+import { BaseRequestQuerySchema } from './documentation/common/BaseRequestQuerySchema';
 
 @Controller('User')
 @ApiTags('users')
@@ -48,10 +49,22 @@ export class UsersController {
   @ApiResponse({ type: GetUserResonseSchema })
   @Get()
   async findOne(@Request() req): Promise<CoreApiResonseSchema<any>> {
-    
-
     return CoreApiResonseSchema.success(
       await this.getUserUseCase.execute(req.user?.user?.id),
+    );
+  }
+
+  @ApiBearerAuth()
+  @UseGuards(JwtGuard)
+  @ApiQuery({ type: BaseRequestQuerySchema })
+  @ApiResponse({ type: GetUserResonseSchema })
+  @Get('/getUserById')
+  async findOneById(
+    @Request() req,
+    @Query() params: { id: string },
+  ): Promise<CoreApiResonseSchema<any>> {
+    return CoreApiResonseSchema.success(
+      await this.getUserUseCase.execute(params.id),
     );
   }
 
@@ -60,7 +73,6 @@ export class UsersController {
   @ApiResponse({ type: GetUserListResponseSchema })
   @Get('/getUserList')
   public async getAllByFilter(@Query() params: UserFilterSchama) {
-    
     console.log(params);
     const filter = new UserFilter(
       params.name,
