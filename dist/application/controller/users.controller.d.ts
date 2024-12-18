@@ -9,5 +9,8 @@ export declare class UsersController {
     private getUserListWithFilter;
     constructor(getUserUseCase: GetUserUseCase, createUserUseCase: CreateUserUseCase, getUserListWithFilter: GetUserListWithFilterUseCase);
     findOne(req: any): Promise<CoreApiResonseSchema<any>>;
+    findOneById(req: any, params: {
+        id: string;
+    }): Promise<CoreApiResonseSchema<any>>;
     getAllByFilter(params: UserFilterSchama): Promise<CoreApiResonseSchema<any>>;
 }

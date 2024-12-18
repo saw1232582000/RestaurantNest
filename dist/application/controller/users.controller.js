@@ -24,6 +24,7 @@ const UserFilter_1 = require("../../core/domain/user/dto/UserFilter");
 const GetUserListUsecase_1 = require("../../core/domain/user/service/GetUserListUsecase");
 const UserFilterSchema_1 = require("./documentation/user/RequsetSchema/UserFilterSchema");
 const GetUserListResponseSchema_1 = require("./documentation/user/ResponseSchema/GetUserListResponseSchema");
+const BaseRequestQuerySchema_1 = require("./documentation/common/BaseRequestQuerySchema");
 let UsersController = class UsersController {
     constructor(getUserUseCase, createUserUseCase, getUserListWithFilter) {
         this.getUserUseCase = getUserUseCase;
@@ -32,6 +33,9 @@ let UsersController = class UsersController {
     }
     async findOne(req) {
         return ApiResponseSchema_1.CoreApiResonseSchema.success(await this.getUserUseCase.execute(req.user?.user?.id));
+    }
+    async findOneById(req, params) {
+        return ApiResponseSchema_1.CoreApiResonseSchema.success(await this.getUserUseCase.execute(params.id));
     }
     async getAllByFilter(params) {
         console.log(params);
@@ -50,6 +54,18 @@ __decorate([
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "findOne", null);
+__decorate([
+    (0, swagger_1.ApiBearerAuth)(),
+    (0, common_1.UseGuards)(jwt_guard_1.JwtGuard),
+    (0, swagger_1.ApiQuery)({ type: BaseRequestQuerySchema_1.BaseRequestQuerySchema }),
+    (0, swagger_1.ApiResponse)({ type: GetUserResponseSchema_1.GetUserResonseSchema }),
+    (0, common_1.Get)('/getUserById'),
+    __param(0, (0, common_1.Request)()),
+    __param(1, (0, common_1.Query)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object]),
+    __metadata("design:returntype", Promise)
+], UsersController.prototype, "findOneById", null);
 __decorate([
     (0, swagger_1.ApiBearerAuth)(),
     (0, common_1.UseGuards)(jwt_guard_1.JwtGuard),

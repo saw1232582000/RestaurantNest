@@ -68,7 +68,7 @@ export class OrderController {
     @Req() req,
   ) {
     try {
-      const createOrderDto = new CreateOrderDto();
+      const createOrderDto = new CreateOrderDto();  
       createOrderDto.table = order?.table;
 
       createOrderDto.status = order.status;
