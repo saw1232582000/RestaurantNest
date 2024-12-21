@@ -9,8 +9,8 @@ class UserEntity {
         this.phone = phone;
         this.role = role;
         this.password = password;
-        this.createdDate = createdDate || new Date();
-        this.updatedDate = updatedDate || new Date();
+        this.createdDate = createdDate;
+        this.updatedDate = updatedDate;
     }
     static toEntity(user) {
         return new UserEntity(user?.id, user?.name, user?.email, user?.phone, user?.role, user?.password, user?.createdDate, user?.updatedDate);
