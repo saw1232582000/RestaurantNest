@@ -8,6 +8,6 @@ export declare class UserEntity {
     password: string;
     createdDate: Date;
     updatedDate: Date;
-    constructor(id: string, name: string, email: string, phone: string, role: UserRole, password: string, createdDate?: Date, updatedDate?: Date);
+    constructor(id: string, name: string, email: string, phone: string, role: UserRole, password?: string, createdDate?: Date, updatedDate?: Date);
     static toEntity(user: any): UserEntity;
 }

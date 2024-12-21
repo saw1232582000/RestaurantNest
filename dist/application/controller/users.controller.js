@@ -15,9 +15,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.UsersController = void 0;
 const common_1 = require("@nestjs/common");
 const CreateUserUsecase_1 = require("../../core/domain/user/service/CreateUserUsecase");
+const CreateUserDto_1 = require("../../core/domain/user/dto/CreateUserDto");
 const jwt_guard_1 = require("../auth/guard/jwt.guard");
 const ApiResponseSchema_1 = require("../../core/common/schema/ApiResponseSchema");
 const swagger_1 = require("@nestjs/swagger");
+const CreateUserResponseSchema_1 = require("./documentation/user/ResponseSchema/CreateUserResponseSchema");
 const GetUserUsecase_1 = require("../../core/domain/user/service/GetUserUsecase");
 const GetUserResponseSchema_1 = require("./documentation/user/ResponseSchema/GetUserResponseSchema");
 const UserFilter_1 = require("../../core/domain/user/dto/UserFilter");
@@ -25,11 +27,14 @@ const GetUserListUsecase_1 = require("../../core/domain/user/service/GetUserList
 const UserFilterSchema_1 = require("./documentation/user/RequsetSchema/UserFilterSchema");
 const GetUserListResponseSchema_1 = require("./documentation/user/ResponseSchema/GetUserListResponseSchema");
 const BaseRequestQuerySchema_1 = require("./documentation/common/BaseRequestQuerySchema");
+const UpdateUserRequestSchema_1 = require("./documentation/user/RequsetSchema/UpdateUserRequestSchema");
+const UpdateUserUseCase_1 = require("../../core/domain/user/service/UpdateUserUseCase");
 let UsersController = class UsersController {
-    constructor(getUserUseCase, createUserUseCase, getUserListWithFilter) {
+    constructor(getUserUseCase, createUserUseCase, getUserListWithFilter, updateUserUseCase) {
         this.getUserUseCase = getUserUseCase;
         this.createUserUseCase = createUserUseCase;
         this.getUserListWithFilter = getUserListWithFilter;
+        this.updateUserUseCase = updateUserUseCase;
     }
     async findOne(req) {
         return ApiResponseSchema_1.CoreApiResonseSchema.success(await this.getUserUseCase.execute(req.user?.user?.id));
@@ -41,6 +46,15 @@ let UsersController = class UsersController {
         console.log(params);
         const filter = new UserFilter_1.UserFilter(params.name, params.role, parseInt(params?.take.toString()), parseInt(params?.skip.toString()));
         return ApiResponseSchema_1.CoreApiResonseSchema.success(await this.getUserListWithFilter.execute(filter));
+    }
+    async updateUser(user, params) {
+        const updateUserDto = new CreateUserDto_1.CreateUserDto();
+        updateUserDto.id = params.id;
+        updateUserDto.email = user.email;
+        updateUserDto.phone = user.phone;
+        updateUserDto.name = user.name;
+        updateUserDto.role = user.role;
+        return ApiResponseSchema_1.CoreApiResonseSchema.success(await this.updateUserUseCase.execute(updateUserDto));
     }
 };
 exports.UsersController = UsersController;
@@ -76,11 +90,26 @@ __decorate([
     __metadata("design:paramtypes", [UserFilterSchema_1.UserFilterSchama]),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "getAllByFilter", null);
+__decorate([
+    (0, swagger_1.ApiBearerAuth)(),
+    (0, common_1.UseGuards)(jwt_guard_1.JwtGuard),
+    (0, common_1.Put)('update'),
+    (0, swagger_1.ApiBody)({ type: UpdateUserRequestSchema_1.UpdateUserRequestSchema }),
+    (0, swagger_1.ApiResponse)({ type: CreateUserResponseSchema_1.CreateUserResonseSchema }),
+    (0, swagger_1.ApiQuery)({ type: BaseRequestQuerySchema_1.BaseRequestQuerySchema }),
+    (0, common_1.HttpCode)(common_1.HttpStatus.OK),
+    __param(0, (0, common_1.Body)(new common_1.ValidationPipe({ errorHttpStatusCode: common_1.HttpStatus.NOT_ACCEPTABLE }))),
+    __param(1, (0, common_1.Query)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [UpdateUserRequestSchema_1.UpdateUserRequestSchema, Object]),
+    __metadata("design:returntype", Promise)
+], UsersController.prototype, "updateUser", null);
 exports.UsersController = UsersController = __decorate([
     (0, common_1.Controller)('User'),
     (0, swagger_1.ApiTags)('users'),
     __metadata("design:paramtypes", [GetUserUsecase_1.GetUserUseCase,
         CreateUserUsecase_1.CreateUserUseCase,
-        GetUserListUsecase_1.GetUserListWithFilterUseCase])
+        GetUserListUsecase_1.GetUserListWithFilterUseCase,
+        UpdateUserUseCase_1.UpdateUserUseCase])
 ], UsersController);
 //# sourceMappingURL=users.controller.js.map

@@ -68,10 +68,7 @@ let PrismaUserRepository = class PrismaUserRepository {
             const result = await this.prisma.user.update({
                 where: { id: user.id },
                 data: {
-                    email: user?.email,
-                    name: user?.name,
-                    password: user?.password,
-                    role: user?.role,
+                    ...user,
                     updatedDate: new Date(),
                 },
             });

@@ -10,6 +10,7 @@ import { AuthModule } from './auth.module';
 import { AuthService } from 'src/core/domain/auth/service/Authservice';
 import { GetUserUseCase } from 'src/core/domain/user/service/GetUserUsecase';
 import { GetUserListWithFilterUseCase } from '@src/core/domain/user/service/GetUserListUsecase';
+import { UpdateUserUseCase } from '@src/core/domain/user/service/UpdateUserUseCase';
 
 @Module({
   controllers: [UsersController],
@@ -18,6 +19,7 @@ import { GetUserListWithFilterUseCase } from '@src/core/domain/user/service/GetU
     JwtGuard,
     GetUserUseCase,
     GetUserListWithFilterUseCase,
+    UpdateUserUseCase,
     {
       provide: IUserRepository,
       useClass: PrismaUserRepository,

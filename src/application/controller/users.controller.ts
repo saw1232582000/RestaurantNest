@@ -8,6 +8,7 @@ import {
   Param,
   ParseIntPipe,
   Post,
+  Put,
   Query,
   Request,
   UseGuards,
@@ -33,6 +34,8 @@ import { GetUserListWithFilterUseCase } from '@src/core/domain/user/service/GetU
 import { UserFilterSchama } from './documentation/user/RequsetSchema/UserFilterSchema';
 import { GetUserListResponseSchema } from './documentation/user/ResponseSchema/GetUserListResponseSchema';
 import { BaseRequestQuerySchema } from './documentation/common/BaseRequestQuerySchema';
+import { UpdateUserRequestSchema } from './documentation/user/RequsetSchema/UpdateUserRequestSchema';
+import { UpdateUserUseCase } from '@src/core/domain/user/service/UpdateUserUseCase';
 
 @Controller('User')
 @ApiTags('users')
@@ -42,6 +45,7 @@ export class UsersController {
     private getUserUseCase: GetUserUseCase,
     private createUserUseCase: CreateUserUseCase,
     private getUserListWithFilter: GetUserListWithFilterUseCase,
+    private updateUserUseCase: UpdateUserUseCase,
   ) {}
 
   @ApiBearerAuth()
@@ -82,6 +86,34 @@ export class UsersController {
     );
     return CoreApiResonseSchema.success(
       await this.getUserListWithFilter.execute(filter),
+    );
+  }
+
+  @ApiBearerAuth()
+  @UseGuards(JwtGuard)
+  @Put('update')
+  @ApiBody({ type: UpdateUserRequestSchema })
+  @ApiResponse({ type: CreateUserResonseSchema })
+  @ApiQuery({ type: BaseRequestQuerySchema })
+  @HttpCode(HttpStatus.OK)
+  async updateUser(
+    @Body(
+      new ValidationPipe({ errorHttpStatusCode: HttpStatus.NOT_ACCEPTABLE }),
+    )
+    user: UpdateUserRequestSchema,
+    @Query() params: { id: string },
+    
+  ): Promise<CoreApiResonseSchema<any>> {
+    
+    const updateUserDto = new CreateUserDto();
+    updateUserDto.id = params.id;
+    updateUserDto.email = user.email;
+    updateUserDto.phone = user.phone;
+    updateUserDto.name = user.name;
+    
+    updateUserDto.role = user.role;
+    return CoreApiResonseSchema.success(
+      await this.updateUserUseCase.execute(updateUserDto),
     );
   }
 
