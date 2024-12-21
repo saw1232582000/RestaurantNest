@@ -126,6 +126,7 @@ export class OrderController {
   @ApiResponse({ type: GetOrderListResponseSchema })
   @Get('/getList')
   public async getOrderList(@Query() params: OrderFilterSchama, @Req() req) {
+    console.log(params);
     const orderFilter = new OrderFilter(
       params.startDate,
       params.endDate,
