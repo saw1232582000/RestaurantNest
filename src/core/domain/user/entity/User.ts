@@ -23,7 +23,7 @@ export class UserEntity {
     email: string,
     phone: string,
     role: UserRole,
-    password: string,
+    password?: string,
     createdDate?: Date,
     updatedDate?: Date,
   ) {
@@ -33,8 +33,8 @@ export class UserEntity {
     this.phone = phone;
     this.role = role;
     this.password = password;
-    this.createdDate = createdDate || new Date();
-    this.updatedDate = updatedDate || new Date();
+    this.createdDate = createdDate;
+    this.updatedDate = updatedDate;
   }
 
   public static toEntity(user: any): UserEntity {
