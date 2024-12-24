@@ -2,6 +2,7 @@ import { IBaseRepository } from 'src/core/common/base-repository/port';
 import { OrderEntity } from '../../entity/Order';
 import { OrderFilter } from '../../dto/OrderFilter';
 import { UpdateOrderStatusDto } from '../../dto/UpdateOrderStatusDto';
+import { UpdateOrderItemDto } from '../../dto/UpdateOrderItemDto';
 export declare abstract class IOrderRepository implements IBaseRepository<OrderEntity, {
     id?: string;
     email?: string;
@@ -20,4 +21,5 @@ export declare abstract class IOrderRepository implements IBaseRepository<OrderE
         totalCounts: number;
     }>;
     updateOrderStatus: (updateOrderStatusDto: UpdateOrderStatusDto) => Promise<Boolean>;
+    updateOrderItems: (updateOrderItemDto: UpdateOrderItemDto) => Promise<Boolean>;
 }

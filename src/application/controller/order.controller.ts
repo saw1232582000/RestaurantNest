@@ -44,6 +44,9 @@ import { UpdateOrderStatusRequestSchema } from './documentation/order/RequestSch
 import { UpdateOrderStatusResponseSchema } from './documentation/order/ResponseSchema/UpdateOrderStatusResponseSchema';
 import { UpdateOrderStatusDto } from '@src/core/domain/order/dto/UpdateOrderStatusDto';
 import { UpdateOrderStatusUseCase } from '@src/core/domain/order/service/UpdateOrderStatusUseCase';
+import { UpdateOrderItemRequestSchema } from './documentation/order/RequestSchema/UpdateOrderItemReqeustSchema';
+import { UpdateOrderItemDto } from '@src/core/domain/order/dto/UpdateOrderItemDto';
+import { UpdateOrderItemUseCase } from '@src/core/domain/order/service/UpdateOrderItemUseCase';
 // import { ChatGateWay } from 'src/core/common/chat/ChatGateWay';
 
 @Controller('Order')
@@ -55,6 +58,7 @@ export class OrderController {
     private getOrderUseCase: GetOrderUseCase,
     private getOrderListUseCase: GetOrderListWithFilterUseCase,
     private updateOrderStatusUseCase: UpdateOrderStatusUseCase,
+    private updateOrderItemUseCase: UpdateOrderItemUseCase,
     // private readonly chatGateWay: ChatGateWay,
   ) {}
 
@@ -107,6 +111,36 @@ export class OrderController {
     return CoreApiResonseSchema.success(
       await this.updateOrderStatusUseCase.execute(updateOrderStatusDto),
     );
+  }
+
+  @ApiBearerAuth()
+  @UseGuards(JwtGuard)
+    @ApiBody({ type: UpdateOrderItemRequestSchema })
+  @ApiResponse({ type: CreateOrderResponseSchema })
+  @ApiQuery({ type: BaseRequestQuerySchema })
+  @Put('/updateOrderItems')
+  public async updateOrderItems(
+    @Body() order: UpdateOrderItemRequestSchema,
+    @Req() req,
+    @Query() params: { id: string },
+  ) {
+    try {
+      const updateOrderDto = new UpdateOrderItemDto();  
+      updateOrderDto.table = order?.table;
+      updateOrderDto.Id = params.id;
+      updateOrderDto.status ="";
+      
+      updateOrderDto.orderItems = order.orderItems.map((orderItem) => {
+        return OrderItemEntity.toEntity(orderItem);
+      });
+      //this.chatGateWay.setNewOrder('New Order submitted');
+      await this.updateOrderItemUseCase.execute(updateOrderDto);
+      return CoreApiResonseSchema.success({
+        message: 'Order updated Successfully',
+      });
+    } catch (error) {
+      return CoreApiResonseSchema.error(error);
+    }
   }
 
   @ApiBearerAuth()

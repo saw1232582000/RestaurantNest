@@ -7,6 +7,7 @@ import {
   HttpStatus,
   Inject,
   InternalServerErrorException,
+  NotFoundException,
 } from '@nestjs/common';
 import {
   PrismaClientKnownRequestError,
@@ -21,9 +22,10 @@ import { OrderFilter } from '../dto/OrderFilter';
 import { Status } from '@src/core/common/type/StatusEnum';
 import { PrismaService } from '@src/core/common/prisma/PrismaService';
 import { UpdateOrderStatusDto } from '../dto/UpdateOrderStatusDto';
+import { UpdateOrderItemDto } from '../dto/UpdateOrderItemDto';
 
 export class PrismaOrderRepository implements IOrderRepository {
-  constructor(@Inject()public readonly prisma: PrismaService) {}
+  constructor(@Inject() public readonly prisma: PrismaService) {}
 
   async create(order: OrderEntity): Promise<OrderEntity> {
     try {
@@ -64,7 +66,6 @@ export class PrismaOrderRepository implements IOrderRepository {
         }
       }
       if (e instanceof PrismaClientValidationError) {
-        
         throw new InternalServerErrorException('Something bad happened', {
           cause: new Error(),
           description: e.message,
@@ -98,7 +99,9 @@ export class PrismaOrderRepository implements IOrderRepository {
     }
   }
 
-  async updateOrderStatus(updateOrderStatusDto: UpdateOrderStatusDto): Promise<Boolean> {
+  async updateOrderStatus(
+    updateOrderStatusDto: UpdateOrderStatusDto,
+  ): Promise<Boolean> {
     try {
       console.log(updateOrderStatusDto);
       const result = await this.prisma.order.update({
@@ -190,7 +193,6 @@ export class PrismaOrderRepository implements IOrderRepository {
   async findAllWithSchema(
     filter: OrderFilter,
   ): Promise<{ orders: OrderEntity[]; totalCounts: number }> {
-    
     const filterValue =
       filter?.startDate && filter?.endDate
         ? {
@@ -225,11 +227,68 @@ export class PrismaOrderRepository implements IOrderRepository {
         },
       },
     });
-    
 
     return {
       orders: products.map((product) => OrderEntity.toEntity(product)),
       totalCounts: totalCounts,
     };
+  }
+
+  async updateOrderItems(
+    updateOrderItemDto: UpdateOrderItemDto,
+  ): Promise<Boolean> {
+    try {
+      const targetOrder = await this.prisma.order.findFirst({
+        where: {
+          Id: updateOrderItemDto.Id,
+        },
+        include: {
+          orderItems: true,
+        },
+      });
+      if (!targetOrder) {
+        throw new NotFoundException('Order not found');
+      }
+      console.log(updateOrderItemDto.orderItems);
+      updateOrderItemDto.orderItems.forEach(async (orderItem) => {
+        if (
+          targetOrder.orderItems.find((item) => item.Id === orderItem.Id) !==
+          undefined
+        ) {
+          await this.prisma.orderItem.update({
+            where: { Id: orderItem.Id },
+            data: {
+              quantity: orderItem.quantity,
+            },
+          });
+        } else {
+          console.log('create new order item');
+          await this.prisma.orderItem.create({
+            data: {
+              orderId: targetOrder.Id,
+              productId: orderItem.productId,
+              quantity: orderItem.quantity,
+              status: Status.PROCESSING,
+            },
+          });
+        }
+      });
+      return true;
+    } catch (e) {
+      if (e instanceof PrismaClientValidationError) {
+        throw new InternalServerErrorException('Something bad happened', {
+          cause: new Error(),
+          description: e.message,
+        });
+      } else {
+        throw new InternalServerErrorException(
+          'Something bad happened in nest',
+          {
+            cause: new Error(),
+            description: 'handled error:' + e?.code,
+          },
+        );
+      }
+    }
   }
 }
