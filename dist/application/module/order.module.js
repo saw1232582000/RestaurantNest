@@ -16,6 +16,7 @@ const GetOrderUseCase_1 = require("../../core/domain/order/service/GetOrderUseCa
 const CreateOrderUseCase_1 = require("../../core/domain/order/service/CreateOrderUseCase");
 const GetOrderListUseCase_1 = require("../../core/domain/order/service/GetOrderListUseCase");
 const UpdateOrderStatusUseCase_1 = require("../../core/domain/order/service/UpdateOrderStatusUseCase");
+const UpdateOrderItemUseCase_1 = require("../../core/domain/order/service/UpdateOrderItemUseCase");
 let OrderModule = class OrderModule {
 };
 exports.OrderModule = OrderModule;
@@ -28,6 +29,7 @@ exports.OrderModule = OrderModule = __decorate([
             CreateOrderUseCase_1.CreateorderUseCase,
             GetOrderListUseCase_1.GetOrderListWithFilterUseCase,
             UpdateOrderStatusUseCase_1.UpdateOrderStatusUseCase,
+            UpdateOrderItemUseCase_1.UpdateOrderItemUseCase,
             {
                 provide: IOrderRepository_1.IOrderRepository,
                 useClass: PrismaOrderRepository_1.PrismaOrderRepository,

@@ -33,12 +33,16 @@ const UpdateOrderStatusRequestSchema_1 = require("./documentation/order/RequestS
 const UpdateOrderStatusResponseSchema_1 = require("./documentation/order/ResponseSchema/UpdateOrderStatusResponseSchema");
 const UpdateOrderStatusDto_1 = require("../../core/domain/order/dto/UpdateOrderStatusDto");
 const UpdateOrderStatusUseCase_1 = require("../../core/domain/order/service/UpdateOrderStatusUseCase");
+const UpdateOrderItemReqeustSchema_1 = require("./documentation/order/RequestSchema/UpdateOrderItemReqeustSchema");
+const UpdateOrderItemDto_1 = require("../../core/domain/order/dto/UpdateOrderItemDto");
+const UpdateOrderItemUseCase_1 = require("../../core/domain/order/service/UpdateOrderItemUseCase");
 let OrderController = class OrderController {
-    constructor(createOrderUseCase, getOrderUseCase, getOrderListUseCase, updateOrderStatusUseCase) {
+    constructor(createOrderUseCase, getOrderUseCase, getOrderListUseCase, updateOrderStatusUseCase, updateOrderItemUseCase) {
         this.createOrderUseCase = createOrderUseCase;
         this.getOrderUseCase = getOrderUseCase;
         this.getOrderListUseCase = getOrderListUseCase;
         this.updateOrderStatusUseCase = updateOrderStatusUseCase;
+        this.updateOrderItemUseCase = updateOrderItemUseCase;
     }
     async createOrder(order, req) {
         try {
@@ -63,6 +67,24 @@ let OrderController = class OrderController {
         updateOrderStatusDto.id = params.id;
         updateOrderStatusDto.status = order.status;
         return ApiResponseSchema_1.CoreApiResonseSchema.success(await this.updateOrderStatusUseCase.execute(updateOrderStatusDto));
+    }
+    async updateOrderItems(order, req, params) {
+        try {
+            const updateOrderDto = new UpdateOrderItemDto_1.UpdateOrderItemDto();
+            updateOrderDto.table = order?.table;
+            updateOrderDto.Id = params.id;
+            updateOrderDto.status = "";
+            updateOrderDto.orderItems = order.orderItems.map((orderItem) => {
+                return OrderItem_1.OrderItemEntity.toEntity(orderItem);
+            });
+            await this.updateOrderItemUseCase.execute(updateOrderDto);
+            return ApiResponseSchema_1.CoreApiResonseSchema.success({
+                message: 'Order updated Successfully',
+            });
+        }
+        catch (error) {
+            return ApiResponseSchema_1.CoreApiResonseSchema.error(error);
+        }
     }
     async getOrder(req, params) {
         const order = await this.getOrderUseCase.execute(params.id);
@@ -104,6 +126,20 @@ __decorate([
 __decorate([
     (0, swagger_1.ApiBearerAuth)(),
     (0, common_1.UseGuards)(jwt_guard_1.JwtGuard),
+    (0, swagger_1.ApiBody)({ type: UpdateOrderItemReqeustSchema_1.UpdateOrderItemRequestSchema }),
+    (0, swagger_1.ApiResponse)({ type: CreateOrderResponseSchema_1.CreateOrderResponseSchema }),
+    (0, swagger_1.ApiQuery)({ type: BaseRequestQuerySchema_1.BaseRequestQuerySchema }),
+    (0, common_1.Put)('/updateOrderItems'),
+    __param(0, (0, common_1.Body)()),
+    __param(1, (0, common_1.Req)()),
+    __param(2, (0, common_1.Query)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [UpdateOrderItemReqeustSchema_1.UpdateOrderItemRequestSchema, Object, Object]),
+    __metadata("design:returntype", Promise)
+], OrderController.prototype, "updateOrderItems", null);
+__decorate([
+    (0, swagger_1.ApiBearerAuth)(),
+    (0, common_1.UseGuards)(jwt_guard_1.JwtGuard),
     (0, swagger_1.ApiQuery)({ type: BaseRequestQuerySchema_1.BaseRequestQuerySchema }),
     (0, swagger_1.ApiResponse)({ type: GetOrderResponseSchema_1.GetOrderResponseSchema }),
     (0, common_1.Get)('/get'),
@@ -131,6 +167,7 @@ exports.OrderController = OrderController = __decorate([
     __metadata("design:paramtypes", [CreateOrderUseCase_1.CreateorderUseCase,
         GetOrderUseCase_1.GetOrderUseCase,
         GetOrderListUseCase_1.GetOrderListWithFilterUseCase,
-        UpdateOrderStatusUseCase_1.UpdateOrderStatusUseCase])
+        UpdateOrderStatusUseCase_1.UpdateOrderStatusUseCase,
+        UpdateOrderItemUseCase_1.UpdateOrderItemUseCase])
 ], OrderController);
 //# sourceMappingURL=order.controller.js.map

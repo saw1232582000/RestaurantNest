@@ -214,6 +214,59 @@ let PrismaOrderRepository = class PrismaOrderRepository {
             totalCounts: totalCounts,
         };
     }
+    async updateOrderItems(updateOrderItemDto) {
+        try {
+            const targetOrder = await this.prisma.order.findFirst({
+                where: {
+                    Id: updateOrderItemDto.Id,
+                },
+                include: {
+                    orderItems: true,
+                },
+            });
+            if (!targetOrder) {
+                throw new common_1.NotFoundException('Order not found');
+            }
+            console.log(updateOrderItemDto.orderItems);
+            updateOrderItemDto.orderItems.forEach(async (orderItem) => {
+                if (targetOrder.orderItems.find((item) => item.Id === orderItem.Id) !==
+                    undefined) {
+                    await this.prisma.orderItem.update({
+                        where: { Id: orderItem.Id },
+                        data: {
+                            quantity: orderItem.quantity,
+                        },
+                    });
+                }
+                else {
+                    console.log('create new order item');
+                    await this.prisma.orderItem.create({
+                        data: {
+                            orderId: targetOrder.Id,
+                            productId: orderItem.productId,
+                            quantity: orderItem.quantity,
+                            status: StatusEnum_1.Status.PROCESSING,
+                        },
+                    });
+                }
+            });
+            return true;
+        }
+        catch (e) {
+            if (e instanceof library_1.PrismaClientValidationError) {
+                throw new common_1.InternalServerErrorException('Something bad happened', {
+                    cause: new Error(),
+                    description: e.message,
+                });
+            }
+            else {
+                throw new common_1.InternalServerErrorException('Something bad happened in nest', {
+                    cause: new Error(),
+                    description: 'handled error:' + e?.code,
+                });
+            }
+        }
+    }
 };
 exports.PrismaOrderRepository = PrismaOrderRepository;
 exports.PrismaOrderRepository = PrismaOrderRepository = __decorate([
