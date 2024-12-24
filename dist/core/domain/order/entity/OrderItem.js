@@ -4,9 +4,9 @@ exports.OrderItemEntity = void 0;
 class OrderItemEntity {
     constructor(Id = '', productId, status, quantity, orderId, createdDate) {
         this.Id = Id;
-        this.orderId = orderId;
-        this.productId = productId;
-        this.status = status;
+        this.orderId = orderId || "";
+        this.productId = productId || "";
+        this.status = status || "";
         this.quantity = quantity;
         this.createdDate = createdDate || new Date();
     }

@@ -3,6 +3,7 @@ import { OrderEntity } from '../entity/Order';
 import { OrderFilter } from '../dto/OrderFilter';
 import { PrismaService } from '@src/core/common/prisma/PrismaService';
 import { UpdateOrderStatusDto } from '../dto/UpdateOrderStatusDto';
+import { UpdateOrderItemDto } from '../dto/UpdateOrderItemDto';
 export declare class PrismaOrderRepository implements IOrderRepository {
     readonly prisma: PrismaService;
     constructor(prisma: PrismaService);
@@ -20,4 +21,5 @@ export declare class PrismaOrderRepository implements IOrderRepository {
         orders: OrderEntity[];
         totalCounts: number;
     }>;
+    updateOrderItems(updateOrderItemDto: UpdateOrderItemDto): Promise<Boolean>;
 }

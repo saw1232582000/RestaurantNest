@@ -21,9 +21,9 @@ export class OrderItemEntity {
     createdDate?: Date,
   ) {
     this.Id = Id;
-    this.orderId = orderId;
-    this.productId = productId;
-    this.status = status;
+    this.orderId = orderId || "";
+    this.productId = productId || "";
+    this.status = status || "";
     this.quantity = quantity;
     this.createdDate = createdDate || new Date();
   }
