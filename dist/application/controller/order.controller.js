@@ -83,7 +83,7 @@ let OrderController = class OrderController {
             });
         }
         catch (error) {
-            return ApiResponseSchema_1.CoreApiResonseSchema.error(error);
+            return ApiResponseSchema_1.CoreApiResonseSchema.error(500, 'Order Item Update Error', error);
         }
     }
     async getOrder(req, params) {
