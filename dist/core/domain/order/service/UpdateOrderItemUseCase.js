@@ -31,7 +31,7 @@ let UpdateOrderItemUseCase = class UpdateOrderItemUseCase {
             return await this.orderRepository.updateOrderItems(orderToUpdate);
         }
         catch (error) {
-            throw new Error(error);
+            throw new common_1.InternalServerErrorException(error);
         }
     }
 };

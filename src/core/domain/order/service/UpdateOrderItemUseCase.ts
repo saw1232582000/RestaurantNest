@@ -1,4 +1,4 @@
-import { forwardRef, Inject, Injectable } from '@nestjs/common';
+import { forwardRef, Inject, Injectable, InternalServerErrorException } from '@nestjs/common';
 
 import { IOrderRepository } from '../port/repository-port/IOrderRepository';
 import { UpdateOrderItemDto } from '../dto/UpdateOrderItemDto';
@@ -35,7 +35,7 @@ export class UpdateOrderItemUseCase implements IUpdateOrderItemUseCase {
 
       return await this.orderRepository.updateOrderItems(orderToUpdate);
     } catch (error) {
-      throw new Error(error);
+      throw new InternalServerErrorException(error);
     }
   }
 }
