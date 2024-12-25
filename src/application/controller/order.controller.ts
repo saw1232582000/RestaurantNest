@@ -139,7 +139,7 @@ export class OrderController {
         message: 'Order updated Successfully',
       });
     } catch (error) {
-      return CoreApiResonseSchema.error(error);
+      return CoreApiResonseSchema.error(500, 'Order Item Update Error', error);
     }
   }
 
