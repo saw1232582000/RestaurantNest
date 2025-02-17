@@ -7,5 +7,5 @@ export class RemoveFromCartDto {
   userId: string;
 
   @Expose()
-  productId:string
+  productId: string;
 }

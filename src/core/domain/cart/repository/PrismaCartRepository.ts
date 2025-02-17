@@ -23,7 +23,7 @@ import { RemoveFromCartDto } from '../dto/RemoveFromCartDto';
 import { PrismaService } from '@src/core/common/prisma/PrismaService';
 
 export class PrismaCartRepository implements ICartRepository {
-  constructor(@Inject()public readonly prisma: PrismaService) {}
+  constructor(@Inject() public readonly prisma: PrismaService) {}
 
   async create(cart: CartEntity): Promise<CartEntity> {
     try {
@@ -41,7 +41,6 @@ export class PrismaCartRepository implements ICartRepository {
         });
       }
       if (e instanceof PrismaClientValidationError) {
-        
         throw new InternalServerErrorException('Something bad happened', {
           cause: new Error(),
           description: e.message,

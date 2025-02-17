@@ -92,7 +92,6 @@ let PrismaOrderRepository = class PrismaOrderRepository {
     }
     async updateOrderStatus(updateOrderStatusDto) {
         try {
-            console.log(updateOrderStatusDto);
             const result = await this.prisma.order.update({
                 where: { Id: updateOrderStatusDto.id },
                 data: { status: updateOrderStatusDto.status },
@@ -227,7 +226,6 @@ let PrismaOrderRepository = class PrismaOrderRepository {
             if (!targetOrder) {
                 throw new common_1.NotFoundException('Order not found');
             }
-            console.log(updateOrderItemDto.orderItems);
             updateOrderItemDto.orderItems.forEach(async (orderItem) => {
                 if (targetOrder.orderItems.find((item) => item.Id === orderItem.Id) !==
                     undefined) {
@@ -239,7 +237,6 @@ let PrismaOrderRepository = class PrismaOrderRepository {
                     });
                 }
                 else {
-                    console.log('create new order item');
                     await this.prisma.orderItem.create({
                         data: {
                             orderId: targetOrder.Id,

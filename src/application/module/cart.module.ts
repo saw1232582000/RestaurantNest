@@ -13,9 +13,9 @@ import { PrismaCartRepository } from 'src/core/domain/cart/repository/PrismaCart
     AddToCartUseCase,
     RemoveFromCartUseCase,
     {
-        provide:ICartRepository,
-        useClass:PrismaCartRepository
-    }
-],
+      provide: ICartRepository,
+      useClass: PrismaCartRepository,
+    },
+  ],
 })
 export class CartModule {}

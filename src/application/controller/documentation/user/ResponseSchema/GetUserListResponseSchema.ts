@@ -10,9 +10,7 @@ export class GetUserListResponse {
   totalCounts: number;
 }
 
-export class GetUserListResponseSchema extends BaseResponseSchema<
-  GetUserListResponse
-> {
-  @ApiProperty({ type: GetUserListResponse})
+export class GetUserListResponseSchema extends BaseResponseSchema<GetUserListResponse> {
+  @ApiProperty({ type: GetUserListResponse })
   public data: GetUserListResponse;
 }

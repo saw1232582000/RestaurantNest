@@ -1,6 +1,5 @@
-import { Global, Module } from "@nestjs/common";
-import { PrismaService } from "@src/core/common/prisma/PrismaService";
-
+import { Global, Module } from '@nestjs/common';
+import { PrismaService } from '@src/core/common/prisma/PrismaService';
 
 @Global()
 @Module({

@@ -23,12 +23,14 @@ export class GetProductListWithFilterUseCase implements IGetProductListUseCase {
   constructor(
     @Inject() private readonly productRepository: IProductRepository,
   ) {}
-  public async execute(filter:ProductFilter): Promise<any> {
+  public async execute(filter: ProductFilter): Promise<any> {
     const list = await this.productRepository.findAllWithSchema(filter);
 
     return {
-      products:list.products.map((product) => CreateProductDto.convertToClass(product)),
-      totalCounts:list.totalCounts
-    }
+      products: list.products.map((product) =>
+        CreateProductDto.convertToClass(product),
+      ),
+      totalCounts: list.totalCounts,
+    };
   }
 }

@@ -146,8 +146,9 @@ export class ProductController {
     // this.getProductListWithFilter = new GetProductListWithFilterUseCase(
     //   new PrismaProductRepository(new PrismaClient()),
     // );
-    
+
     const filter = new ProductFilter(
+      params.category,
       params.name,
       parseInt(params?.take.toString()),
       parseInt(params?.skip.toString()),

@@ -56,7 +56,6 @@ export class PrismaProductRepository implements IProductRepository {
         }
       }
       if (e instanceof PrismaClientValidationError) {
-        
         throw new InternalServerErrorException('Something bad happened', {
           cause: new Error(),
           description: e.message,
@@ -152,19 +151,26 @@ export class PrismaProductRepository implements IProductRepository {
   async findAllWithSchema(
     filter: ProductFilter,
   ): Promise<{ products: ProductEntity[]; totalCounts: number }> {
-    
+    // console.log(filter)
     const totalCounts = await this.prisma.product.count({
       where: {
         name: { contains: filter.name },
+        category: {
+          contains: filter.category,
+        },
       },
     });
     const products = await this.prisma.product.findMany({
       where: {
         name: { contains: filter.name },
+        category: {
+          contains: filter.category,
+        },
       },
       take: filter.take,
       skip: filter.skip,
     });
+    // console.log(products)
 
     return {
       products: products.map((product) => ProductEntity.toEntity(product)),

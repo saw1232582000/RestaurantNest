@@ -27,12 +27,13 @@ export class CartController {
   @ApiResponse({ type: AddToCartResponseSchema })
   @Post('/AddToCart')
   public async addToCart(@Body() product: AddToCartRequestSchema, @Req() req) {
-    
     const addToCartDto = new AddToCartDto();
     addToCartDto.productId = product.productId;
     addToCartDto.userId = req.user?.user?.id;
     this.addToCartUseCase.execute(addToCartDto);
-    return CoreApiResonseSchema.success({message:"Item added to cart successfully"});
+    return CoreApiResonseSchema.success({
+      message: 'Item added to cart successfully',
+    });
   }
 
   @ApiBearerAuth()
@@ -44,11 +45,12 @@ export class CartController {
     @Body() product: RemoveFromCartRequestSchema,
     @Req() req,
   ) {
-    
     const removeFromCartDto = new RemoveFromCartDto();
     removeFromCartDto.productId = product.productId;
     removeFromCartDto.userId = req.user?.user?.id;
     this.addToCartUseCase.execute(removeFromCartDto);
-    return CoreApiResonseSchema.success({message:"Item removed from cart successfully"});
+    return CoreApiResonseSchema.success({
+      message: 'Item removed from cart successfully',
+    });
   }
 }
