@@ -24,7 +24,7 @@ let GetUserListWithFilterUseCase = class GetUserListWithFilterUseCase {
         const list = await this.userRepository.findAllWithSchema(filter);
         return {
             users: list.users.map((product) => CreateUserDto_1.CreateUserDto.convertToClass(product)),
-            totalCounts: list.totalCounts
+            totalCounts: list.totalCounts,
         };
     }
 };

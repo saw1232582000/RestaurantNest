@@ -1,4 +1,4 @@
-import { Optional } from "../type/CommonTypes";
+import { Optional } from '../type/CommonTypes';
 export interface IBaseRepository<T, TFindByType> {
     create: (entity: T) => Promise<T>;
     update: (entity: T) => Promise<T>;

@@ -94,4 +94,14 @@ model OrderItem {
   product        Product        @relation(fields: [productId], references: [id], onDelete: Cascade)
 }
 
+model DailyBuying{
+  Id             String         @id @default(cuid())
+  particular     String
+  unit           String
+  quantity       Int
+  price          Float
+  Amount         Int
+  createdDate        DateTime           @default(now())
+  updatedDate        DateTime           @default(now())
+}
 

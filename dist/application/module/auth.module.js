@@ -41,7 +41,7 @@ exports.AuthModule = AuthModule = __decorate([
             },
             local_strategy_1.LocalStrategy,
             jwt_strategy_1.JwtStrategy,
-            CreateUserUsecase_1.CreateUserUseCase
+            CreateUserUsecase_1.CreateUserUseCase,
         ],
     })
 ], AuthModule);

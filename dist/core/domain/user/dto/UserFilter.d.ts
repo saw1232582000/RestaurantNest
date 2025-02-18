@@ -1,5 +1,5 @@
-import { UserRole } from "@src/core/common/type/UserEnum";
-import { BaseFilterSchema } from "src/core/common/schema/BaseFilterSchema";
+import { UserRole } from '@src/core/common/type/UserEnum';
+import { BaseFilterSchema } from 'src/core/common/schema/BaseFilterSchema';
 export declare class UserFilter extends BaseFilterSchema {
     name?: string;
     role?: UserRole;

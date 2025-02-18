@@ -73,7 +73,7 @@ let OrderController = class OrderController {
             const updateOrderDto = new UpdateOrderItemDto_1.UpdateOrderItemDto();
             updateOrderDto.table = order?.table;
             updateOrderDto.Id = params.id;
-            updateOrderDto.status = "";
+            updateOrderDto.status = '';
             updateOrderDto.orderItems = order.orderItems.map((orderItem) => {
                 return OrderItem_1.OrderItemEntity.toEntity(orderItem);
             });
