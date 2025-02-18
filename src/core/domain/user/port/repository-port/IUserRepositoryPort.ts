@@ -18,5 +18,7 @@ export abstract class IUserRepository
   }) => Promise<UserEntity | null>;
   findAll: () => Promise<UserEntity[]>;
   update: (entity: UserEntity) => Promise<UserEntity>;
-  findAllWithSchema: (filter: UserFilter) => Promise<{ users: UserEntity[]; totalCounts: number }>;
+  findAllWithSchema: (
+    filter: UserFilter,
+  ) => Promise<{ users: UserEntity[]; totalCounts: number }>;
 }

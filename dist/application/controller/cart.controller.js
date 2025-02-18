@@ -35,14 +35,18 @@ let CartController = class CartController {
         addToCartDto.productId = product.productId;
         addToCartDto.userId = req.user?.user?.id;
         this.addToCartUseCase.execute(addToCartDto);
-        return ApiResponseSchema_1.CoreApiResonseSchema.success({ message: "Item added to cart successfully" });
+        return ApiResponseSchema_1.CoreApiResonseSchema.success({
+            message: 'Item added to cart successfully',
+        });
     }
     async removeFromCart(product, req) {
         const removeFromCartDto = new RemoveFromCartDto_1.RemoveFromCartDto();
         removeFromCartDto.productId = product.productId;
         removeFromCartDto.userId = req.user?.user?.id;
         this.addToCartUseCase.execute(removeFromCartDto);
-        return ApiResponseSchema_1.CoreApiResonseSchema.success({ message: "Item removed from cart successfully" });
+        return ApiResponseSchema_1.CoreApiResonseSchema.success({
+            message: 'Item removed from cart successfully',
+        });
     }
 };
 exports.CartController = CartController;

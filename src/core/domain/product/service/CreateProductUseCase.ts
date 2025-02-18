@@ -21,7 +21,6 @@ export class CreateProductUseCase implements ICreateProductUseCase {
     );
     const createdProduct = await this.productRepository.create(newProduct);
 
-    
     return CreateProductDto.convertToClass(createdProduct);
   }
 }

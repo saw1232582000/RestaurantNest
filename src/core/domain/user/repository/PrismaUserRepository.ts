@@ -19,7 +19,7 @@ import { UserFilter } from '../dto/UserFilter';
 import { PrismaService } from '@src/core/common/prisma/PrismaService';
 
 export class PrismaUserRepository implements IUserRepository {
-  constructor(@Inject()public readonly prisma: PrismaService) {}
+  constructor(@Inject() public readonly prisma: PrismaService) {}
 
   async create(user: UserEntity): Promise<UserEntity> {
     try {

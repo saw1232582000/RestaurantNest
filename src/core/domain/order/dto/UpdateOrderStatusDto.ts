@@ -1,5 +1,5 @@
-import { Status } from "@src/core/common/type/StatusEnum";
-import { Expose } from "class-transformer";
+import { Status } from '@src/core/common/type/StatusEnum';
+import { Expose } from 'class-transformer';
 
 export class UpdateOrderStatusDto {
   @Expose()

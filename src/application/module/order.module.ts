@@ -10,7 +10,6 @@ import { S3Service } from 'src/core/common/file-upload/UploadS3Service';
 import { UpdateOrderStatusUseCase } from '@src/core/domain/order/service/UpdateOrderStatusUseCase';
 import { UpdateOrderItemUseCase } from '@src/core/domain/order/service/UpdateOrderItemUseCase';
 
-
 @Module({
   controllers: [OrderController],
   providers: [
@@ -24,7 +23,7 @@ import { UpdateOrderItemUseCase } from '@src/core/domain/order/service/UpdateOrd
       provide: IOrderRepository,
       useClass: PrismaOrderRepository,
     },
-    
+
     // {
     //   provide:"CreateorderUseCase",
     //   useClass:CreateorderUseCase,useFactory: (orderRepository: PrismaOrderRepository, chatGateway: ChatGateWay) => {
@@ -33,8 +32,6 @@ import { UpdateOrderItemUseCase } from '@src/core/domain/order/service/UpdateOrd
     //   inject: ['OrderRepository', ChatGateWay],
     // },
     // ChatGateWay,
-    
-    
   ],
 })
 export class OrderModule {}

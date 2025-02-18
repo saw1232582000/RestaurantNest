@@ -7,11 +7,11 @@ class AuthResponse {
 }
 
 export class AuthResponseSchema extends BaseResponseSchema<AuthResponse> {
-  @ApiProperty({type:AuthResponse})
+  @ApiProperty({ type: AuthResponse })
   public data: AuthResponse;
 
-  constructor(token:string){
-    super()
-    this.data={token:token}
+  constructor(token: string) {
+    super();
+    this.data = { token: token };
   }
 }

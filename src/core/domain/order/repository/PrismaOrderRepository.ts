@@ -103,7 +103,7 @@ export class PrismaOrderRepository implements IOrderRepository {
     updateOrderStatusDto: UpdateOrderStatusDto,
   ): Promise<Boolean> {
     try {
-      console.log(updateOrderStatusDto);
+      // console.log(updateOrderStatusDto);
       const result = await this.prisma.order.update({
         where: { Id: updateOrderStatusDto.id },
         data: { status: updateOrderStatusDto.status },
@@ -249,7 +249,7 @@ export class PrismaOrderRepository implements IOrderRepository {
       if (!targetOrder) {
         throw new NotFoundException('Order not found');
       }
-      console.log(updateOrderItemDto.orderItems);
+      // console.log(updateOrderItemDto.orderItems);
       updateOrderItemDto.orderItems.forEach(async (orderItem) => {
         if (
           targetOrder.orderItems.find((item) => item.Id === orderItem.Id) !==
@@ -262,7 +262,7 @@ export class PrismaOrderRepository implements IOrderRepository {
             },
           });
         } else {
-          console.log('create new order item');
+          // console.log('create new order item');
           await this.prisma.orderItem.create({
             data: {
               orderId: targetOrder.Id,

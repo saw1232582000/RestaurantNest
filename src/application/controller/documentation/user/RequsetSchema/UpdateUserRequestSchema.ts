@@ -22,6 +22,4 @@ export class UpdateUserRequestSchema {
   })
   @IsEnum(UserRole, { message: 'Valid Role is required' })
   role: UserRole;
-
- 
 }

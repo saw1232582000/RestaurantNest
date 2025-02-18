@@ -26,8 +26,8 @@ exports.CartModule = CartModule = __decorate([
             RemoveFromCartUseCase_1.RemoveFromCartUseCase,
             {
                 provide: ICartRepository_1.ICartRepository,
-                useClass: PrismaCartRepository_1.PrismaCartRepository
-            }
+                useClass: PrismaCartRepository_1.PrismaCartRepository,
+            },
         ],
     })
 ], CartModule);

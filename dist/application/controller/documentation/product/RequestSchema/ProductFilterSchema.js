@@ -19,4 +19,8 @@ __decorate([
     (0, swagger_1.ApiPropertyOptional)(),
     __metadata("design:type", String)
 ], ProdcutFilterSchama.prototype, "name", void 0);
+__decorate([
+    (0, swagger_1.ApiPropertyOptional)(),
+    __metadata("design:type", String)
+], ProdcutFilterSchama.prototype, "category", void 0);
 //# sourceMappingURL=ProductFilterSchema.js.map

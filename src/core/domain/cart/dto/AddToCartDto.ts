@@ -7,7 +7,7 @@ export class AddToCartDto {
   userId: string;
 
   @Expose()
-  productId:string
+  productId: string;
 
   public static convertToClass(cart: CartEntity) {
     return plainToInstance(AddToCartDto, cart, {
