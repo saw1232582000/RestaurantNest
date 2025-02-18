@@ -22,7 +22,7 @@ let GetOrderListWithFilterUseCase = class GetOrderListWithFilterUseCase {
     async execute(filter) {
         const list = await this.orderRepository.findAllWithSchema(filter);
         return {
-            ...list
+            ...list,
         };
     }
 };

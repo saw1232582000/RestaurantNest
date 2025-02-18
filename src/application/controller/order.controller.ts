@@ -72,7 +72,7 @@ export class OrderController {
     @Req() req,
   ) {
     try {
-      const createOrderDto = new CreateOrderDto();  
+      const createOrderDto = new CreateOrderDto();
       createOrderDto.table = order?.table;
 
       createOrderDto.status = order.status;
@@ -115,7 +115,7 @@ export class OrderController {
 
   @ApiBearerAuth()
   @UseGuards(JwtGuard)
-    @ApiBody({ type: UpdateOrderItemRequestSchema })
+  @ApiBody({ type: UpdateOrderItemRequestSchema })
   @ApiResponse({ type: CreateOrderResponseSchema })
   @ApiQuery({ type: BaseRequestQuerySchema })
   @Put('/updateOrderItems')
@@ -125,11 +125,11 @@ export class OrderController {
     @Query() params: { id: string },
   ) {
     try {
-      const updateOrderDto = new UpdateOrderItemDto();  
+      const updateOrderDto = new UpdateOrderItemDto();
       updateOrderDto.table = order?.table;
       updateOrderDto.Id = params.id;
-      updateOrderDto.status ="";
-      
+      updateOrderDto.status = '';
+
       updateOrderDto.orderItems = order.orderItems.map((orderItem) => {
         return OrderItemEntity.toEntity(orderItem);
       });
@@ -160,7 +160,7 @@ export class OrderController {
   @ApiResponse({ type: GetOrderListResponseSchema })
   @Get('/getList')
   public async getOrderList(@Query() params: OrderFilterSchama, @Req() req) {
-    console.log(params);
+    // console.log(params);
     const orderFilter = new OrderFilter(
       params.startDate,
       params.endDate,

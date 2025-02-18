@@ -15,7 +15,7 @@ import { CreateUserUseCase } from 'src/core/domain/user/service/CreateUserUsecas
   imports: [
     JwtModule.register({
       secret: env.JWT_SECRET_KEY,
-      signOptions: {  },
+      signOptions: {},
     }),
     UsersModule,
     PassportModule,
@@ -29,7 +29,7 @@ import { CreateUserUseCase } from 'src/core/domain/user/service/CreateUserUsecas
     },
     LocalStrategy,
     JwtStrategy,
-    CreateUserUseCase
+    CreateUserUseCase,
   ],
 })
 export class AuthModule {}

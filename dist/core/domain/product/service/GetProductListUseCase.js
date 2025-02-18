@@ -39,7 +39,7 @@ let GetProductListWithFilterUseCase = class GetProductListWithFilterUseCase {
         const list = await this.productRepository.findAllWithSchema(filter);
         return {
             products: list.products.map((product) => CreateProductDto_1.CreateProductDto.convertToClass(product)),
-            totalCounts: list.totalCounts
+            totalCounts: list.totalCounts,
         };
     }
 };

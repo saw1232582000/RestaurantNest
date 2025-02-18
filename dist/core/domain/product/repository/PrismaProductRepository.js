@@ -143,11 +143,17 @@ let PrismaProductRepository = class PrismaProductRepository {
         const totalCounts = await this.prisma.product.count({
             where: {
                 name: { contains: filter.name },
+                category: {
+                    contains: filter.category,
+                },
             },
         });
         const products = await this.prisma.product.findMany({
             where: {
                 name: { contains: filter.name },
+                category: {
+                    contains: filter.category,
+                },
             },
             take: filter.take,
             skip: filter.skip,

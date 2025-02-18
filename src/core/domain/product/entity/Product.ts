@@ -9,7 +9,7 @@ export class ProductEntity {
 
   price: number;
 
-  image:string;
+  image: string;
 
   description: string;
 

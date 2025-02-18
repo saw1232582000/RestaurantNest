@@ -23,7 +23,13 @@ import { PrismaUserRepository } from 'src/core/domain/user/repository/PrismaUser
 import { PrismaClient } from '@prisma/client';
 import { JwtGuard } from '../auth/guard/jwt.guard';
 import { CoreApiResonseSchema } from 'src/core/common/schema/ApiResponseSchema';
-import { ApiBearerAuth, ApiBody, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiBody,
+  ApiQuery,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 
 import { CreateUserResonseSchema } from './documentation/user/ResponseSchema/CreateUserResponseSchema';
 import { GetUserUseCase } from 'src/core/domain/user/service/GetUserUsecase';
@@ -102,15 +108,13 @@ export class UsersController {
     )
     user: UpdateUserRequestSchema,
     @Query() params: { id: string },
-    
   ): Promise<CoreApiResonseSchema<any>> {
-    
     const updateUserDto = new CreateUserDto();
     updateUserDto.id = params.id;
     updateUserDto.email = user.email;
     updateUserDto.phone = user.phone;
     updateUserDto.name = user.name;
-    
+
     updateUserDto.role = user.role;
     return CoreApiResonseSchema.success(
       await this.updateUserUseCase.execute(updateUserDto),

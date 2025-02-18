@@ -73,7 +73,7 @@ let OrderController = class OrderController {
             const updateOrderDto = new UpdateOrderItemDto_1.UpdateOrderItemDto();
             updateOrderDto.table = order?.table;
             updateOrderDto.Id = params.id;
-            updateOrderDto.status = "";
+            updateOrderDto.status = '';
             updateOrderDto.orderItems = order.orderItems.map((orderItem) => {
                 return OrderItem_1.OrderItemEntity.toEntity(orderItem);
             });
@@ -91,7 +91,6 @@ let OrderController = class OrderController {
         return ApiResponseSchema_1.CoreApiResonseSchema.success(order);
     }
     async getOrderList(params, req) {
-        console.log(params);
         const orderFilter = new OrderFilter_1.OrderFilter(params.startDate, params.endDate, parseInt(params?.take.toString()), parseInt(params?.skip.toString()), params.status);
         const orderList = await this.getOrderListUseCase.execute(orderFilter);
         return ApiResponseSchema_1.CoreApiResonseSchema.success(orderList);
