@@ -2,9 +2,9 @@ export class CoreApiResonseSchema<T> {
   public readonly code: number;
   public readonly message: string;
   public readonly data: NonNullable<T>;
-  public readonly error: NonNullable<string>;
+  public readonly error: NonNullable<T>;
 
-  constructor(code: number, message: string, data?: T, error?: string) {
+  constructor(code: number, message: string, data?: T, error?: T) {
     this.code = code;
     this.message = message;
     this.data = data;
@@ -21,7 +21,7 @@ export class CoreApiResonseSchema<T> {
   public static error<T>(
     code?: number,
     message?: string,
-    error?: string,
+    error?: T,
   ): CoreApiResonseSchema<T> {
     return new CoreApiResonseSchema(
       code || 500,

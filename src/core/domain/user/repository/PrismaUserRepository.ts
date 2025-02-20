@@ -36,25 +36,32 @@ export class PrismaUserRepository implements IUserRepository {
     } catch (e) {
       if (e instanceof PrismaClientKnownRequestError) {
         if (e.code == 'P2002') {
-          throw new BadRequestException(
-            CoreApiResonseSchema.error(
-              HttpStatus.BAD_REQUEST,
-              'Bad Request',
+          // throw new BadRequestException(
+          //   CoreApiResonseSchema.error(
+          //     HttpStatus.BAD_REQUEST,
+          //     'Bad Request',
+          //     e?.meta?.target[0] == 'email'
+          //       ? 'Email already used'
+          //       : 'Phone already used',
+          //   ),
+          // );
+          throw new BadRequestException({
+            message: 'Bad request',
+            error:
               e?.meta?.target[0] == 'email'
                 ? 'Email already used'
                 : 'Phone already used',
-            ),
-          );
+          });
         } else {
-          throw new BadRequestException('Bad Request', {
-            cause: new Error(),
-            description: 'Cannot create user',
+          throw new BadRequestException({
+            message: 'Bad request',
+            error: '',
           });
         }
       } else if (e instanceof PrismaClientValidationError) {
-        throw new InternalServerErrorException('Something bad happened', {
-          cause: new Error(),
-          description: e.message,
+        throw new InternalServerErrorException({
+          message: 'Internal server error',
+          error: '',
         });
       } else {
         throw new BadRequestException('Internal server error', {
@@ -76,15 +83,15 @@ export class PrismaUserRepository implements IUserRepository {
       return UserEntity.toEntity(result);
     } catch (e) {
       if (e instanceof PrismaClientValidationError) {
-        throw new InternalServerErrorException('Something bad happened', {
-          cause: new Error(),
-          description: e.message,
+        throw new InternalServerErrorException({
+          message: 'Internal server error',
+          error: '',
         });
       }
       if (e instanceof PrismaClientKnownRequestError) {
-        throw new InternalServerErrorException('Something bad happened', {
-          cause: new Error(),
-          description: e.code,
+        throw new InternalServerErrorException({
+          message: 'Internal server error',
+          error: '',
         });
       }
     }
@@ -97,15 +104,15 @@ export class PrismaUserRepository implements IUserRepository {
       return true;
     } catch (e) {
       if (e instanceof PrismaClientValidationError) {
-        throw new InternalServerErrorException('Something bad happened', {
-          cause: new Error(),
-          description: e.message,
+        throw new InternalServerErrorException({
+          message: 'Internal server error',
+          error: '',
         });
       }
       if (e instanceof PrismaClientKnownRequestError) {
-        throw new InternalServerErrorException('Something bad happened', {
-          cause: new Error(),
-          description: e.code,
+        throw new InternalServerErrorException({
+          message: 'Internal server error',
+          error: '',
         });
       }
     }
@@ -127,15 +134,15 @@ export class PrismaUserRepository implements IUserRepository {
       else return null;
     } catch (e) {
       if (e instanceof PrismaClientValidationError) {
-        throw new InternalServerErrorException('Something bad happened', {
-          cause: new Error(),
-          description: e.message,
+        throw new InternalServerErrorException({
+          message: 'Internal server error',
+          error: '',
         });
       }
       if (e instanceof PrismaClientKnownRequestError) {
-        throw new InternalServerErrorException('Something bad happened', {
-          cause: new Error(),
-          description: e.code,
+        throw new InternalServerErrorException({
+          message: 'Internal server error',
+          error: '',
         });
       }
     }
@@ -170,9 +177,9 @@ export class PrismaUserRepository implements IUserRepository {
         totalCounts: totalCounts,
       };
     } catch (e) {
-      throw new InternalServerErrorException('Something bad happened', {
-        cause: new Error(),
-        description: 'Unable to get user list',
+      throw new InternalServerErrorException({
+        message: 'Internal server error',
+        error: '',
       });
     }
   }

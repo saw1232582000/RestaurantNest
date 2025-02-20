@@ -23,7 +23,7 @@ export declare class OrderController {
     }>>;
     updateOrderItems(order: UpdateOrderItemRequestSchema, req: any, params: {
         id: string;
-    }): Promise<CoreApiResonseSchema<unknown>>;
+    }): Promise<CoreApiResonseSchema<any>>;
     getOrder(req: any, params: {
         id: string;
     }): Promise<CoreApiResonseSchema<any>>;

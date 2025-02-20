@@ -16,7 +16,6 @@ exports.PrismaUserRepository = void 0;
 const User_1 = require("../entity/User");
 const common_1 = require("@nestjs/common");
 const library_1 = require("@prisma/client/runtime/library");
-const ApiResponseSchema_1 = require("../../../common/schema/ApiResponseSchema");
 const PrismaService_1 = require("../../../common/prisma/PrismaService");
 let PrismaUserRepository = class PrismaUserRepository {
     constructor(prisma) {
@@ -38,21 +37,24 @@ let PrismaUserRepository = class PrismaUserRepository {
         catch (e) {
             if (e instanceof library_1.PrismaClientKnownRequestError) {
                 if (e.code == 'P2002') {
-                    throw new common_1.BadRequestException(ApiResponseSchema_1.CoreApiResonseSchema.error(common_1.HttpStatus.BAD_REQUEST, 'Bad Request', e?.meta?.target[0] == 'email'
-                        ? 'Email already used'
-                        : 'Phone already used'));
+                    throw new common_1.BadRequestException({
+                        message: 'Bad request',
+                        error: e?.meta?.target[0] == 'email'
+                            ? 'Email already used'
+                            : 'Phone already used',
+                    });
                 }
                 else {
-                    throw new common_1.BadRequestException('Bad Request', {
-                        cause: new Error(),
-                        description: 'Cannot create user',
+                    throw new common_1.BadRequestException({
+                        message: 'Bad request',
+                        error: '',
                     });
                 }
             }
             else if (e instanceof library_1.PrismaClientValidationError) {
-                throw new common_1.InternalServerErrorException('Something bad happened', {
-                    cause: new Error(),
-                    description: e.message,
+                throw new common_1.InternalServerErrorException({
+                    message: 'Internal server error',
+                    error: '',
                 });
             }
             else {
@@ -76,15 +78,15 @@ let PrismaUserRepository = class PrismaUserRepository {
         }
         catch (e) {
             if (e instanceof library_1.PrismaClientValidationError) {
-                throw new common_1.InternalServerErrorException('Something bad happened', {
-                    cause: new Error(),
-                    description: e.message,
+                throw new common_1.InternalServerErrorException({
+                    message: 'Internal server error',
+                    error: '',
                 });
             }
             if (e instanceof library_1.PrismaClientKnownRequestError) {
-                throw new common_1.InternalServerErrorException('Something bad happened', {
-                    cause: new Error(),
-                    description: e.code,
+                throw new common_1.InternalServerErrorException({
+                    message: 'Internal server error',
+                    error: '',
                 });
             }
         }
@@ -98,15 +100,15 @@ let PrismaUserRepository = class PrismaUserRepository {
         }
         catch (e) {
             if (e instanceof library_1.PrismaClientValidationError) {
-                throw new common_1.InternalServerErrorException('Something bad happened', {
-                    cause: new Error(),
-                    description: e.message,
+                throw new common_1.InternalServerErrorException({
+                    message: 'Internal server error',
+                    error: '',
                 });
             }
             if (e instanceof library_1.PrismaClientKnownRequestError) {
-                throw new common_1.InternalServerErrorException('Something bad happened', {
-                    cause: new Error(),
-                    description: e.code,
+                throw new common_1.InternalServerErrorException({
+                    message: 'Internal server error',
+                    error: '',
                 });
             }
         }
@@ -125,15 +127,15 @@ let PrismaUserRepository = class PrismaUserRepository {
         }
         catch (e) {
             if (e instanceof library_1.PrismaClientValidationError) {
-                throw new common_1.InternalServerErrorException('Something bad happened', {
-                    cause: new Error(),
-                    description: e.message,
+                throw new common_1.InternalServerErrorException({
+                    message: 'Internal server error',
+                    error: '',
                 });
             }
             if (e instanceof library_1.PrismaClientKnownRequestError) {
-                throw new common_1.InternalServerErrorException('Something bad happened', {
-                    cause: new Error(),
-                    description: e.code,
+                throw new common_1.InternalServerErrorException({
+                    message: 'Internal server error',
+                    error: '',
                 });
             }
         }
@@ -164,9 +166,9 @@ let PrismaUserRepository = class PrismaUserRepository {
             };
         }
         catch (e) {
-            throw new common_1.InternalServerErrorException('Something bad happened', {
-                cause: new Error(),
-                description: 'Unable to get user list',
+            throw new common_1.InternalServerErrorException({
+                message: 'Internal server error',
+                error: '',
             });
         }
     }
