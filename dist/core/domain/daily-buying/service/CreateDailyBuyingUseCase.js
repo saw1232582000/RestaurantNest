@@ -12,7 +12,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.CreateDailyBuyingUseCase = void 0;
+exports.CreateManyDailyBuyingUseCase = exports.CreateDailyBuyingUseCase = void 0;
 const common_1 = require("@nestjs/common");
 const DailyBuying_1 = require("../entity/DailyBuying");
 const CreateDailyBuyingDto_1 = require("../dto/CreateDailyBuyingDto");
@@ -33,4 +33,21 @@ exports.CreateDailyBuyingUseCase = CreateDailyBuyingUseCase = __decorate([
     __param(0, (0, common_1.Inject)()),
     __metadata("design:paramtypes", [IDailyBuyingRepository_1.IDailyBuyingRepository])
 ], CreateDailyBuyingUseCase);
+let CreateManyDailyBuyingUseCase = class CreateManyDailyBuyingUseCase {
+    constructor(DailyBuyingRepository) {
+        this.DailyBuyingRepository = DailyBuyingRepository;
+    }
+    async execute(data) {
+        const newDailyBuying = data.dailyBuyings.map((db) => {
+            return new DailyBuying_1.DailyBuyingEntity(db?.Id, db?.particular, db?.unit, db?.price, db?.quantity, db?.Amount, db?.createdDate, db?.updatedDate);
+        });
+        return await this.DailyBuyingRepository.createMany(newDailyBuying);
+    }
+};
+exports.CreateManyDailyBuyingUseCase = CreateManyDailyBuyingUseCase;
+exports.CreateManyDailyBuyingUseCase = CreateManyDailyBuyingUseCase = __decorate([
+    (0, common_1.Injectable)(),
+    __param(0, (0, common_1.Inject)()),
+    __metadata("design:paramtypes", [IDailyBuyingRepository_1.IDailyBuyingRepository])
+], CreateManyDailyBuyingUseCase);
 //# sourceMappingURL=CreateDailyBuyingUseCase.js.map

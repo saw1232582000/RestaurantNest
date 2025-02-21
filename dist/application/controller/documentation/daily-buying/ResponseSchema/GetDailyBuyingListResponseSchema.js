@@ -12,44 +12,44 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.GetDailyBuyingListResponseSchema = void 0;
 const swagger_1 = require("@nestjs/swagger");
 const BaseResponseSchema_1 = require("../../common/BaseResponseSchema");
-class DailyBuying {
+class DailyBuyingData {
 }
 __decorate([
     (0, swagger_1.ApiProperty)(),
     __metadata("design:type", String)
-], DailyBuying.prototype, "Id", void 0);
+], DailyBuyingData.prototype, "Id", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)(),
     __metadata("design:type", String)
-], DailyBuying.prototype, "particular", void 0);
+], DailyBuyingData.prototype, "particular", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)(),
     __metadata("design:type", String)
-], DailyBuying.prototype, "unit", void 0);
+], DailyBuyingData.prototype, "unit", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)(),
     __metadata("design:type", Number)
-], DailyBuying.prototype, "price", void 0);
+], DailyBuyingData.prototype, "price", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)(),
     __metadata("design:type", Number)
-], DailyBuying.prototype, "quantity", void 0);
+], DailyBuyingData.prototype, "quantity", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)(),
     __metadata("design:type", Number)
-], DailyBuying.prototype, "Amount", void 0);
+], DailyBuyingData.prototype, "Amount", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)(),
     __metadata("design:type", Date)
-], DailyBuying.prototype, "createdDate", void 0);
+], DailyBuyingData.prototype, "createdDate", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)(),
     __metadata("design:type", Date)
-], DailyBuying.prototype, "updatedDate", void 0);
+], DailyBuyingData.prototype, "updatedDate", void 0);
 class GetDailyBuyingList {
 }
 __decorate([
-    (0, swagger_1.ApiProperty)({ type: [DailyBuying] }),
+    (0, swagger_1.ApiProperty)({ type: [DailyBuyingData] }),
     __metadata("design:type", Array)
 ], GetDailyBuyingList.prototype, "DailyBuyings", void 0);
 __decorate([

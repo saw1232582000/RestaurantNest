@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { BaseResponseSchema } from '../../common/BaseResponseSchema';
 
-class DailyBuying {
+class DailyBuyingData {
   @ApiProperty()
   Id: string;
 
@@ -28,8 +28,8 @@ class DailyBuying {
 }
 
 class GetDailyBuyingList {
-  @ApiProperty({ type: [DailyBuying] })
-  DailyBuyings: DailyBuying[];
+  @ApiProperty({ type: [DailyBuyingData] })
+  DailyBuyings: DailyBuyingData[];
 
   @ApiProperty()
   totalCount: number;
