@@ -6,6 +6,7 @@ export declare class PrismaDailyBuyingRepository implements IDailyBuyingReposito
     readonly prisma: PrismaService;
     constructor(prisma: PrismaService);
     create(dailyBuying: DailyBuyingEntity): Promise<DailyBuyingEntity>;
+    createMany(dailyBuyings: DailyBuyingEntity[]): Promise<string>;
     update(dailyBuying: DailyBuyingEntity): Promise<DailyBuyingEntity>;
     delete(Id: string): Promise<boolean>;
     find(by: {

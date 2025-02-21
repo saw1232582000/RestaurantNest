@@ -63,6 +63,45 @@ export class PrismaDailyBuyingRepository implements IDailyBuyingRepository {
       }
     }
   }
+  async createMany(dailyBuyings: DailyBuyingEntity[]): Promise<string> {
+    try {
+      await this.prisma.dailyBuying.createMany({
+        data: dailyBuyings.map((db) => {
+          return {
+            particular: db.particular,
+            unit: db.unit,
+            quantity: db.quantity,
+            Amount: db.Amount,
+            price: db.price,
+          };
+        }),
+      });
+      return 'Daily buyings created successfully';
+    } catch (e) {
+      if (e instanceof PrismaClientKnownRequestError) {
+        if (e.code == 'P2002') {
+          throw new BadRequestException(
+            CoreApiResonseSchema.error(
+              HttpStatus.BAD_REQUEST,
+              'Bad Request',
+              'Email already used',
+            ),
+          );
+        } else {
+          throw new BadRequestException('Bad Request', {
+            cause: new Error(),
+            description: 'Cannot create DailyBuying',
+          });
+        }
+      }
+      if (e instanceof PrismaClientValidationError) {
+        throw new InternalServerErrorException('Something bad happened', {
+          cause: new Error(),
+          description: e.message,
+        });
+      }
+    }
+  }
   async update(dailyBuying: DailyBuyingEntity): Promise<DailyBuyingEntity> {
     try {
       console.log(dailyBuying);

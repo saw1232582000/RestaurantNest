@@ -17,6 +17,7 @@ const GetDailyBuyingUseCase_1 = require("../../core/domain/daily-buying/service/
 const GetDailyBuyingListUseCase_1 = require("../../core/domain/daily-buying/service/GetDailyBuyingListUseCase");
 const IDailyBuyingRepository_1 = require("../../core/domain/daily-buying/port/repository-port/IDailyBuyingRepository");
 const PrismaDailyBuyingRepository_1 = require("../../core/domain/daily-buying/repository/PrismaDailyBuyingRepository");
+const ICreateManyDailyBuyingUseCase_1 = require("../../core/domain/daily-buying/port/service-port/ICreateManyDailyBuyingUseCase");
 let DailyBuyingModule = class DailyBuyingModule {
 };
 exports.DailyBuyingModule = DailyBuyingModule;
@@ -34,6 +35,10 @@ exports.DailyBuyingModule = DailyBuyingModule = __decorate([
             {
                 provide: IDailyBuyingRepository_1.IDailyBuyingRepository,
                 useClass: PrismaDailyBuyingRepository_1.PrismaDailyBuyingRepository,
+            },
+            {
+                provide: ICreateManyDailyBuyingUseCase_1.ICreateManyDailyBuyingUseCase,
+                useClass: CreateDailyBuyingUseCase_1.CreateManyDailyBuyingUseCase,
             },
         ],
     })

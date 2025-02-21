@@ -1,5 +1,5 @@
 import { BaseResponseSchema } from '../../common/BaseResponseSchema';
-declare class DailyBuying {
+declare class DailyBuyingData {
     Id: string;
     particular: string;
     unit: string;
@@ -10,7 +10,7 @@ declare class DailyBuying {
     updatedDate: Date;
 }
 declare class GetDailyBuyingList {
-    DailyBuyings: DailyBuying[];
+    DailyBuyings: DailyBuyingData[];
     totalCount: number;
 }
 export declare class GetDailyBuyingListResponseSchema extends BaseResponseSchema<GetDailyBuyingList> {

@@ -30,13 +30,17 @@ const UpdateDailyBuyingResponseSchema_1 = require("./documentation/daily-buying/
 const GetDailyBuyingResponseSchema_1 = require("./documentation/daily-buying/ResponseSchema/GetDailyBuyingResponseSchema");
 const GetDailyBuyingListResponseSchema_1 = require("./documentation/daily-buying/ResponseSchema/GetDailyBuyingListResponseSchema");
 const DailyBuyingFilterSchema_1 = require("./documentation/daily-buying/RequestSchema/DailyBuyingFilterSchema");
+const CreateManyDailyBuyingReqeustSchema_1 = require("./documentation/daily-buying/RequestSchema/CreateManyDailyBuyingReqeustSchema");
+const ICreateManyDailyBuyingUseCase_1 = require("../../core/domain/daily-buying/port/service-port/ICreateManyDailyBuyingUseCase");
+const CreateManyDailyBuyingDto_1 = require("../../core/domain/daily-buying/dto/CreateManyDailyBuyingDto");
 let DailyBuyingController = class DailyBuyingController {
-    constructor(createDailyBuyingUseCase, updateDailyBuyingUsecase, getDailyBuyingUsecase, getDailyBuyingListUsecase, getDailyBuyingListWithFilter) {
+    constructor(createDailyBuyingUseCase, updateDailyBuyingUsecase, getDailyBuyingUsecase, getDailyBuyingListUsecase, getDailyBuyingListWithFilter, createManyDailyBuyingUseCase) {
         this.createDailyBuyingUseCase = createDailyBuyingUseCase;
         this.updateDailyBuyingUsecase = updateDailyBuyingUsecase;
         this.getDailyBuyingUsecase = getDailyBuyingUsecase;
         this.getDailyBuyingListUsecase = getDailyBuyingListUsecase;
         this.getDailyBuyingListWithFilter = getDailyBuyingListWithFilter;
+        this.createManyDailyBuyingUseCase = createManyDailyBuyingUseCase;
     }
     async create(dailyBuying, req) {
         const createDailyBuyingDto = new CreateDailyBuyingDto_1.CreateDailyBuyingDto();
@@ -46,6 +50,19 @@ let DailyBuyingController = class DailyBuyingController {
         createDailyBuyingDto.Amount = dailyBuying.Amount;
         createDailyBuyingDto.price = dailyBuying.price;
         return ApiResponseSchema_1.CoreApiResonseSchema.success(await this.createDailyBuyingUseCase.execute(createDailyBuyingDto));
+    }
+    async createMany(dailyBuyings, req) {
+        const createManyDailyBuyingDto = new CreateManyDailyBuyingDto_1.CreateManyDailyBuyingDto();
+        createManyDailyBuyingDto.dailyBuyings = dailyBuyings.DailyBuyings.map((dailyBuying) => {
+            const createDailyBuyingDto = new CreateDailyBuyingDto_1.CreateDailyBuyingDto();
+            createDailyBuyingDto.particular = dailyBuying.particular;
+            createDailyBuyingDto.unit = dailyBuying.unit;
+            createDailyBuyingDto.quantity = dailyBuying.quantity;
+            createDailyBuyingDto.Amount = dailyBuying.Amount;
+            createDailyBuyingDto.price = dailyBuying.price;
+            return createDailyBuyingDto;
+        });
+        return ApiResponseSchema_1.CoreApiResonseSchema.success(await this.createManyDailyBuyingUseCase.execute(createManyDailyBuyingDto));
     }
     async update(dailyBuying, req, params) {
         const updateDailyBuyingDto = new UpdateDailyBuyingDto_1.UpdateDailyBuyingDto();
@@ -85,6 +102,18 @@ __decorate([
     __metadata("design:paramtypes", [CreateDailyBuyingRequestSchema_1.CreateDailyBuyingSchema, Object]),
     __metadata("design:returntype", Promise)
 ], DailyBuyingController.prototype, "create", null);
+__decorate([
+    (0, swagger_1.ApiBearerAuth)(),
+    (0, common_1.UseGuards)(jwt_guard_1.JwtGuard),
+    (0, swagger_1.ApiBody)({ type: CreateManyDailyBuyingReqeustSchema_1.CreateManyDailyBuyingSchema }),
+    (0, swagger_1.ApiResponse)({ type: CreateDailyBuyingResponseSchema_1.CreateDailyBuyingResponseSchema }),
+    (0, common_1.Post)('/createMany'),
+    __param(0, (0, common_1.Body)()),
+    __param(1, (0, common_1.Req)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [CreateManyDailyBuyingReqeustSchema_1.CreateManyDailyBuyingSchema, Object]),
+    __metadata("design:returntype", Promise)
+], DailyBuyingController.prototype, "createMany", null);
 __decorate([
     (0, swagger_1.ApiBearerAuth)(),
     (0, common_1.UseGuards)(jwt_guard_1.JwtGuard),
@@ -137,6 +166,7 @@ exports.DailyBuyingController = DailyBuyingController = __decorate([
         UpdateDailyBuyingUseCase_1.UpdateDailyBuyingUseCase,
         GetDailyBuyingUseCase_1.GetDailyBuyingUseCase,
         GetDailyBuyingListUseCase_1.GetDailyBuyingListUseCase,
-        GetDailyBuyingListUseCase_1.GetDailyBuyingListWithFilterUseCase])
+        GetDailyBuyingListUseCase_1.GetDailyBuyingListWithFilterUseCase,
+        ICreateManyDailyBuyingUseCase_1.ICreateManyDailyBuyingUseCase])
 ], DailyBuyingController);
 //# sourceMappingURL=daily-buying.controller.js.map

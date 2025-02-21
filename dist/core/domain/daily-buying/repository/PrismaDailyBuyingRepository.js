@@ -55,6 +55,41 @@ let PrismaDailyBuyingRepository = class PrismaDailyBuyingRepository {
             }
         }
     }
+    async createMany(dailyBuyings) {
+        try {
+            await this.prisma.dailyBuying.createMany({
+                data: dailyBuyings.map((db) => {
+                    return {
+                        particular: db.particular,
+                        unit: db.unit,
+                        quantity: db.quantity,
+                        Amount: db.Amount,
+                        price: db.price,
+                    };
+                }),
+            });
+            return 'Daily buyings created successfully';
+        }
+        catch (e) {
+            if (e instanceof library_1.PrismaClientKnownRequestError) {
+                if (e.code == 'P2002') {
+                    throw new common_1.BadRequestException(ApiResponseSchema_1.CoreApiResonseSchema.error(common_1.HttpStatus.BAD_REQUEST, 'Bad Request', 'Email already used'));
+                }
+                else {
+                    throw new common_1.BadRequestException('Bad Request', {
+                        cause: new Error(),
+                        description: 'Cannot create DailyBuying',
+                    });
+                }
+            }
+            if (e instanceof library_1.PrismaClientValidationError) {
+                throw new common_1.InternalServerErrorException('Something bad happened', {
+                    cause: new Error(),
+                    description: e.message,
+                });
+            }
+        }
+    }
     async update(dailyBuying) {
         try {
             console.log(dailyBuying);

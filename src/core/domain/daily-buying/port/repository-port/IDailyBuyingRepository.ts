@@ -13,6 +13,7 @@ export abstract class IDailyBuyingRepository
     >
 {
   create: (entity: DailyBuyingEntity) => Promise<DailyBuyingEntity>;
+  createMany: (entity: DailyBuyingEntity[]) => Promise<string>;
   delete: (id: string) => Promise<boolean>;
   find: (by: { Id?: string }) => Promise<DailyBuyingEntity | null>;
   findAll: () => Promise<DailyBuyingEntity[]>;
