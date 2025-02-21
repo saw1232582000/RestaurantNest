@@ -47,6 +47,9 @@ import { UpdateDailyBuyingResponseSchema } from './documentation/daily-buying/Re
 import { GetDailyBuyingResponseSchema } from './documentation/daily-buying/ResponseSchema/GetDailyBuyingResponseSchema';
 import { GetDailyBuyingListResponseSchema } from './documentation/daily-buying/ResponseSchema/GetDailyBuyingListResponseSchema';
 import { DailyBuyingFilterSchama } from './documentation/daily-buying/RequestSchema/DailyBuyingFilterSchema';
+import { CreateManyDailyBuyingSchema } from './documentation/daily-buying/RequestSchema/CreateManyDailyBuyingReqeustSchema';
+import { ICreateManyDailyBuyingUseCase } from '@src/core/domain/daily-buying/port/service-port/ICreateManyDailyBuyingUseCase';
+import { CreateManyDailyBuyingDto } from '@src/core/domain/daily-buying/dto/CreateManyDailyBuyingDto';
 
 @Controller('DailyBuying')
 @ApiTags('DailyBuying')
@@ -57,6 +60,7 @@ export class DailyBuyingController {
     private getDailyBuyingUsecase: GetDailyBuyingUseCase,
     private getDailyBuyingListUsecase: GetDailyBuyingListUseCase,
     private getDailyBuyingListWithFilter: GetDailyBuyingListWithFilterUseCase,
+    private createManyDailyBuyingUseCase: ICreateManyDailyBuyingUseCase,
   ) {}
 
   @ApiBearerAuth()
@@ -80,6 +84,35 @@ export class DailyBuyingController {
 
     return CoreApiResonseSchema.success(
       await this.createDailyBuyingUseCase.execute(createDailyBuyingDto),
+    );
+  }
+
+  @ApiBearerAuth()
+  @UseGuards(JwtGuard)
+  @ApiBody({ type: CreateManyDailyBuyingSchema })
+  @ApiResponse({ type: CreateDailyBuyingResponseSchema })
+  @Post('/createMany')
+  public async createMany(
+    @Body() dailyBuyings: CreateManyDailyBuyingSchema,
+    @Req() req,
+  ) {
+    // this.createDailyBuyingUseCase = new CreateDailyBuyingUseCase(
+    //   new PrismaDailyBuyingRepository(new PrismaClient()),
+    // );
+    const createManyDailyBuyingDto = new CreateManyDailyBuyingDto();
+    createManyDailyBuyingDto.dailyBuyings = dailyBuyings.DailyBuyings.map(
+      (dailyBuying) => {
+        const createDailyBuyingDto = new CreateDailyBuyingDto();
+        createDailyBuyingDto.particular = dailyBuying.particular;
+        createDailyBuyingDto.unit = dailyBuying.unit;
+        createDailyBuyingDto.quantity = dailyBuying.quantity;
+        createDailyBuyingDto.Amount = dailyBuying.Amount;
+        createDailyBuyingDto.price = dailyBuying.price;
+        return createDailyBuyingDto;
+      },
+    );
+    return CoreApiResonseSchema.success(
+      await this.createManyDailyBuyingUseCase.execute(createManyDailyBuyingDto),
     );
   }
 

@@ -3,6 +3,8 @@ import { ICreateDailyBuyingUseCase } from '../port/service-port/ICreateDailyBuyi
 import { DailyBuyingEntity } from '../entity/DailyBuying';
 import { CreateDailyBuyingDto } from '../dto/CreateDailyBuyingDto';
 import { IDailyBuyingRepository } from '../port/repository-port/IDailyBuyingRepository';
+import { ICreateManyDailyBuyingUseCase } from '../port/service-port/ICreateManyDailyBuyingUseCase';
+import { CreateManyDailyBuyingDto } from '../dto/CreateManyDailyBuyingDto';
 
 @Injectable()
 export class CreateDailyBuyingUseCase implements ICreateDailyBuyingUseCase {
@@ -24,5 +26,30 @@ export class CreateDailyBuyingUseCase implements ICreateDailyBuyingUseCase {
       await this.DailyBuyingRepository.create(newDailyBuying);
 
     return CreateDailyBuyingDto.convertToClass(createdDailyBuying);
+  }
+}
+
+@Injectable()
+export class CreateManyDailyBuyingUseCase
+  implements ICreateManyDailyBuyingUseCase
+{
+  constructor(
+    @Inject() private readonly DailyBuyingRepository: IDailyBuyingRepository,
+  ) {}
+  public async execute(data?: CreateManyDailyBuyingDto): Promise<any> {
+    const newDailyBuying = data.dailyBuyings.map((db) => {
+      return new DailyBuyingEntity(
+        db?.Id,
+        db?.particular,
+        db?.unit,
+        db?.price,
+        db?.quantity,
+        db?.Amount,
+        db?.createdDate,
+        db?.updatedDate,
+      );
+    });
+
+    return await this.DailyBuyingRepository.createMany(newDailyBuying);
   }
 }

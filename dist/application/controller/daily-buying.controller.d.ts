@@ -5,14 +5,18 @@ import { GetDailyBuyingUseCase } from '@src/core/domain/daily-buying/service/Get
 import { GetDailyBuyingListUseCase, GetDailyBuyingListWithFilterUseCase } from '@src/core/domain/daily-buying/service/GetDailyBuyingListUseCase';
 import { CreateDailyBuyingSchema } from './documentation/daily-buying/RequestSchema/CreateDailyBuyingRequestSchema';
 import { DailyBuyingFilterSchama } from './documentation/daily-buying/RequestSchema/DailyBuyingFilterSchema';
+import { CreateManyDailyBuyingSchema } from './documentation/daily-buying/RequestSchema/CreateManyDailyBuyingReqeustSchema';
+import { ICreateManyDailyBuyingUseCase } from '@src/core/domain/daily-buying/port/service-port/ICreateManyDailyBuyingUseCase';
 export declare class DailyBuyingController {
     private createDailyBuyingUseCase;
     private updateDailyBuyingUsecase;
     private getDailyBuyingUsecase;
     private getDailyBuyingListUsecase;
     private getDailyBuyingListWithFilter;
-    constructor(createDailyBuyingUseCase: CreateDailyBuyingUseCase, updateDailyBuyingUsecase: UpdateDailyBuyingUseCase, getDailyBuyingUsecase: GetDailyBuyingUseCase, getDailyBuyingListUsecase: GetDailyBuyingListUseCase, getDailyBuyingListWithFilter: GetDailyBuyingListWithFilterUseCase);
+    private createManyDailyBuyingUseCase;
+    constructor(createDailyBuyingUseCase: CreateDailyBuyingUseCase, updateDailyBuyingUsecase: UpdateDailyBuyingUseCase, getDailyBuyingUsecase: GetDailyBuyingUseCase, getDailyBuyingListUsecase: GetDailyBuyingListUseCase, getDailyBuyingListWithFilter: GetDailyBuyingListWithFilterUseCase, createManyDailyBuyingUseCase: ICreateManyDailyBuyingUseCase);
     create(dailyBuying: CreateDailyBuyingSchema, req: any): Promise<CoreApiResonseSchema<any>>;
+    createMany(dailyBuyings: CreateManyDailyBuyingSchema, req: any): Promise<CoreApiResonseSchema<any>>;
     update(dailyBuying: CreateDailyBuyingSchema, req: any, params: {
         id: string;
     }): Promise<CoreApiResonseSchema<any>>;

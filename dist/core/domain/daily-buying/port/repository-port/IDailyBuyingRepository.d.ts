@@ -7,6 +7,7 @@ export declare abstract class IDailyBuyingRepository implements IBaseRepository<
     name?: string;
 }> {
     create: (entity: DailyBuyingEntity) => Promise<DailyBuyingEntity>;
+    createMany: (entity: DailyBuyingEntity[]) => Promise<string>;
     delete: (id: string) => Promise<boolean>;
     find: (by: {
         Id?: string;
