@@ -26,7 +26,6 @@ let GlobalExceptionFilter = class GlobalExceptionFilter {
         if (exception instanceof common_1.HttpException) {
             status = exception.getStatus();
             const exceptionResponse = exception.getResponse();
-            console.log('response in global handler', exceptionResponse);
             if (typeof exceptionResponse === 'string') {
                 message = exceptionResponse;
             }
