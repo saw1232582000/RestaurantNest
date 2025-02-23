@@ -33,6 +33,9 @@ class GetDailyBuyingList {
 
   @ApiProperty()
   totalCount: number;
+
+  @ApiProperty()
+  totalPrice: number;
 }
 
 export class GetDailyBuyingListResponseSchema extends BaseResponseSchema<GetDailyBuyingList> {

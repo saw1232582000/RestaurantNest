@@ -17,5 +17,6 @@ export declare abstract class IDailyBuyingRepository implements IBaseRepository<
     findAllWithSchema: (filter: DailyBuyingFilter) => Promise<{
         DailyBuyings: DailyBuyingEntity[];
         totalCounts: number;
+        totalPrice: number;
     }>;
 }

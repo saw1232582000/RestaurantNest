@@ -190,9 +190,11 @@ export class PrismaOrderRepository implements IOrderRepository {
     return orders.map((order) => OrderEntity.toEntity(order));
   }
 
-  async findAllWithSchema(
-    filter: OrderFilter,
-  ): Promise<{ orders: OrderEntity[]; totalCounts: number }> {
+  async findAllWithSchema(filter: OrderFilter): Promise<{
+    orders: OrderEntity[];
+    totalCounts: number;
+    totalPrice: number;
+  }> {
     const filterValue =
       filter?.startDate && filter?.endDate
         ? {
@@ -210,6 +212,33 @@ export class PrismaOrderRepository implements IOrderRepository {
         ...filterValue,
       },
     });
+    const priceList = await this.prisma.order.findMany({
+      where: {
+        ...filterValue,
+      },
+      select: {
+        orderItems: {
+          select: {
+            quantity: true,
+            product: {
+              select: {
+                price: true,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    const totalPrice = priceList.reduce((previous, current) => {
+      // Calculate the total for this order's items
+      const orderTotal = current.orderItems.reduce((sum, item) => {
+        return sum + item.quantity * item.product.price;
+      }, 0);
+
+      // Add this order's total to the running total
+      return previous + orderTotal;
+    }, 0);
 
     const products = await this.prisma.order.findMany({
       where: {
@@ -231,6 +260,7 @@ export class PrismaOrderRepository implements IOrderRepository {
     return {
       orders: products.map((product) => OrderEntity.toEntity(product)),
       totalCounts: totalCounts,
+      totalPrice: totalPrice,
     };
   }
 

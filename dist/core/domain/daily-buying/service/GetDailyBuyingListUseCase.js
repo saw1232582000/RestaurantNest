@@ -40,6 +40,7 @@ let GetDailyBuyingListWithFilterUseCase = class GetDailyBuyingListWithFilterUseC
         return {
             DailyBuyings: list.DailyBuyings.map((DailyBuying) => CreateDailyBuyingDto_1.CreateDailyBuyingDto.convertToClass(DailyBuying)),
             totalCounts: list.totalCounts,
+            totalPrice: list.totalPrice,
         };
     }
 };

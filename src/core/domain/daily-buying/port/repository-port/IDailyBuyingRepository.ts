@@ -18,7 +18,9 @@ export abstract class IDailyBuyingRepository
   find: (by: { Id?: string }) => Promise<DailyBuyingEntity | null>;
   findAll: () => Promise<DailyBuyingEntity[]>;
   update: (entity: DailyBuyingEntity) => Promise<DailyBuyingEntity>;
-  findAllWithSchema: (
-    filter: DailyBuyingFilter,
-  ) => Promise<{ DailyBuyings: DailyBuyingEntity[]; totalCounts: number }>;
+  findAllWithSchema: (filter: DailyBuyingFilter) => Promise<{
+    DailyBuyings: DailyBuyingEntity[];
+    totalCounts: number;
+    totalPrice: number;
+  }>;
 }

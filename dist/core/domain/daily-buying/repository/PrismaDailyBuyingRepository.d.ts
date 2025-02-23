@@ -16,5 +16,6 @@ export declare class PrismaDailyBuyingRepository implements IDailyBuyingReposito
     findAllWithSchema(filter: DailyBuyingFilter): Promise<{
         DailyBuyings: DailyBuyingEntity[];
         totalCounts: number;
+        totalPrice: number;
     }>;
 }

@@ -186,15 +186,29 @@ export class PrismaDailyBuyingRepository implements IDailyBuyingRepository {
     );
   }
 
-  async findAllWithSchema(
-    filter: DailyBuyingFilter,
-  ): Promise<{ DailyBuyings: DailyBuyingEntity[]; totalCounts: number }> {
+  async findAllWithSchema(filter: DailyBuyingFilter): Promise<{
+    DailyBuyings: DailyBuyingEntity[];
+    totalCounts: number;
+    totalPrice: number;
+  }> {
     // console.log(filter)
     const totalCounts = await this.prisma.dailyBuying.count({
       where: {
         particular: { contains: filter.particular },
       },
     });
+    const priceList = await this.prisma.dailyBuying.findMany({
+      where: {
+        particular: { contains: filter.particular },
+      },
+      select: {
+        Amount: true,
+      },
+    });
+    const totalPrice = priceList.reduce(
+      (previous, current) => previous + current.Amount,
+      0,
+    );
     const dailyBuyings = await this.prisma.dailyBuying.findMany({
       where: {
         particular: { contains: filter.particular },
@@ -209,6 +223,7 @@ export class PrismaDailyBuyingRepository implements IDailyBuyingRepository {
         DailyBuyingEntity.toEntity(DailyBuying),
       ),
       totalCounts: totalCounts,
+      totalPrice: totalPrice,
     };
   }
 }
