@@ -19,6 +19,7 @@ export declare abstract class IOrderRepository implements IBaseRepository<OrderE
     findAllWithSchema: (filter: OrderFilter) => Promise<{
         orders: OrderEntity[];
         totalCounts: number;
+        totalPrice: number;
     }>;
     updateOrderStatus: (updateOrderStatusDto: UpdateOrderStatusDto) => Promise<Boolean>;
     updateOrderItems: (updateOrderItemDto: UpdateOrderItemDto) => Promise<Boolean>;

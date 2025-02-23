@@ -56,6 +56,10 @@ __decorate([
     (0, swagger_1.ApiProperty)(),
     __metadata("design:type", Number)
 ], GetDailyBuyingList.prototype, "totalCount", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)(),
+    __metadata("design:type", Number)
+], GetDailyBuyingList.prototype, "totalPrice", void 0);
 class GetDailyBuyingListResponseSchema extends BaseResponseSchema_1.BaseResponseSchema {
 }
 exports.GetDailyBuyingListResponseSchema = GetDailyBuyingListResponseSchema;

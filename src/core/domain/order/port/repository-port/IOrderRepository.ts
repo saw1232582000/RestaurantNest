@@ -16,9 +16,11 @@ export abstract class IOrderRepository
   find: (by: { id?: string; name?: string }) => Promise<OrderEntity | null>;
   findAll: () => Promise<OrderEntity[]>;
   update: (entity: OrderEntity) => Promise<OrderEntity>;
-  findAllWithSchema: (
-    filter: OrderFilter,
-  ) => Promise<{ orders: OrderEntity[]; totalCounts: number }>;
+  findAllWithSchema: (filter: OrderFilter) => Promise<{
+    orders: OrderEntity[];
+    totalCounts: number;
+    totalPrice: number;
+  }>;
   updateOrderStatus: (
     updateOrderStatusDto: UpdateOrderStatusDto,
   ) => Promise<Boolean>;
