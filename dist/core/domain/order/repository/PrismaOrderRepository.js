@@ -192,6 +192,29 @@ let PrismaOrderRepository = class PrismaOrderRepository {
                 ...filterValue,
             },
         });
+        const priceList = await this.prisma.order.findMany({
+            where: {
+                ...filterValue,
+            },
+            select: {
+                orderItems: {
+                    select: {
+                        quantity: true,
+                        product: {
+                            select: {
+                                price: true,
+                            },
+                        },
+                    },
+                },
+            },
+        });
+        const totalPrice = priceList.reduce((previous, current) => {
+            const orderTotal = current.orderItems.reduce((sum, item) => {
+                return sum + item.quantity * item.product.price;
+            }, 0);
+            return previous + orderTotal;
+        }, 0);
         const products = await this.prisma.order.findMany({
             where: {
                 ...filterValue,
@@ -211,6 +234,7 @@ let PrismaOrderRepository = class PrismaOrderRepository {
         return {
             orders: products.map((product) => Order_1.OrderEntity.toEntity(product)),
             totalCounts: totalCounts,
+            totalPrice: totalPrice,
         };
     }
     async updateOrderItems(updateOrderItemDto) {

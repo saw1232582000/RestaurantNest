@@ -12,6 +12,7 @@ declare class DailyBuyingData {
 declare class GetDailyBuyingList {
     DailyBuyings: DailyBuyingData[];
     totalCount: number;
+    totalPrice: number;
 }
 export declare class GetDailyBuyingListResponseSchema extends BaseResponseSchema<GetDailyBuyingList> {
     data: GetDailyBuyingList;

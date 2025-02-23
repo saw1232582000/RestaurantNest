@@ -35,6 +35,7 @@ export class GetDailyBuyingListWithFilterUseCase
         CreateDailyBuyingDto.convertToClass(DailyBuying),
       ),
       totalCounts: list.totalCounts,
+      totalPrice: list.totalPrice,
     };
   }
 }

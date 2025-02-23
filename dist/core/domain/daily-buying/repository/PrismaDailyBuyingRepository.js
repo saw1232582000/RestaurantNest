@@ -180,6 +180,15 @@ let PrismaDailyBuyingRepository = class PrismaDailyBuyingRepository {
                 particular: { contains: filter.particular },
             },
         });
+        const priceList = await this.prisma.dailyBuying.findMany({
+            where: {
+                particular: { contains: filter.particular },
+            },
+            select: {
+                Amount: true,
+            },
+        });
+        const totalPrice = priceList.reduce((previous, current) => previous + current.Amount, 0);
         const dailyBuyings = await this.prisma.dailyBuying.findMany({
             where: {
                 particular: { contains: filter.particular },
@@ -190,6 +199,7 @@ let PrismaDailyBuyingRepository = class PrismaDailyBuyingRepository {
         return {
             DailyBuyings: dailyBuyings.map((DailyBuying) => DailyBuying_1.DailyBuyingEntity.toEntity(DailyBuying)),
             totalCounts: totalCounts,
+            totalPrice: totalPrice,
         };
     }
 };

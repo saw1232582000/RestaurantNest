@@ -20,6 +20,7 @@ export declare class PrismaOrderRepository implements IOrderRepository {
     findAllWithSchema(filter: OrderFilter): Promise<{
         orders: OrderEntity[];
         totalCounts: number;
+        totalPrice: number;
     }>;
     updateOrderItems(updateOrderItemDto: UpdateOrderItemDto): Promise<Boolean>;
 }
