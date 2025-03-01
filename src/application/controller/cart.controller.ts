@@ -8,7 +8,7 @@ import { RemoveFromCartUseCase } from 'src/core/domain/cart/service/RemoveFromCa
 import { PrismaCartRepository } from 'src/core/domain/cart/repository/PrismaCartRepository';
 import { Prisma, PrismaClient } from '@prisma/client';
 import { AddToCartDto } from 'src/core/domain/cart/dto/AddToCartDto';
-import { CoreApiResonseSchema } from 'src/core/common/schema/ApiResponseSchema';
+import { CoreApiResponseSchema } from 'src/core/common/schema/ApiResponseSchema';
 import { RemoveFromCartDto } from 'src/core/domain/cart/dto/RemoveFromCartDto';
 import { AddToCartResponseSchema } from './documentation/cart/ResponseSchema/AddToCartResponseSchema';
 import { RemoveFromCartResponseSchema } from './documentation/cart/ResponseSchema/RemoveFromCartResponseSchema';
@@ -31,7 +31,7 @@ export class CartController {
     addToCartDto.productId = product.productId;
     addToCartDto.userId = req.user?.user?.id;
     this.addToCartUseCase.execute(addToCartDto);
-    return CoreApiResonseSchema.success({
+    return CoreApiResponseSchema.success({
       message: 'Item added to cart successfully',
     });
   }
@@ -49,7 +49,7 @@ export class CartController {
     removeFromCartDto.productId = product.productId;
     removeFromCartDto.userId = req.user?.user?.id;
     this.addToCartUseCase.execute(removeFromCartDto);
-    return CoreApiResonseSchema.success({
+    return CoreApiResponseSchema.success({
       message: 'Item removed from cart successfully',
     });
   }

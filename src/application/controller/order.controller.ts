@@ -29,7 +29,7 @@ import { GetOrderListWithFilterUseCase } from 'src/core/domain/order/service/Get
 import { PrismaOrderRepository } from 'src/core/domain/order/repository/PrismaOrderRepository';
 import { PrismaClient } from '@prisma/client';
 import { CreateOrderDto } from 'src/core/domain/order/dto/CreateOrderDto';
-import { CoreApiResonseSchema } from 'src/core/common/schema/ApiResponseSchema';
+import { CoreApiResponseSchema } from 'src/core/common/schema/ApiResponseSchema';
 import { CreateOrderRequestSchema } from './documentation/order/RequestSchema/CreateOrderRequestSchema';
 import { OrderItemEntity } from 'src/core/domain/order/entity/OrderItem';
 import { BaseRequestQuerySchema } from './documentation/common/BaseRequestQuerySchema';
@@ -82,11 +82,11 @@ export class OrderController {
       });
       //this.chatGateWay.setNewOrder('New Order submitted');
       await this.createOrderUseCase.execute(createOrderDto);
-      return CoreApiResonseSchema.success({
+      return CoreApiResponseSchema.success({
         message: 'Order Created Successfully',
       });
     } catch (error) {
-      return CoreApiResonseSchema.error(error);
+      return CoreApiResponseSchema.error(error);
     }
   }
 
@@ -108,7 +108,7 @@ export class OrderController {
     updateOrderStatusDto.id = params.id;
     updateOrderStatusDto.status = order.status;
 
-    return CoreApiResonseSchema.success(
+    return CoreApiResponseSchema.success(
       await this.updateOrderStatusUseCase.execute(updateOrderStatusDto),
     );
   }
@@ -135,11 +135,11 @@ export class OrderController {
       });
       //this.chatGateWay.setNewOrder('New Order submitted');
       await this.updateOrderItemUseCase.execute(updateOrderDto);
-      return CoreApiResonseSchema.success({
+      return CoreApiResponseSchema.success({
         message: 'Order updated Successfully',
       });
     } catch (error) {
-      return CoreApiResonseSchema.error(500, 'Order Item Update Error', error);
+      return CoreApiResponseSchema.error(500, 'Order Item Update Error', error);
     }
   }
 
@@ -151,7 +151,7 @@ export class OrderController {
   @Get('/get')
   public async getOrder(@Req() req, @Query() params: { id: string }) {
     const order = await this.getOrderUseCase.execute(params.id);
-    return CoreApiResonseSchema.success(order);
+    return CoreApiResponseSchema.success(order);
   }
 
   @ApiBearerAuth()
@@ -170,6 +170,6 @@ export class OrderController {
     );
 
     const orderList = await this.getOrderListUseCase.execute(orderFilter);
-    return CoreApiResonseSchema.success(orderList);
+    return CoreApiResponseSchema.success(orderList);
   }
 }

@@ -10,49 +10,54 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UpdateProductDto = void 0;
-const class_transformer_1 = require("class-transformer");
+const swagger_1 = require("@nestjs/swagger");
+const class_validator_1 = require("class-validator");
 class UpdateProductDto {
-    static convertToClass(product) {
-        return (0, class_transformer_1.plainToInstance)(UpdateProductDto, product, {
-            excludeExtraneousValues: true,
-        });
+    constructor(data) {
+        this.id = data.id || '';
+        this.name = data.name || '';
+        this.image = data.image || '';
+        this.price = data.price || 0;
+        this.description = data.description || '';
+        this.category = data.category || '';
+        this.userId = data.userId;
     }
 }
 exports.UpdateProductDto = UpdateProductDto;
 __decorate([
-    (0, class_transformer_1.Expose)(),
-    __metadata("design:type", Object)
+    (0, swagger_1.ApiProperty)({ description: 'Product ID', example: 'cuid123' }),
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsNotEmpty)(),
+    __metadata("design:type", String)
 ], UpdateProductDto.prototype, "id", void 0);
 __decorate([
-    (0, class_transformer_1.Expose)(),
-    __metadata("design:type", String)
-], UpdateProductDto.prototype, "userId", void 0);
-__decorate([
-    (0, class_transformer_1.Expose)(),
+    (0, swagger_1.ApiProperty)({ description: 'Product name', example: 'Pizza' }),
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsNotEmpty)(),
     __metadata("design:type", String)
 ], UpdateProductDto.prototype, "name", void 0);
 __decorate([
-    (0, class_transformer_1.Expose)(),
-    __metadata("design:type", Number)
-], UpdateProductDto.prototype, "price", void 0);
-__decorate([
-    (0, class_transformer_1.Expose)(),
+    (0, swagger_1.ApiProperty)({ description: 'Product image URL', example: 'https://example.com/pizza.jpg' }),
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsNotEmpty)(),
     __metadata("design:type", String)
 ], UpdateProductDto.prototype, "image", void 0);
 __decorate([
-    (0, class_transformer_1.Expose)(),
+    (0, swagger_1.ApiProperty)({ description: 'Product price', example: 10 }),
+    (0, class_validator_1.IsNumber)(),
+    (0, class_validator_1.IsNotEmpty)(),
+    __metadata("design:type", Number)
+], UpdateProductDto.prototype, "price", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Product description', example: 'Delicious cheese pizza' }),
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsNotEmpty)(),
     __metadata("design:type", String)
 ], UpdateProductDto.prototype, "description", void 0);
 __decorate([
-    (0, class_transformer_1.Expose)(),
+    (0, swagger_1.ApiProperty)({ description: 'Product category', example: 'Food' }),
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsNotEmpty)(),
     __metadata("design:type", String)
 ], UpdateProductDto.prototype, "category", void 0);
-__decorate([
-    (0, class_transformer_1.Expose)(),
-    __metadata("design:type", Object)
-], UpdateProductDto.prototype, "createdDate", void 0);
-__decorate([
-    (0, class_transformer_1.Expose)(),
-    __metadata("design:type", Object)
-], UpdateProductDto.prototype, "updatedDate", void 0);
 //# sourceMappingURL=UpdateProductDto.js.map

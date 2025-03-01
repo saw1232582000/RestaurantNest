@@ -54,19 +54,19 @@ let OrderController = class OrderController {
                 return OrderItem_1.OrderItemEntity.toEntity(orderItem);
             });
             await this.createOrderUseCase.execute(createOrderDto);
-            return ApiResponseSchema_1.CoreApiResonseSchema.success({
+            return ApiResponseSchema_1.CoreApiResponseSchema.success({
                 message: 'Order Created Successfully',
             });
         }
         catch (error) {
-            return ApiResponseSchema_1.CoreApiResonseSchema.error(error);
+            return ApiResponseSchema_1.CoreApiResponseSchema.error(error);
         }
     }
     async update(order, req, params) {
         const updateOrderStatusDto = new UpdateOrderStatusDto_1.UpdateOrderStatusDto();
         updateOrderStatusDto.id = params.id;
         updateOrderStatusDto.status = order.status;
-        return ApiResponseSchema_1.CoreApiResonseSchema.success(await this.updateOrderStatusUseCase.execute(updateOrderStatusDto));
+        return ApiResponseSchema_1.CoreApiResponseSchema.success(await this.updateOrderStatusUseCase.execute(updateOrderStatusDto));
     }
     async updateOrderItems(order, req, params) {
         try {
@@ -78,22 +78,22 @@ let OrderController = class OrderController {
                 return OrderItem_1.OrderItemEntity.toEntity(orderItem);
             });
             await this.updateOrderItemUseCase.execute(updateOrderDto);
-            return ApiResponseSchema_1.CoreApiResonseSchema.success({
+            return ApiResponseSchema_1.CoreApiResponseSchema.success({
                 message: 'Order updated Successfully',
             });
         }
         catch (error) {
-            return ApiResponseSchema_1.CoreApiResonseSchema.error(500, 'Order Item Update Error', error);
+            return ApiResponseSchema_1.CoreApiResponseSchema.error(500, 'Order Item Update Error', error);
         }
     }
     async getOrder(req, params) {
         const order = await this.getOrderUseCase.execute(params.id);
-        return ApiResponseSchema_1.CoreApiResonseSchema.success(order);
+        return ApiResponseSchema_1.CoreApiResponseSchema.success(order);
     }
     async getOrderList(params, req) {
         const orderFilter = new OrderFilter_1.OrderFilter(params.startDate, params.endDate, parseInt(params?.take.toString()), parseInt(params?.skip.toString()), params.status);
         const orderList = await this.getOrderListUseCase.execute(orderFilter);
-        return ApiResponseSchema_1.CoreApiResonseSchema.success(orderList);
+        return ApiResponseSchema_1.CoreApiResponseSchema.success(orderList);
     }
 };
 exports.OrderController = OrderController;

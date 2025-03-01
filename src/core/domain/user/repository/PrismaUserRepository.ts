@@ -14,7 +14,7 @@ import {
   PrismaClientValidationError,
 } from '@prisma/client/runtime/library';
 import { HTTP_CODE_METADATA } from '@nestjs/common/constants';
-import { CoreApiResonseSchema } from 'src/core/common/schema/ApiResponseSchema';
+import { CoreApiResponseSchema } from 'src/core/common/schema/ApiResponseSchema';
 import { UserFilter } from '../dto/UserFilter';
 import { PrismaService } from '@src/core/common/prisma/PrismaService';
 
@@ -37,7 +37,7 @@ export class PrismaUserRepository implements IUserRepository {
       if (e instanceof PrismaClientKnownRequestError) {
         if (e.code == 'P2002') {
           // throw new BadRequestException(
-          //   CoreApiResonseSchema.error(
+          //   CoreApiResponseSchema.error(
           //     HttpStatus.BAD_REQUEST,
           //     'Bad Request',
           //     e?.meta?.target[0] == 'email'

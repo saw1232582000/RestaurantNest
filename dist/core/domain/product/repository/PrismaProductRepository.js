@@ -8,165 +8,107 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var __param = (this && this.__param) || function (paramIndex, decorator) {
-    return function (target, key) { decorator(target, key, paramIndex); }
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.PrismaProductRepository = void 0;
 const common_1 = require("@nestjs/common");
 const library_1 = require("@prisma/client/runtime/library");
-const ApiResponseSchema_1 = require("../../../common/schema/ApiResponseSchema");
-const Product_1 = require("../entity/Product");
+const common_2 = require("@nestjs/common");
 const PrismaService_1 = require("../../../common/prisma/PrismaService");
+const Product_1 = require("../entity/Product");
 let PrismaProductRepository = class PrismaProductRepository {
     constructor(prisma) {
         this.prisma = prisma;
     }
-    async create(product) {
+    async create(entity) {
         try {
             const result = await this.prisma.product.create({
-                data: {
-                    name: product.name,
-                    category: product.category,
-                    description: product.description,
-                    image: product.image,
-                    price: product.price,
-                    userId: product.userId,
-                },
+                data: { ...entity },
             });
-            return Product_1.ProductEntity.toEntity(result);
+            return new Product_1.ProductEntity(result);
         }
         catch (e) {
-            if (e instanceof library_1.PrismaClientKnownRequestError) {
-                if (e.code == 'P2002') {
-                    throw new common_1.BadRequestException(ApiResponseSchema_1.CoreApiResonseSchema.error(common_1.HttpStatus.BAD_REQUEST, 'Bad Request', 'Email already used'));
-                }
-                else {
-                    throw new common_1.BadRequestException('Bad Request', {
-                        cause: new Error(),
-                        description: 'Cannot create product',
-                    });
-                }
-            }
-            if (e instanceof library_1.PrismaClientValidationError) {
-                throw new common_1.InternalServerErrorException('Something bad happened', {
-                    cause: new Error(),
-                    description: e.message,
-                });
-            }
+            this.handlePrismaError(e, 'Cannot create product');
         }
     }
-    async update(product) {
+    async update(entity) {
         try {
             const result = await this.prisma.product.update({
-                where: { id: product.id },
-                data: {
-                    name: product.name,
-                    category: product.category,
-                    description: product.description,
-                    price: product.price,
-                    userId: product.userId,
-                    updatedDate: new Date(),
-                },
+                where: { id: entity.id },
+                data: { ...entity, updatedDate: new Date() },
             });
-            return Product_1.ProductEntity.toEntity(result);
+            return new Product_1.ProductEntity(result);
         }
         catch (e) {
-            if (e instanceof library_1.PrismaClientValidationError) {
-                throw new common_1.InternalServerErrorException('Something bad happened', {
-                    cause: new Error(),
-                    description: e.message,
-                });
-            }
-            if (e instanceof library_1.PrismaClientKnownRequestError) {
-                throw new common_1.InternalServerErrorException('Something bad happened', {
-                    cause: new Error(),
-                    description: e.code,
-                });
-            }
+            this.handlePrismaError(e, 'Cannot update product');
         }
     }
     async delete(id) {
         try {
-            await this.prisma.product.delete({
-                where: { id: id },
-            });
+            await this.prisma.product.delete({ where: { id } });
             return true;
         }
         catch (e) {
-            if (e instanceof library_1.PrismaClientValidationError) {
-                throw new common_1.InternalServerErrorException('Something bad happened', {
-                    cause: new Error(),
-                    description: e.message,
-                });
-            }
-            if (e instanceof library_1.PrismaClientKnownRequestError) {
-                throw new common_1.InternalServerErrorException('Something bad happened', {
-                    cause: new Error(),
-                    description: e.code,
-                });
-            }
+            this.handlePrismaError(e, 'Cannot delete product');
         }
     }
     async find(by) {
         try {
-            const product = await this.prisma.product.findFirst({
-                where: {
-                    ...by,
-                },
-            });
-            if (product)
-                return Product_1.ProductEntity.toEntity(product);
-            else
-                return null;
+            const result = await this.prisma.product.findFirst({ where: by });
+            return result ? new Product_1.ProductEntity(result) : null;
         }
         catch (e) {
-            if (e instanceof library_1.PrismaClientValidationError) {
-                throw new common_1.InternalServerErrorException('Something bad happened', {
-                    cause: new Error(),
-                    description: e.message,
-                });
-            }
-            if (e instanceof library_1.PrismaClientKnownRequestError) {
-                throw new common_1.InternalServerErrorException('Something bad happened', {
-                    cause: new Error(),
-                    description: e.code,
-                });
-            }
+            this.handlePrismaError(e, 'Cannot find product');
         }
     }
     async findAll() {
-        const products = await this.prisma.product.findMany({});
-        return products.map((product) => Product_1.ProductEntity.toEntity(product));
+        try {
+            const results = await this.prisma.product.findMany();
+            return results.map((r) => new Product_1.ProductEntity(r));
+        }
+        catch (e) {
+            this.handlePrismaError(e, 'Cannot fetch products');
+        }
     }
-    async findAllWithSchema(filter) {
-        const totalCounts = await this.prisma.product.count({
-            where: {
-                name: { contains: filter.name },
-                category: {
-                    contains: filter.category,
-                },
-            },
-        });
-        const products = await this.prisma.product.findMany({
-            where: {
-                name: { contains: filter.name },
-                category: {
-                    contains: filter.category,
-                },
-            },
-            take: filter.take,
-            skip: filter.skip,
-        });
-        return {
-            products: products.map((product) => Product_1.ProductEntity.toEntity(product)),
-            totalCounts: totalCounts,
-        };
+    async findAllWithFilter(filter) {
+        try {
+            const [totalCounts, products] = await Promise.all([
+                this.prisma.product.count({
+                    where: {
+                        name: { contains: filter.name },
+                        category: { contains: filter.category },
+                    },
+                }),
+                this.prisma.product.findMany({
+                    where: {
+                        name: { contains: filter.name },
+                        category: { contains: filter.category },
+                    },
+                    take: filter.take,
+                    skip: filter.skip,
+                }),
+            ]);
+            return {
+                products: products.map((p) => new Product_1.ProductEntity(p)),
+                totalCounts,
+            };
+        }
+        catch (e) {
+            this.handlePrismaError(e, 'Cannot fetch filtered products');
+        }
+    }
+    handlePrismaError(error, message) {
+        if (error instanceof library_1.PrismaClientKnownRequestError) {
+            if (error.code === 'P2002') {
+                throw new common_2.BadRequestException(`${message}: Name already exists`);
+            }
+            throw new common_2.BadRequestException(`${message}: ${error.message}`);
+        }
+        throw new common_2.InternalServerErrorException('An unexpected error occurred');
     }
 };
 exports.PrismaProductRepository = PrismaProductRepository;
 exports.PrismaProductRepository = PrismaProductRepository = __decorate([
-    __param(0, (0, common_1.Inject)()),
+    (0, common_1.Injectable)(),
     __metadata("design:paramtypes", [PrismaService_1.PrismaService])
 ], PrismaProductRepository);
 //# sourceMappingURL=PrismaProductRepository.js.map

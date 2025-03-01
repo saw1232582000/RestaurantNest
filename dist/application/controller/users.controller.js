@@ -37,15 +37,15 @@ let UsersController = class UsersController {
         this.updateUserUseCase = updateUserUseCase;
     }
     async findOne(req) {
-        return ApiResponseSchema_1.CoreApiResonseSchema.success(await this.getUserUseCase.execute(req.user?.user?.id));
+        return ApiResponseSchema_1.CoreApiResponseSchema.success(await this.getUserUseCase.execute(req.user?.user?.id));
     }
     async findOneById(req, params) {
-        return ApiResponseSchema_1.CoreApiResonseSchema.success(await this.getUserUseCase.execute(params.id));
+        return ApiResponseSchema_1.CoreApiResponseSchema.success(await this.getUserUseCase.execute(params.id));
     }
     async getAllByFilter(params) {
         console.log(params);
         const filter = new UserFilter_1.UserFilter(params.name, params.role, parseInt(params?.take.toString()), parseInt(params?.skip.toString()));
-        return ApiResponseSchema_1.CoreApiResonseSchema.success(await this.getUserListWithFilter.execute(filter));
+        return ApiResponseSchema_1.CoreApiResponseSchema.success(await this.getUserListWithFilter.execute(filter));
     }
     async updateUser(user, params) {
         const updateUserDto = new CreateUserDto_1.CreateUserDto();
@@ -54,7 +54,7 @@ let UsersController = class UsersController {
         updateUserDto.phone = user.phone;
         updateUserDto.name = user.name;
         updateUserDto.role = user.role;
-        return ApiResponseSchema_1.CoreApiResonseSchema.success(await this.updateUserUseCase.execute(updateUserDto));
+        return ApiResponseSchema_1.CoreApiResponseSchema.success(await this.updateUserUseCase.execute(updateUserDto));
     }
 };
 exports.UsersController = UsersController;

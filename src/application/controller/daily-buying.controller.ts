@@ -26,7 +26,7 @@ import {
 import { JwtGuard } from '../auth/guard/jwt.guard';
 
 import { PrismaClient } from '@prisma/client';
-import { CoreApiResonseSchema } from 'src/core/common/schema/ApiResponseSchema';
+import { CoreApiResponseSchema } from 'src/core/common/schema/ApiResponseSchema';
 
 import { FileInterceptor } from '@nestjs/platform-express';
 import { S3Service } from 'src/core/common/file-upload/UploadS3Service';
@@ -82,7 +82,7 @@ export class DailyBuyingController {
     createDailyBuyingDto.Amount = dailyBuying.Amount;
     createDailyBuyingDto.price = dailyBuying.price;
 
-    return CoreApiResonseSchema.success(
+    return CoreApiResponseSchema.success(
       await this.createDailyBuyingUseCase.execute(createDailyBuyingDto),
     );
   }
@@ -111,7 +111,7 @@ export class DailyBuyingController {
         return createDailyBuyingDto;
       },
     );
-    return CoreApiResonseSchema.success(
+    return CoreApiResponseSchema.success(
       await this.createManyDailyBuyingUseCase.execute(createManyDailyBuyingDto),
     );
   }
@@ -138,7 +138,7 @@ export class DailyBuyingController {
     updateDailyBuyingDto.price = dailyBuying.price;
     updateDailyBuyingDto.quantity = dailyBuying.quantity;
 
-    return CoreApiResonseSchema.success(
+    return CoreApiResponseSchema.success(
       await this.updateDailyBuyingUsecase.execute(updateDailyBuyingDto),
     );
   }
@@ -153,7 +153,7 @@ export class DailyBuyingController {
     //   new PrismaDailyBuyingRepository(new PrismaClient()),
     // );
 
-    return CoreApiResonseSchema.success(
+    return CoreApiResponseSchema.success(
       await this.getDailyBuyingUsecase.execute(params.id),
     );
   }
@@ -167,7 +167,7 @@ export class DailyBuyingController {
     //   new PrismaDailyBuyingRepository(new PrismaClient()),
     // );
 
-    return CoreApiResonseSchema.success(
+    return CoreApiResponseSchema.success(
       await this.getDailyBuyingListUsecase.execute(),
     );
   }
@@ -188,7 +188,7 @@ export class DailyBuyingController {
       skip: parseInt(params?.skip.toString()),
     };
 
-    return CoreApiResonseSchema.success(
+    return CoreApiResponseSchema.success(
       await this.getDailyBuyingListWithFilter.execute(filter),
     );
   }

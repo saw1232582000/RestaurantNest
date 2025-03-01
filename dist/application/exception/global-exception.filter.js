@@ -43,7 +43,7 @@ let GlobalExceptionFilter = class GlobalExceptionFilter {
         else if (exception instanceof Error) {
             errorDetails = exception.message;
         }
-        const coreResponse = ApiResponseSchema_1.CoreApiResonseSchema.error(status, message, errorDetails);
+        const coreResponse = ApiResponseSchema_1.CoreApiResponseSchema.error(status, message, errorDetails);
         response.status(status).json(coreResponse);
     }
 };

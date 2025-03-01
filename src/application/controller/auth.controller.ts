@@ -18,7 +18,7 @@ import { LocalGuard } from '../auth/guard/local.guard';
 import { ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AuthRequestSchema } from './documentation/auth/RequestSchema/AuthRequestSchema';
 import { AuthResponseSchema } from './documentation/auth/ResponseSchema/AuthResponseSchema';
-import { CoreApiResonseSchema } from 'src/core/common/schema/ApiResponseSchema';
+import { CoreApiResponseSchema } from 'src/core/common/schema/ApiResponseSchema';
 import { CreateUserSchema } from './documentation/user/RequsetSchema/CreateUserRequestSchema';
 import { CreateUserResonseSchema } from './documentation/user/ResponseSchema/CreateUserResponseSchema';
 import { CreateUserUseCase } from 'src/core/domain/user/service/CreateUserUsecase';
@@ -44,9 +44,9 @@ export class AuthController {
       new ValidationPipe({ errorHttpStatusCode: HttpStatus.NOT_ACCEPTABLE }),
     )
     credential: AuthRequestSchema,
-  ): Promise<CoreApiResonseSchema<any>> {
+  ): Promise<CoreApiResponseSchema<any>> {
     const result = await this.authService.validateUser(credential);
-    return CoreApiResonseSchema.success({ token: result });
+    return CoreApiResponseSchema.success({ token: result });
   }
 
   @Post('register')
@@ -58,14 +58,14 @@ export class AuthController {
       new ValidationPipe({ errorHttpStatusCode: HttpStatus.NOT_ACCEPTABLE }),
     )
     user: CreateUserSchema,
-  ): Promise<CoreApiResonseSchema<any>> {
+  ): Promise<CoreApiResponseSchema<any>> {
     const createUserDto = new CreateUserDto();
     createUserDto.email = user.email;
     createUserDto.phone = user.phone;
     createUserDto.name = user.name;
     createUserDto.password = user.password;
     createUserDto.role = user.role;
-    return CoreApiResonseSchema.success(
+    return CoreApiResponseSchema.success(
       await this.createUserUseCase.execute(createUserDto),
     );
   }
