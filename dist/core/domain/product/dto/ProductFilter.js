@@ -12,13 +12,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.ProductFilterDto = void 0;
 const swagger_1 = require("@nestjs/swagger");
 const class_validator_1 = require("class-validator");
+const class_transformer_1 = require("class-transformer");
 class ProductFilterDto {
-    constructor(data) {
-        this.name = data.name || '';
-        this.category = data.category || '';
-        this.take = data.take || 10;
-        this.skip = data.skip || 0;
-    }
 }
 exports.ProductFilterDto = ProductFilterDto;
 __decorate([
@@ -35,13 +30,15 @@ __decorate([
 ], ProductFilterDto.prototype, "category", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({ required: false, example: 10 }),
-    (0, class_validator_1.IsNumber)(),
+    (0, class_transformer_1.Transform)(({ value }) => parseInt(value, 10)),
+    (0, class_validator_1.IsNumber)({}, { message: 'take must be a number' }),
     (0, class_validator_1.IsOptional)(),
     __metadata("design:type", Number)
 ], ProductFilterDto.prototype, "take", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({ required: false, example: 0 }),
-    (0, class_validator_1.IsNumber)(),
+    (0, class_transformer_1.Transform)(({ value }) => parseInt(value, 10)),
+    (0, class_validator_1.IsNumber)({}, { message: 'skip must be a number' }),
     (0, class_validator_1.IsOptional)(),
     __metadata("design:type", Number)
 ], ProductFilterDto.prototype, "skip", void 0);

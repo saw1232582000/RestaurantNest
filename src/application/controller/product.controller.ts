@@ -221,6 +221,7 @@ import {
   FileTypeValidator,
   MaxFileSizeValidator,
   ParseFilePipe,
+  ValidationPipe,
 } from '@nestjs/common/pipes';
 import {
   CreateProductUseCase,
@@ -323,13 +324,19 @@ export class ProductController {
   @ApiBearerAuth()
   @UseGuards(JwtGuard)
   @Get('/getProductListByName')
-  @ApiQuery({ type: ProductFilterDto })
   @ApiResponse({ status: 200, type: ProductListResponseSchema })
   async getAllByFilter(
-    @Query() query: ProductFilterDto,
+    @Query(
+      new ValidationPipe({
+        transform: true,
+        transformOptions: { enableImplicitConversion: true },
+        whitelist: true,
+        forbidNonWhitelisted: true,
+      }),
+    )
+    query: ProductFilterDto,
   ): Promise<CoreApiResponseSchema<ProductListResponseDto>> {
-    const filter = new ProductFilterDto(query);
-    const result = await this.getProductListWithFilterUseCase.execute(filter);
+    const result = await this.getProductListWithFilterUseCase.execute(query);
     return CoreApiResponseSchema.success(result);
   }
 

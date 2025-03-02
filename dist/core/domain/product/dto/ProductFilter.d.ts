@@ -3,5 +3,4 @@ export declare class ProductFilterDto {
     category?: string;
     take?: number;
     skip?: number;
-    constructor(data: Partial<ProductFilterDto>);
 }

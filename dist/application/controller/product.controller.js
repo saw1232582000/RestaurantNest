@@ -77,8 +77,7 @@ let ProductController = class ProductController {
         return ApiResponseSchema_1.CoreApiResponseSchema.success(result);
     }
     async getAllByFilter(query) {
-        const filter = new ProductFilter_1.ProductFilterDto(query);
-        const result = await this.getProductListWithFilterUseCase.execute(filter);
+        const result = await this.getProductListWithFilterUseCase.execute(query);
         return ApiResponseSchema_1.CoreApiResponseSchema.success(result);
     }
     async upload(file) {
@@ -137,9 +136,13 @@ __decorate([
     (0, swagger_1.ApiBearerAuth)(),
     (0, common_1.UseGuards)(jwt_guard_1.JwtGuard),
     (0, common_1.Get)('/getProductListByName'),
-    (0, swagger_1.ApiQuery)({ type: ProductFilter_1.ProductFilterDto }),
     (0, swagger_1.ApiResponse)({ status: 200, type: ProductListResponseSchema }),
-    __param(0, (0, common_1.Query)()),
+    __param(0, (0, common_1.Query)(new pipes_1.ValidationPipe({
+        transform: true,
+        transformOptions: { enableImplicitConversion: true },
+        whitelist: true,
+        forbidNonWhitelisted: true,
+    }))),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [ProductFilter_1.ProductFilterDto]),
     __metadata("design:returntype", Promise)
@@ -150,7 +153,10 @@ __decorate([
     (0, common_1.Post)('/upload'),
     (0, swagger_1.ApiConsumes)('multipart/form-data'),
     (0, swagger_1.ApiBody)({
-        schema: { type: 'object', properties: { file: { type: 'string', format: 'binary' } } },
+        schema: {
+            type: 'object',
+            properties: { file: { type: 'string', format: 'binary' } },
+        },
     }),
     (0, swagger_1.ApiResponse)({ status: 201, type: UploadResponseSchema }),
     (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('file')),

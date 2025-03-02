@@ -160,12 +160,11 @@ export class OrderController {
   @ApiResponse({ type: GetOrderListResponseSchema })
   @Get('/getList')
   public async getOrderList(@Query() params: OrderFilterSchama, @Req() req) {
-    // console.log(params);
     const orderFilter = new OrderFilter(
       params.startDate,
       params.endDate,
-      parseInt(params?.take.toString()),
-      parseInt(params?.skip.toString()),
+      params.take ? parseInt(params.take.toString()) : 10,
+      params.skip ? parseInt(params.skip.toString()) : 0,
       params.status,
     );
 

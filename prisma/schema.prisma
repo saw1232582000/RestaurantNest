@@ -14,94 +14,170 @@ datasource db {
 }
 
 model User {
-  id        String  @id @default(cuid())
-  name      String
-  email     String  @unique
-  role      String
-  password  String
-  createdDate            DateTime         @default(now())
-  updatedDate            DateTime         @default(now())
-  phone     String  @unique
-  products   Product[]
-  cart       Cart?  
-  orders      Order[]
+  id            String        @id @default(cuid())
+  name          String
+  email         String        @unique
+  role          String
+  password      String
+  createdDate   DateTime      @default(now())
+  updatedDate   DateTime      @default(now())
+  phone         String        @unique
+  products      Product[]
+  cart          Cart?
+  orders        Order[]
+  reservations  Reservation[]
 }
 
-model Product{
-  id String  @id @default(cuid())
-
-  name String
-
-  price Int
-
+model Product {
+  id          String      @id @default(cuid())
+  name        String
+  price       Int
   description String
-
   image       String?
-
-  category String
-
-  createdDate DateTime         @default(now())
-
-  updatedDate DateTime         @default(now())
-
-  userId        String
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-  
-  cartItem CartItem[]
-  orderItems OrderItem[]
-
+  category    String
+  createdDate DateTime    @default(now())
+  updatedDate DateTime    @default(now())
+  userId      String
+  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  cartItem    CartItem[]
+  orderItems  OrderItem[]
+  stock       Stock?      // Added relation to Stock
 }
 
 model Cart {
-  id       String     @id @default(cuid())
-  userId   String     @unique
-  user     User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id        String      @id @default(cuid())
+  userId    String      @unique
+  user      User        @relation(fields: [userId], references: [id], onDelete: Cascade)
   cartItems CartItem[]
 }
 
 model CartItem {
-  id        String  @id @default(cuid())
-  cartId    String
-  productId String
-  quantity  Int     @default(1)
-  cart      Cart    @relation(fields: [cartId], references: [id], onDelete: Cascade)
-  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
-  createdDate            DateTime         @default(now())
-  updatedDate            DateTime         @default(now())
+  id          String    @id @default(cuid())
+  cartId      String
+  productId   String
+  quantity    Int       @default(1)
+  cart        Cart      @relation(fields: [cartId], references: [id], onDelete: Cascade)
+  product     Product   @relation(fields: [productId], references: [id], onDelete: Cascade)
+  createdDate DateTime  @default(now())
+  updatedDate DateTime  @default(now())
 }
 
 model Order {
-  Id                 String             @id @default(cuid())
-  userId             String
-  table            String
-  status             String?             
-  createdDate        DateTime           @default(now())
-  updatedDate        DateTime           @default(now())
-  soldDate           DateTime?
-  orderItems   OrderItem[]
-  user               User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  Id            String        @id @default(cuid())
+  userId        String
+  table         String
+  status        String?
+  createdDate   DateTime      @default(now())
+  updatedDate   DateTime      @default(now())
+  soldDate      DateTime?
+  orderItems    OrderItem[]
+  bill          Bill?         // Link to bill generation
+  notifications Notification[] // Notify kitchen/bar
+  user          User          @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model OrderItem {
-  Id             String         @id @default(cuid())
-  orderId        String
-  productId      String
-  status         String?
-  quantity       Int            @default(1)
-  createdDate        DateTime           @default(now())
-  order Order @relation(fields: [orderId], references: [Id], onDelete: Cascade)
-  product        Product        @relation(fields: [productId], references: [id], onDelete: Cascade)
+  Id          String    @id @default(cuid())
+  orderId     String
+  productId   String
+  status      String?
+  quantity    Int       @default(1)
+  createdDate DateTime  @default(now())
+  order       Order     @relation(fields: [orderId], references: [Id], onDelete: Cascade)
+  product     Product   @relation(fields: [productId], references: [id], onDelete: Cascade)
 }
 
-model DailyBuying{
-  Id             String         @id @default(cuid())
-  particular     String
-  unit           String
-  quantity       Int
-  price          Float
-  Amount         Int
-  createdDate        DateTime           @default(now())
-  updatedDate        DateTime           @default(now())
+model DailyBuying {
+  Id          String    @id @default(cuid())
+  particular  String
+  unit        String
+  quantity    Int
+  price       Float
+  Amount      Int
+  createdDate DateTime  @default(now())
+  updatedDate DateTime  @default(now())
 }
 
+// Bill model (for generating bill info to customer)
+model Bill {
+  id            String    @id @default(cuid())
+  orderId       String    @unique
+  totalAmount   Float
+  tax           Float?    // Optional tax field
+  discount      Float?    // FOC/Voucher/Item discount applied
+  finalAmount   Float     // Amount after tax and discount
+  createdDate   DateTime  @default(now())
+  status        String    // e.g., "Pending", "Paid", "Printed"
+  paymentMethod String?   // e.g., "Card", "Cash"
+  order         Order     @relation(fields: [orderId], references: [Id], onDelete: Cascade)
+  voucherId     String?  @unique  // Foreign key to Voucher
+  voucher       Voucher?  @relation(fields: [voucherId], references: [id]) // Define relation
+}
+
+// Voucher model (for discounts and thermal printing)
+model Voucher {
+  id          String    @id @default(cuid())
+  code        String    @unique
+  discount    Float     // Percentage or fixed amount
+  expiryDate  DateTime
+  isActive    Boolean   @default(true)
+  createdDate DateTime  @default(now())
+  bill        Bill?     // One voucher per bill, no fields/references needed here
+}
+
+// Reservation model (for receiving reservations)
+model Reservation {
+  id             String    @id @default(cuid())
+  userId         String    // Receptionist or Admin who manages it
+  customerName   String
+  phone          String
+  table          String    // Table reserved
+  reservationTime DateTime
+  status         String    // e.g., "Pending", "Confirmed", "Cancelled"
+  createdDate    DateTime  @default(now())
+  updatedDate    DateTime  @default(now())
+  user           User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+// Stock model (for mini stock management)
+model Stock {
+  id          String    @id @default(cuid())
+  productId   String    @unique
+  quantity    Int
+  unit        String    // e.g., "kg", "liters", "units"
+  threshold   Int?      // Minimum stock level for alerts
+  createdDate DateTime  @default(now())
+  updatedDate DateTime  @default(now())
+  product     Product   @relation(fields: [productId], references: [id], onDelete: Cascade)
+  stockLogs   StockLog[] // Track stock changes
+}
+
+// StockLog model (for tracking stock updates)
+model StockLog {
+  id          String    @id @default(cuid())
+  stockId     String
+  quantity    Int       // Positive for addition, negative for reduction
+  reason      String    // e.g., "Order Consumption", "Restock"
+  createdDate DateTime  @default(now())
+  stock       Stock     @relation(fields: [stockId], references: [id], onDelete: Cascade)
+}
+
+// Notification model (for kitchen/bar notifications)
+model Notification {
+  id            String    @id @default(cuid())
+  orderId       String
+  message       String    // e.g., "New order for table 5"
+  recipientRole String    // e.g., "Chef", "Bar"
+  status        String    // e.g., "Sent", "Read"
+  createdDate   DateTime  @default(now())
+  order         Order     @relation(fields: [orderId], references: [Id], onDelete: Cascade)
+}
+
+// Report model (for online reporting module)
+model Report {
+  id          String    @id @default(cuid())
+  type        String    // e.g., "Sales", "Stock", "Order Summary"
+  data        Json      // Store report data in JSON format
+  createdDate DateTime  @default(now())
+  generatedBy String    // User who generated the report
+}

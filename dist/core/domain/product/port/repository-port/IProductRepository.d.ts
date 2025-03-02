@@ -1,5 +1,5 @@
-import { ProductFilterDto } from "../../dto/ProductFilter";
-import { ProductEntity } from "../../entity/Product";
+import { ProductFilterDto } from '../../dto/ProductFilter';
+import { ProductEntity } from '../../entity/Product';
 export declare abstract class ProductRepository {
     abstract create(entity: ProductEntity): Promise<ProductEntity>;
     abstract update(entity: ProductEntity): Promise<ProductEntity>;

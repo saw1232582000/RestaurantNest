@@ -12,6 +12,10 @@ import { ChatModule } from './application/module/chat.module';
 import { PrismaModule } from './application/module/prisma.module';
 import { NotificationModule } from './application/module/notification.module';
 import { DailyBuyingModule } from './application/module/daily-buying.module';
+import { BillModule } from './application/module/bill.module';
+import { VoucherModule } from './application/module/voucher.module';
+import { ReservationModule } from './application/module/reservation.module';
+import { StockModule } from './application/module/stock.module';
 
 @Module({
   imports: [
@@ -24,6 +28,10 @@ import { DailyBuyingModule } from './application/module/daily-buying.module';
     PrismaModule,
     NotificationModule,
     DailyBuyingModule,
+    BillModule,
+    VoucherModule,
+    ReservationModule,
+    StockModule,
     ThrottlerModule.forRoot([
       {
         name: 'short',

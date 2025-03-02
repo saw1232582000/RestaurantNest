@@ -91,7 +91,7 @@ let OrderController = class OrderController {
         return ApiResponseSchema_1.CoreApiResponseSchema.success(order);
     }
     async getOrderList(params, req) {
-        const orderFilter = new OrderFilter_1.OrderFilter(params.startDate, params.endDate, parseInt(params?.take.toString()), parseInt(params?.skip.toString()), params.status);
+        const orderFilter = new OrderFilter_1.OrderFilter(params.startDate, params.endDate, params.take ? parseInt(params.take.toString()) : 10, params.skip ? parseInt(params.skip.toString()) : 0, params.status);
         const orderList = await this.getOrderListUseCase.execute(orderFilter);
         return ApiResponseSchema_1.CoreApiResponseSchema.success(orderList);
     }
