@@ -41,7 +41,6 @@ model Product {
   user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
   cartItem    CartItem[]
   orderItems  OrderItem[]
-  stock       Stock?      // Added relation to Stock
 }
 
 model Cart {
@@ -141,15 +140,14 @@ model Reservation {
 
 // Stock model (for mini stock management)
 model Stock {
-  id          String    @id @default(cuid())
-  productId   String    @unique
-  quantity    Int
-  unit        String    // e.g., "kg", "liters", "units"
-  threshold   Int?      // Minimum stock level for alerts
-  createdDate DateTime  @default(now())
-  updatedDate DateTime  @default(now())
-  product     Product   @relation(fields: [productId], references: [id], onDelete: Cascade)
-  stockLogs   StockLog[] // Track stock changes
+  id             String    @id @default(cuid())
+  ingredientName String    // Name of the ingredient
+  quantity       Int
+  unit           String    // e.g., "kg", "liters", "units"
+  threshold      Int?      // Minimum stock level for alerts
+  createdDate    DateTime  @default(now())
+  updatedDate    DateTime  @default(now())
+  stockLogs      StockLog[] // Track stock changes
 }
 
 // StockLog model (for tracking stock updates)

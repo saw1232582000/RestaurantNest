@@ -23,8 +23,7 @@ let PrismaStockRepository = class PrismaStockRepository {
         try {
             const result = await this.prisma.stock.create({
                 data: {
-                    id: entity.id,
-                    productId: entity.productId,
+                    ingredientName: entity.ingredientName,
                     quantity: entity.quantity,
                     unit: entity.unit,
                     threshold: entity.threshold,
@@ -57,6 +56,34 @@ let PrismaStockRepository = class PrismaStockRepository {
         }
         catch (e) {
             this.handlePrismaError(e, 'Cannot find stock');
+        }
+    }
+    async findAll(filter) {
+        try {
+            const where = {};
+            if (filter?.ingredientName) {
+                where.ingredientName = {
+                    contains: filter.ingredientName,
+                    mode: 'insensitive',
+                };
+            }
+            if (filter?.unit) {
+                where.unit = {
+                    equals: filter.unit,
+                    mode: 'insensitive',
+                };
+            }
+            let results = await this.prisma.stock.findMany({
+                where,
+                orderBy: { ingredientName: 'asc' },
+            });
+            if (filter?.belowThreshold) {
+                results = results.filter((stock) => stock.threshold !== null && stock.quantity < stock.threshold);
+            }
+            return results.map((result) => new Stock_1.StockEntity(result));
+        }
+        catch (e) {
+            this.handlePrismaError(e, 'Cannot find stocks');
         }
     }
     handlePrismaError(error, message) {

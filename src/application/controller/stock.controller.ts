@@ -16,21 +16,31 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { CoreApiResponseSchema } from '@src/core/common/schema/ApiResponseSchema';
-import { StockResponseDto } from '@src/core/domain/stock/dto/StockResponseDto';
+import {
+  StockListResponseDto,
+  StockResponseDto,
+} from '@src/core/domain/stock/dto/StockResponseDto';
 import {
   CreateStockUseCase,
+  GetStockListUseCase,
   GetStockUseCase,
   UpdateStockUseCase,
 } from '@src/core/domain/stock/port/service-port/IStockUseCase';
 import { JwtGuard } from '../auth/guard/jwt.guard';
 import {
   CreateStockDto,
+  GetStockListDto,
   UpdateStockDto,
 } from '@src/core/domain/stock/dto/StockRequestDto';
 
 class StockResponseSchema extends CoreApiResponseSchema<StockResponseDto> {
   @ApiProperty({ type: StockResponseDto })
   data: StockResponseDto;
+}
+
+class StockListResponseSchema extends CoreApiResponseSchema<StockListResponseDto> {
+  @ApiProperty({ type: StockListResponseDto })
+  data: StockListResponseDto;
 }
 
 @ApiTags('stock')
@@ -40,6 +50,7 @@ export class StockController {
     private readonly createStockUseCase: CreateStockUseCase,
     private readonly updateStockUseCase: UpdateStockUseCase,
     private readonly getStockUseCase: GetStockUseCase,
+    private readonly getStockListUseCase: GetStockListUseCase,
   ) {}
 
   @ApiBearerAuth()
@@ -75,6 +86,28 @@ export class StockController {
     @Query('id') id: string,
   ): Promise<CoreApiResponseSchema<StockResponseDto>> {
     const result = await this.getStockUseCase.execute(id);
+    return CoreApiResponseSchema.success(result);
+  }
+
+  @ApiBearerAuth()
+  @UseGuards(JwtGuard)
+  @Get('/list')
+  @ApiQuery({ name: 'ingredientName', type: String, required: false })
+  @ApiQuery({ name: 'unit', type: String, required: false })
+  @ApiQuery({ name: 'belowThreshold', type: Boolean, required: false })
+  @ApiResponse({ status: 200, type: StockListResponseSchema })
+  async getList(
+    @Query('ingredientName') ingredientName?: string,
+    @Query('unit') unit?: string,
+    @Query('belowThreshold') belowThreshold?: string,
+  ): Promise<CoreApiResponseSchema<StockListResponseDto>> {
+    console.log(ingredientName, unit, belowThreshold);
+    const filter = new GetStockListDto({
+      ingredientName,
+      unit,
+      belowThreshold: belowThreshold === 'true',
+    });
+    const result = await this.getStockListUseCase.execute(filter);
     return CoreApiResponseSchema.success(result);
   }
 }

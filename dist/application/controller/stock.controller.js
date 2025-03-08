@@ -26,11 +26,18 @@ __decorate([
     (0, swagger_1.ApiProperty)({ type: StockResponseDto_1.StockResponseDto }),
     __metadata("design:type", StockResponseDto_1.StockResponseDto)
 ], StockResponseSchema.prototype, "data", void 0);
+class StockListResponseSchema extends ApiResponseSchema_1.CoreApiResponseSchema {
+}
+__decorate([
+    (0, swagger_1.ApiProperty)({ type: StockResponseDto_1.StockListResponseDto }),
+    __metadata("design:type", StockResponseDto_1.StockListResponseDto)
+], StockListResponseSchema.prototype, "data", void 0);
 let StockController = class StockController {
-    constructor(createStockUseCase, updateStockUseCase, getStockUseCase) {
+    constructor(createStockUseCase, updateStockUseCase, getStockUseCase, getStockListUseCase) {
         this.createStockUseCase = createStockUseCase;
         this.updateStockUseCase = updateStockUseCase;
         this.getStockUseCase = getStockUseCase;
+        this.getStockListUseCase = getStockListUseCase;
     }
     async create(dto) {
         const result = await this.createStockUseCase.execute(dto);
@@ -42,6 +49,16 @@ let StockController = class StockController {
     }
     async get(id) {
         const result = await this.getStockUseCase.execute(id);
+        return ApiResponseSchema_1.CoreApiResponseSchema.success(result);
+    }
+    async getList(ingredientName, unit, belowThreshold) {
+        console.log(ingredientName, unit, belowThreshold);
+        const filter = new StockRequestDto_1.GetStockListDto({
+            ingredientName,
+            unit,
+            belowThreshold: belowThreshold === 'true',
+        });
+        const result = await this.getStockListUseCase.execute(filter);
         return ApiResponseSchema_1.CoreApiResponseSchema.success(result);
     }
 };
@@ -79,11 +96,27 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], StockController.prototype, "get", null);
+__decorate([
+    (0, swagger_1.ApiBearerAuth)(),
+    (0, common_1.UseGuards)(jwt_guard_1.JwtGuard),
+    (0, common_1.Get)('/list'),
+    (0, swagger_1.ApiQuery)({ name: 'ingredientName', type: String, required: false }),
+    (0, swagger_1.ApiQuery)({ name: 'unit', type: String, required: false }),
+    (0, swagger_1.ApiQuery)({ name: 'belowThreshold', type: Boolean, required: false }),
+    (0, swagger_1.ApiResponse)({ status: 200, type: StockListResponseSchema }),
+    __param(0, (0, common_1.Query)('ingredientName')),
+    __param(1, (0, common_1.Query)('unit')),
+    __param(2, (0, common_1.Query)('belowThreshold')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, String, String]),
+    __metadata("design:returntype", Promise)
+], StockController.prototype, "getList", null);
 exports.StockController = StockController = __decorate([
     (0, swagger_1.ApiTags)('stock'),
     (0, common_1.Controller)('stock'),
     __metadata("design:paramtypes", [IStockUseCase_1.CreateStockUseCase,
         IStockUseCase_1.UpdateStockUseCase,
-        IStockUseCase_1.GetStockUseCase])
+        IStockUseCase_1.GetStockUseCase,
+        IStockUseCase_1.GetStockListUseCase])
 ], StockController);
 //# sourceMappingURL=stock.controller.js.map

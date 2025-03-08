@@ -9,7 +9,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.GetStockUseCaseImpl = exports.UpdateStockUseCaseImpl = exports.CreateStockUseCaseImpl = void 0;
+exports.GetStockListUseCaseImpl = exports.GetStockUseCaseImpl = exports.UpdateStockUseCaseImpl = exports.CreateStockUseCaseImpl = void 0;
 const common_1 = require("@nestjs/common");
 const IStockRepository_1 = require("../port/repository-port/IStockRepository");
 const StockResponseDto_1 = require("../dto/StockResponseDto");
@@ -60,4 +60,22 @@ exports.GetStockUseCaseImpl = GetStockUseCaseImpl = __decorate([
     (0, common_1.Injectable)(),
     __metadata("design:paramtypes", [IStockRepository_1.StockRepository])
 ], GetStockUseCaseImpl);
+let GetStockListUseCaseImpl = class GetStockListUseCaseImpl {
+    constructor(stockRepository) {
+        this.stockRepository = stockRepository;
+    }
+    async execute(filter) {
+        const stocks = await this.stockRepository.findAll({
+            ingredientName: filter?.ingredientName,
+            unit: filter?.unit,
+            belowThreshold: filter?.belowThreshold,
+        });
+        return StockResponseDto_1.StockListResponseDto.fromEntities(stocks);
+    }
+};
+exports.GetStockListUseCaseImpl = GetStockListUseCaseImpl;
+exports.GetStockListUseCaseImpl = GetStockListUseCaseImpl = __decorate([
+    (0, common_1.Injectable)(),
+    __metadata("design:paramtypes", [IStockRepository_1.StockRepository])
+], GetStockListUseCaseImpl);
 //# sourceMappingURL=StockUseCase.js.map

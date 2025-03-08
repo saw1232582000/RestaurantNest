@@ -9,14 +9,14 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.StockResponseDto = void 0;
+exports.StockListResponseDto = exports.StockResponseDto = void 0;
 const swagger_1 = require("@nestjs/swagger");
 const class_transformer_1 = require("class-transformer");
 let StockResponseDto = class StockResponseDto {
     static fromEntity(entity) {
         return {
             id: entity.id,
-            productId: entity.productId,
+            ingredientName: entity.ingredientName,
             quantity: entity.quantity,
             unit: entity.unit,
             threshold: entity.threshold,
@@ -32,15 +32,10 @@ __decorate([
     __metadata("design:type", String)
 ], StockResponseDto.prototype, "id", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({ example: 'cuid303' }),
+    (0, swagger_1.ApiProperty)({ example: 'Salt' }),
     (0, class_transformer_1.Expose)(),
     __metadata("design:type", String)
-], StockResponseDto.prototype, "productId", void 0);
-__decorate([
-    (0, swagger_1.ApiProperty)({ example: 'cuid202' }),
-    (0, class_transformer_1.Expose)(),
-    __metadata("design:type", String)
-], StockResponseDto.prototype, "ingredientId", void 0);
+], StockResponseDto.prototype, "ingredientName", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({ example: 100 }),
     (0, class_transformer_1.Expose)(),
@@ -69,4 +64,26 @@ __decorate([
 exports.StockResponseDto = StockResponseDto = __decorate([
     (0, class_transformer_1.Exclude)()
 ], StockResponseDto);
+let StockListResponseDto = class StockListResponseDto {
+    static fromEntities(entities) {
+        return {
+            items: entities.map((entity) => StockResponseDto.fromEntity(entity)),
+            total: entities.length,
+        };
+    }
+};
+exports.StockListResponseDto = StockListResponseDto;
+__decorate([
+    (0, swagger_1.ApiProperty)({ type: [StockResponseDto] }),
+    (0, class_transformer_1.Expose)(),
+    __metadata("design:type", Array)
+], StockListResponseDto.prototype, "items", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ example: 10 }),
+    (0, class_transformer_1.Expose)(),
+    __metadata("design:type", Number)
+], StockListResponseDto.prototype, "total", void 0);
+exports.StockListResponseDto = StockListResponseDto = __decorate([
+    (0, class_transformer_1.Exclude)()
+], StockListResponseDto);
 //# sourceMappingURL=StockResponseDto.js.map

@@ -4,7 +4,7 @@ exports.StockEntity = void 0;
 class StockEntity {
     constructor(data) {
         this.id = data.id || '';
-        this.productId = data.productId;
+        this.ingredientName = data.ingredientName || '';
         this.quantity = data.quantity || 0;
         this.unit = data.unit || '';
         this.threshold = data.threshold;

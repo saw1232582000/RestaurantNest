@@ -9,13 +9,9 @@ export class StockResponseDto {
   @Expose()
   id: string;
 
-  @ApiProperty({ example: 'cuid303' })
+  @ApiProperty({ example: 'Salt' })
   @Expose()
-  productId?: string;
-
-  @ApiProperty({ example: 'cuid202' })
-  @Expose()
-  ingredientId?: string;
+  ingredientName: string;
 
   @ApiProperty({ example: 100 })
   @Expose()
@@ -40,12 +36,30 @@ export class StockResponseDto {
   static fromEntity(entity: StockEntity): StockResponseDto {
     return {
       id: entity.id,
-      productId: entity.productId,
+      ingredientName: entity.ingredientName,
       quantity: entity.quantity,
       unit: entity.unit,
       threshold: entity.threshold,
       createdDate: entity.createdDate,
       updatedDate: entity.updatedDate,
+    };
+  }
+}
+
+@Exclude()
+export class StockListResponseDto {
+  @ApiProperty({ type: [StockResponseDto] })
+  @Expose()
+  items: StockResponseDto[];
+
+  @ApiProperty({ example: 10 })
+  @Expose()
+  total: number;
+
+  static fromEntities(entities: StockEntity[]): StockListResponseDto {
+    return {
+      items: entities.map((entity) => StockResponseDto.fromEntity(entity)),
+      total: entities.length,
     };
   }
 }

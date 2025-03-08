@@ -1,7 +1,7 @@
 // src/stock/entity/stock.entity.ts
 export class StockEntity {
   id: string;
-  productId?: string;
+  ingredientName: string;
 
   quantity: number;
   unit: string;
@@ -11,7 +11,7 @@ export class StockEntity {
 
   constructor(data: Partial<StockEntity>) {
     this.id = data.id || '';
-    this.productId = data.productId;
+    this.ingredientName = data.ingredientName || '';
 
     this.quantity = data.quantity || 0;
     this.unit = data.unit || '';

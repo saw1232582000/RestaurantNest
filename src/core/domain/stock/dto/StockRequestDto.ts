@@ -4,22 +4,12 @@ import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class CreateStockDto {
   @ApiProperty({
-    description: 'Product ID',
-    example: 'cuid303',
-    required: false,
+    description: 'Ingredient Name',
+    example: 'Salt',
   })
   @IsString()
-  @IsOptional()
-  productId?: string;
-
-  @ApiProperty({
-    description: 'Ingredient ID',
-    example: 'cuid202',
-    required: false,
-  })
-  @IsString()
-  @IsOptional()
-  ingredientId?: string;
+  @IsNotEmpty()
+  ingredientName: string;
 
   @ApiProperty({ description: 'Quantity', example: 100 })
   @IsNumber()
@@ -36,13 +26,13 @@ export class CreateStockDto {
   @IsOptional()
   threshold?: number;
 
-  constructor(data: Partial<CreateStockDto>) {
-    this.productId = data.productId;
-    this.ingredientId = data.ingredientId;
-    this.quantity = data.quantity || 0;
-    this.unit = data.unit || '';
-    this.threshold = data.threshold;
-  }
+  // constructor(data: Partial<CreateStockDto>) {
+  //   console.log(data);
+  //   this.ingredientName = data.ingredientName || '';
+  //   this.quantity = data.quantity || 0;
+  //   this.unit = data.unit || '';
+  //   this.threshold = data.threshold;
+  // }
 }
 
 export class UpdateStockDto {
@@ -52,32 +42,23 @@ export class UpdateStockDto {
   id: string;
 
   @ApiProperty({
-    description: 'Product ID',
-    example: 'cuid303',
+    description: 'Ingredient Name',
+    example: 'Salt',
     required: false,
   })
   @IsString()
   @IsOptional()
-  productId?: string;
+  ingredientName?: string;
 
-  @ApiProperty({
-    description: 'Ingredient ID',
-    example: 'cuid202',
-    required: false,
-  })
-  @IsString()
-  @IsOptional()
-  ingredientId?: string;
-
-  @ApiProperty({ description: 'Quantity', example: 100 })
+  @ApiProperty({ description: 'Quantity', example: 100, required: false })
   @IsNumber()
-  @IsNotEmpty()
-  quantity: number;
+  @IsOptional()
+  quantity?: number;
 
-  @ApiProperty({ description: 'Unit', example: 'kg' })
+  @ApiProperty({ description: 'Unit', example: 'kg', required: false })
   @IsString()
-  @IsNotEmpty()
-  unit: string;
+  @IsOptional()
+  unit?: string;
 
   @ApiProperty({ description: 'Threshold', example: 10, required: false })
   @IsNumber()
@@ -86,10 +67,39 @@ export class UpdateStockDto {
 
   constructor(data: Partial<UpdateStockDto>) {
     this.id = data.id || '';
-    this.productId = data.productId;
-    this.ingredientId = data.ingredientId;
-    this.quantity = data.quantity || 0;
-    this.unit = data.unit || '';
+    this.ingredientName = data.ingredientName;
+    this.quantity = data.quantity;
+    this.unit = data.unit;
     this.threshold = data.threshold;
+  }
+}
+
+export class GetStockListDto {
+  @ApiProperty({
+    description: 'Ingredient Name',
+    example: 'Salt',
+    required: false,
+  })
+  @IsString()
+  @IsOptional()
+  ingredientName?: string;
+
+  @ApiProperty({ description: 'Unit', example: 'kg', required: false })
+  @IsString()
+  @IsOptional()
+  unit?: string;
+
+  @ApiProperty({
+    description: 'Below Threshold',
+    example: true,
+    required: false,
+  })
+  @IsOptional()
+  belowThreshold?: boolean;
+
+  constructor(data: Partial<GetStockListDto>) {
+    this.ingredientName = data.ingredientName;
+    this.unit = data.unit;
+    this.belowThreshold = data.belowThreshold;
   }
 }

@@ -1,4 +1,4 @@
-import { StockRepository } from '../port/repository-port/IStockRepository';
+import { StockFilter, StockRepository } from '../port/repository-port/IStockRepository';
 import { PrismaService } from '@src/core/common/prisma/PrismaService';
 import { StockEntity } from '../entity/Stock';
 export declare class PrismaStockRepository implements StockRepository {
@@ -9,5 +9,6 @@ export declare class PrismaStockRepository implements StockRepository {
     find(by: {
         id?: string;
     }): Promise<StockEntity | null>;
+    findAll(filter?: StockFilter): Promise<StockEntity[]>;
     private handlePrismaError;
 }

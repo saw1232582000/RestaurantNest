@@ -1,7 +1,7 @@
-import { CreateStockUseCase, GetStockUseCase, UpdateStockUseCase } from '../port/service-port/IStockUseCase';
+import { CreateStockUseCase, GetStockListUseCase, GetStockUseCase, UpdateStockUseCase } from '../port/service-port/IStockUseCase';
 import { StockRepository } from '../port/repository-port/IStockRepository';
-import { CreateStockDto, UpdateStockDto } from '../dto/StockRequestDto';
-import { StockResponseDto } from '../dto/StockResponseDto';
+import { CreateStockDto, GetStockListDto, UpdateStockDto } from '../dto/StockRequestDto';
+import { StockListResponseDto, StockResponseDto } from '../dto/StockResponseDto';
 export declare class CreateStockUseCaseImpl implements CreateStockUseCase {
     private readonly stockRepository;
     constructor(stockRepository: StockRepository);
@@ -16,4 +16,9 @@ export declare class GetStockUseCaseImpl implements GetStockUseCase {
     private readonly stockRepository;
     constructor(stockRepository: StockRepository);
     execute(id: string): Promise<StockResponseDto>;
+}
+export declare class GetStockListUseCaseImpl implements GetStockListUseCase {
+    private readonly stockRepository;
+    constructor(stockRepository: StockRepository);
+    execute(filter?: GetStockListDto): Promise<StockListResponseDto>;
 }

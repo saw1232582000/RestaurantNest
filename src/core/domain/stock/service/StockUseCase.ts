@@ -1,12 +1,20 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import {
   CreateStockUseCase,
+  GetStockListUseCase,
   GetStockUseCase,
   UpdateStockUseCase,
 } from '../port/service-port/IStockUseCase';
 import { StockRepository } from '../port/repository-port/IStockRepository';
-import { CreateStockDto, UpdateStockDto } from '../dto/StockRequestDto';
-import { StockResponseDto } from '../dto/StockResponseDto';
+import {
+  CreateStockDto,
+  GetStockListDto,
+  UpdateStockDto,
+} from '../dto/StockRequestDto';
+import {
+  StockListResponseDto,
+  StockResponseDto,
+} from '../dto/StockResponseDto';
 import { StockEntity } from '../entity/Stock';
 
 @Injectable()
@@ -39,5 +47,19 @@ export class GetStockUseCaseImpl implements GetStockUseCase {
     const stock = await this.stockRepository.find({ id });
     if (!stock) throw new BadRequestException('Stock not found');
     return StockResponseDto.fromEntity(stock);
+  }
+}
+
+@Injectable()
+export class GetStockListUseCaseImpl implements GetStockListUseCase {
+  constructor(private readonly stockRepository: StockRepository) {}
+
+  async execute(filter?: GetStockListDto): Promise<StockListResponseDto> {
+    const stocks = await this.stockRepository.findAll({
+      ingredientName: filter?.ingredientName,
+      unit: filter?.unit,
+      belowThreshold: filter?.belowThreshold,
+    });
+    return StockListResponseDto.fromEntities(stocks);
   }
 }

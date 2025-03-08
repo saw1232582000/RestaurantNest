@@ -9,39 +9,21 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.UpdateStockDto = exports.CreateStockDto = void 0;
+exports.GetStockListDto = exports.UpdateStockDto = exports.CreateStockDto = void 0;
 const swagger_1 = require("@nestjs/swagger");
 const class_validator_1 = require("class-validator");
 class CreateStockDto {
-    constructor(data) {
-        this.productId = data.productId;
-        this.ingredientId = data.ingredientId;
-        this.quantity = data.quantity || 0;
-        this.unit = data.unit || '';
-        this.threshold = data.threshold;
-    }
 }
 exports.CreateStockDto = CreateStockDto;
 __decorate([
     (0, swagger_1.ApiProperty)({
-        description: 'Product ID',
-        example: 'cuid303',
-        required: false,
+        description: 'Ingredient Name',
+        example: 'Salt',
     }),
     (0, class_validator_1.IsString)(),
-    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsNotEmpty)(),
     __metadata("design:type", String)
-], CreateStockDto.prototype, "productId", void 0);
-__decorate([
-    (0, swagger_1.ApiProperty)({
-        description: 'Ingredient ID',
-        example: 'cuid202',
-        required: false,
-    }),
-    (0, class_validator_1.IsString)(),
-    (0, class_validator_1.IsOptional)(),
-    __metadata("design:type", String)
-], CreateStockDto.prototype, "ingredientId", void 0);
+], CreateStockDto.prototype, "ingredientName", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({ description: 'Quantity', example: 100 }),
     (0, class_validator_1.IsNumber)(),
@@ -63,10 +45,9 @@ __decorate([
 class UpdateStockDto {
     constructor(data) {
         this.id = data.id || '';
-        this.productId = data.productId;
-        this.ingredientId = data.ingredientId;
-        this.quantity = data.quantity || 0;
-        this.unit = data.unit || '';
+        this.ingredientName = data.ingredientName;
+        this.quantity = data.quantity;
+        this.unit = data.unit;
         this.threshold = data.threshold;
     }
 }
@@ -79,34 +60,24 @@ __decorate([
 ], UpdateStockDto.prototype, "id", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({
-        description: 'Product ID',
-        example: 'cuid303',
+        description: 'Ingredient Name',
+        example: 'Salt',
         required: false,
     }),
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsOptional)(),
     __metadata("design:type", String)
-], UpdateStockDto.prototype, "productId", void 0);
+], UpdateStockDto.prototype, "ingredientName", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({
-        description: 'Ingredient ID',
-        example: 'cuid202',
-        required: false,
-    }),
-    (0, class_validator_1.IsString)(),
-    (0, class_validator_1.IsOptional)(),
-    __metadata("design:type", String)
-], UpdateStockDto.prototype, "ingredientId", void 0);
-__decorate([
-    (0, swagger_1.ApiProperty)({ description: 'Quantity', example: 100 }),
+    (0, swagger_1.ApiProperty)({ description: 'Quantity', example: 100, required: false }),
     (0, class_validator_1.IsNumber)(),
-    (0, class_validator_1.IsNotEmpty)(),
+    (0, class_validator_1.IsOptional)(),
     __metadata("design:type", Number)
 ], UpdateStockDto.prototype, "quantity", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({ description: 'Unit', example: 'kg' }),
+    (0, swagger_1.ApiProperty)({ description: 'Unit', example: 'kg', required: false }),
     (0, class_validator_1.IsString)(),
-    (0, class_validator_1.IsNotEmpty)(),
+    (0, class_validator_1.IsOptional)(),
     __metadata("design:type", String)
 ], UpdateStockDto.prototype, "unit", void 0);
 __decorate([
@@ -115,4 +86,37 @@ __decorate([
     (0, class_validator_1.IsOptional)(),
     __metadata("design:type", Number)
 ], UpdateStockDto.prototype, "threshold", void 0);
+class GetStockListDto {
+    constructor(data) {
+        this.ingredientName = data.ingredientName;
+        this.unit = data.unit;
+        this.belowThreshold = data.belowThreshold;
+    }
+}
+exports.GetStockListDto = GetStockListDto;
+__decorate([
+    (0, swagger_1.ApiProperty)({
+        description: 'Ingredient Name',
+        example: 'Salt',
+        required: false,
+    }),
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsOptional)(),
+    __metadata("design:type", String)
+], GetStockListDto.prototype, "ingredientName", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ description: 'Unit', example: 'kg', required: false }),
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsOptional)(),
+    __metadata("design:type", String)
+], GetStockListDto.prototype, "unit", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({
+        description: 'Below Threshold',
+        example: true,
+        required: false,
+    }),
+    (0, class_validator_1.IsOptional)(),
+    __metadata("design:type", Boolean)
+], GetStockListDto.prototype, "belowThreshold", void 0);
 //# sourceMappingURL=StockRequestDto.js.map

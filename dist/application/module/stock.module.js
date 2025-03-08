@@ -25,6 +25,7 @@ exports.StockModule = StockModule = __decorate([
             { provide: IStockUseCase_1.CreateStockUseCase, useClass: StockUseCase_1.CreateStockUseCaseImpl },
             { provide: IStockUseCase_1.UpdateStockUseCase, useClass: StockUseCase_1.UpdateStockUseCaseImpl },
             { provide: IStockUseCase_1.GetStockUseCase, useClass: StockUseCase_1.GetStockUseCaseImpl },
+            { provide: IStockUseCase_1.GetStockListUseCase, useClass: StockUseCase_1.GetStockListUseCaseImpl },
             { provide: IStockRepository_1.StockRepository, useClass: PrismaStockRepository_1.PrismaStockRepository },
             PrismaService_1.PrismaService,
             jwt_guard_1.JwtGuard,

@@ -1,6 +1,6 @@
 export declare class StockEntity {
     id: string;
-    productId?: string;
+    ingredientName: string;
     quantity: number;
     unit: string;
     threshold?: number;

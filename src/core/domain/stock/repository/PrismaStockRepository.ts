@@ -5,7 +5,10 @@ import {
   BadRequestException,
   InternalServerErrorException,
 } from '@nestjs/common';
-import { StockRepository } from '../port/repository-port/IStockRepository';
+import {
+  StockFilter,
+  StockRepository,
+} from '../port/repository-port/IStockRepository';
 import { PrismaService } from '@src/core/common/prisma/PrismaService';
 import { StockEntity } from '../entity/Stock';
 
@@ -17,8 +20,8 @@ export class PrismaStockRepository implements StockRepository {
     try {
       const result = await this.prisma.stock.create({
         data: {
-          id: entity.id,
-          productId: entity.productId,
+          // id: entity.id,
+          ingredientName: entity.ingredientName,
           quantity: entity.quantity,
           unit: entity.unit,
           threshold: entity.threshold,
@@ -50,6 +53,43 @@ export class PrismaStockRepository implements StockRepository {
       return result ? new StockEntity(result) : null;
     } catch (e) {
       this.handlePrismaError(e, 'Cannot find stock');
+    }
+  }
+
+  async findAll(filter?: StockFilter): Promise<StockEntity[]> {
+    try {
+      const where: any = {};
+
+      if (filter?.ingredientName) {
+        where.ingredientName = {
+          contains: filter.ingredientName,
+          mode: 'insensitive',
+        };
+      }
+
+      if (filter?.unit) {
+        where.unit = {
+          equals: filter.unit,
+          mode: 'insensitive',
+        };
+      }
+
+      let results = await this.prisma.stock.findMany({
+        where,
+        orderBy: { ingredientName: 'asc' },
+      });
+
+      // Filter for below threshold items if requested
+      if (filter?.belowThreshold) {
+        results = results.filter(
+          (stock) =>
+            stock.threshold !== null && stock.quantity < stock.threshold,
+        );
+      }
+
+      return results.map((result) => new StockEntity(result));
+    } catch (e) {
+      this.handlePrismaError(e, 'Cannot find stocks');
     }
   }
 
