@@ -11,15 +11,23 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.BaseFilterSchema = void 0;
 const swagger_1 = require("@nestjs/swagger");
+const class_transformer_1 = require("class-transformer");
+const class_validator_1 = require("class-validator");
 class BaseFilterSchema {
 }
 exports.BaseFilterSchema = BaseFilterSchema;
 __decorate([
-    (0, swagger_1.ApiProperty)(),
+    (0, swagger_1.ApiProperty)({ required: false, example: 10 }),
+    (0, class_transformer_1.Transform)(({ value }) => parseInt(value, 10)),
+    (0, class_validator_1.IsNumber)({}, { message: 'take must be a number' }),
+    (0, class_validator_1.IsOptional)(),
     __metadata("design:type", Number)
 ], BaseFilterSchema.prototype, "take", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)(),
+    (0, swagger_1.ApiProperty)({ required: false, example: 0 }),
+    (0, class_transformer_1.Transform)(({ value }) => parseInt(value, 10)),
+    (0, class_validator_1.IsNumber)({}, { message: 'skip must be a number' }),
+    (0, class_validator_1.IsOptional)(),
     __metadata("design:type", Number)
 ], BaseFilterSchema.prototype, "skip", void 0);
 //# sourceMappingURL=BaseFilterSchema.js.map

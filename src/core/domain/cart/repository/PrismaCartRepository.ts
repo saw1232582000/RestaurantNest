@@ -14,7 +14,7 @@ import {
   PrismaClientValidationError,
 } from '@prisma/client/runtime/library';
 
-import { CoreApiResonseSchema } from 'src/core/common/schema/ApiResponseSchema';
+import { CoreApiResponseSchema } from 'src/core/common/schema/ApiResponseSchema';
 import { ICartRepository } from '../port/repository-port/ICartRepository';
 import { CartEntity } from '../entity/Cart';
 import { filter } from 'rxjs';

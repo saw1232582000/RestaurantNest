@@ -1,4 +1,4 @@
-import { CoreApiResonseSchema } from 'src/core/common/schema/ApiResponseSchema';
+import { CoreApiResponseSchema } from 'src/core/common/schema/ApiResponseSchema';
 import { CreateDailyBuyingUseCase } from '@src/core/domain/daily-buying/service/CreateDailyBuyingUseCase';
 import { UpdateDailyBuyingUseCase } from '@src/core/domain/daily-buying/service/UpdateDailyBuyingUseCase';
 import { GetDailyBuyingUseCase } from '@src/core/domain/daily-buying/service/GetDailyBuyingUseCase';
@@ -15,14 +15,14 @@ export declare class DailyBuyingController {
     private getDailyBuyingListWithFilter;
     private createManyDailyBuyingUseCase;
     constructor(createDailyBuyingUseCase: CreateDailyBuyingUseCase, updateDailyBuyingUsecase: UpdateDailyBuyingUseCase, getDailyBuyingUsecase: GetDailyBuyingUseCase, getDailyBuyingListUsecase: GetDailyBuyingListUseCase, getDailyBuyingListWithFilter: GetDailyBuyingListWithFilterUseCase, createManyDailyBuyingUseCase: ICreateManyDailyBuyingUseCase);
-    create(dailyBuying: CreateDailyBuyingSchema, req: any): Promise<CoreApiResonseSchema<any>>;
-    createMany(dailyBuyings: CreateManyDailyBuyingSchema, req: any): Promise<CoreApiResonseSchema<any>>;
+    create(dailyBuying: CreateDailyBuyingSchema, req: any): Promise<CoreApiResponseSchema<any>>;
+    createMany(dailyBuyings: CreateManyDailyBuyingSchema, req: any): Promise<CoreApiResponseSchema<any>>;
     update(dailyBuying: CreateDailyBuyingSchema, req: any, params: {
         id: string;
-    }): Promise<CoreApiResonseSchema<any>>;
+    }): Promise<CoreApiResponseSchema<any>>;
     get(req: any, params: {
         id: string;
-    }): Promise<CoreApiResonseSchema<any>>;
-    getAll(): Promise<CoreApiResonseSchema<any>>;
-    getAllByFilter(params: DailyBuyingFilterSchama): Promise<CoreApiResonseSchema<any>>;
+    }): Promise<CoreApiResponseSchema<any>>;
+    getAll(): Promise<CoreApiResponseSchema<any>>;
+    getAllByFilter(params: DailyBuyingFilterSchama): Promise<CoreApiResponseSchema<any>>;
 }

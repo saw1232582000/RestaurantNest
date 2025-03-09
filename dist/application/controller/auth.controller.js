@@ -31,7 +31,7 @@ let AuthController = class AuthController {
     }
     async SignIn(credential) {
         const result = await this.authService.validateUser(credential);
-        return ApiResponseSchema_1.CoreApiResonseSchema.success({ token: result });
+        return ApiResponseSchema_1.CoreApiResponseSchema.success({ token: result });
     }
     async Login(user) {
         const createUserDto = new CreateUserDto_1.CreateUserDto();
@@ -40,7 +40,7 @@ let AuthController = class AuthController {
         createUserDto.name = user.name;
         createUserDto.password = user.password;
         createUserDto.role = user.role;
-        return ApiResponseSchema_1.CoreApiResonseSchema.success(await this.createUserUseCase.execute(createUserDto));
+        return ApiResponseSchema_1.CoreApiResponseSchema.success(await this.createUserUseCase.execute(createUserDto));
     }
 };
 exports.AuthController = AuthController;

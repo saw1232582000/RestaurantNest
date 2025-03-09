@@ -49,7 +49,7 @@ let DailyBuyingController = class DailyBuyingController {
         createDailyBuyingDto.quantity = dailyBuying.quantity;
         createDailyBuyingDto.Amount = dailyBuying.Amount;
         createDailyBuyingDto.price = dailyBuying.price;
-        return ApiResponseSchema_1.CoreApiResonseSchema.success(await this.createDailyBuyingUseCase.execute(createDailyBuyingDto));
+        return ApiResponseSchema_1.CoreApiResponseSchema.success(await this.createDailyBuyingUseCase.execute(createDailyBuyingDto));
     }
     async createMany(dailyBuyings, req) {
         const createManyDailyBuyingDto = new CreateManyDailyBuyingDto_1.CreateManyDailyBuyingDto();
@@ -62,7 +62,7 @@ let DailyBuyingController = class DailyBuyingController {
             createDailyBuyingDto.price = dailyBuying.price;
             return createDailyBuyingDto;
         });
-        return ApiResponseSchema_1.CoreApiResonseSchema.success(await this.createManyDailyBuyingUseCase.execute(createManyDailyBuyingDto));
+        return ApiResponseSchema_1.CoreApiResponseSchema.success(await this.createManyDailyBuyingUseCase.execute(createManyDailyBuyingDto));
     }
     async update(dailyBuying, req, params) {
         const updateDailyBuyingDto = new UpdateDailyBuyingDto_1.UpdateDailyBuyingDto();
@@ -72,13 +72,13 @@ let DailyBuyingController = class DailyBuyingController {
         updateDailyBuyingDto.Amount = dailyBuying.Amount;
         updateDailyBuyingDto.price = dailyBuying.price;
         updateDailyBuyingDto.quantity = dailyBuying.quantity;
-        return ApiResponseSchema_1.CoreApiResonseSchema.success(await this.updateDailyBuyingUsecase.execute(updateDailyBuyingDto));
+        return ApiResponseSchema_1.CoreApiResponseSchema.success(await this.updateDailyBuyingUsecase.execute(updateDailyBuyingDto));
     }
     async get(req, params) {
-        return ApiResponseSchema_1.CoreApiResonseSchema.success(await this.getDailyBuyingUsecase.execute(params.id));
+        return ApiResponseSchema_1.CoreApiResponseSchema.success(await this.getDailyBuyingUsecase.execute(params.id));
     }
     async getAll() {
-        return ApiResponseSchema_1.CoreApiResonseSchema.success(await this.getDailyBuyingListUsecase.execute());
+        return ApiResponseSchema_1.CoreApiResponseSchema.success(await this.getDailyBuyingListUsecase.execute());
     }
     async getAllByFilter(params) {
         const filter = {
@@ -86,7 +86,7 @@ let DailyBuyingController = class DailyBuyingController {
             take: parseInt(params?.take.toString()),
             skip: parseInt(params?.skip.toString()),
         };
-        return ApiResponseSchema_1.CoreApiResonseSchema.success(await this.getDailyBuyingListWithFilter.execute(filter));
+        return ApiResponseSchema_1.CoreApiResponseSchema.success(await this.getDailyBuyingListWithFilter.execute(filter));
     }
 };
 exports.DailyBuyingController = DailyBuyingController;

@@ -5,7 +5,7 @@ import {
   HttpException,
   Logger,
 } from '@nestjs/common';
-import { CoreApiResonseSchema } from '@src/core/common/schema/ApiResponseSchema';
+import { CoreApiResponseSchema } from '@src/core/common/schema/ApiResponseSchema';
 import { Request, Response } from 'express';
 
 @Catch()
@@ -45,7 +45,7 @@ export class GlobalExceptionFilter implements ExceptionFilter {
       errorDetails = exception.message;
     }
 
-    const coreResponse = CoreApiResonseSchema.error<unknown>(
+    const coreResponse = CoreApiResponseSchema.error<unknown>(
       status,
       message,
       errorDetails,

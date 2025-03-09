@@ -14,7 +14,7 @@ import {
   PrismaClientValidationError,
 } from '@prisma/client/runtime/library';
 
-import { CoreApiResonseSchema } from 'src/core/common/schema/ApiResponseSchema';
+import { CoreApiResponseSchema } from 'src/core/common/schema/ApiResponseSchema';
 
 import { IOrderRepository } from '../port/repository-port/IOrderRepository';
 import { OrderEntity } from '../entity/Order';
@@ -52,7 +52,7 @@ export class PrismaOrderRepository implements IOrderRepository {
       if (e instanceof PrismaClientKnownRequestError) {
         if (e.code == 'P2002') {
           throw new BadRequestException(
-            CoreApiResonseSchema.error(
+            CoreApiResponseSchema.error(
               HttpStatus.BAD_REQUEST,
               'Bad Request',
               'Email already used',

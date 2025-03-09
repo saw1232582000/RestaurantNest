@@ -22,7 +22,7 @@ import { CreateUserDto } from 'src/core/domain/user/dto/CreateUserDto';
 import { PrismaUserRepository } from 'src/core/domain/user/repository/PrismaUserRepository';
 import { PrismaClient } from '@prisma/client';
 import { JwtGuard } from '../auth/guard/jwt.guard';
-import { CoreApiResonseSchema } from 'src/core/common/schema/ApiResponseSchema';
+import { CoreApiResponseSchema } from 'src/core/common/schema/ApiResponseSchema';
 import {
   ApiBearerAuth,
   ApiBody,
@@ -58,8 +58,8 @@ export class UsersController {
   @UseGuards(JwtGuard)
   @ApiResponse({ type: GetUserResonseSchema })
   @Get()
-  async findOne(@Request() req): Promise<CoreApiResonseSchema<any>> {
-    return CoreApiResonseSchema.success(
+  async findOne(@Request() req): Promise<CoreApiResponseSchema<any>> {
+    return CoreApiResponseSchema.success(
       await this.getUserUseCase.execute(req.user?.user?.id),
     );
   }
@@ -72,8 +72,8 @@ export class UsersController {
   async findOneById(
     @Request() req,
     @Query() params: { id: string },
-  ): Promise<CoreApiResonseSchema<any>> {
-    return CoreApiResonseSchema.success(
+  ): Promise<CoreApiResponseSchema<any>> {
+    return CoreApiResponseSchema.success(
       await this.getUserUseCase.execute(params.id),
     );
   }
@@ -83,14 +83,14 @@ export class UsersController {
   @ApiResponse({ type: GetUserListResponseSchema })
   @Get('/getUserList')
   public async getAllByFilter(@Query() params: UserFilterSchama) {
-    console.log(params);
+    //console.log(params);
     const filter = new UserFilter(
       params.name,
       params.role,
       parseInt(params?.take.toString()),
       parseInt(params?.skip.toString()),
     );
-    return CoreApiResonseSchema.success(
+    return CoreApiResponseSchema.success(
       await this.getUserListWithFilter.execute(filter),
     );
   }
@@ -108,7 +108,7 @@ export class UsersController {
     )
     user: UpdateUserRequestSchema,
     @Query() params: { id: string },
-  ): Promise<CoreApiResonseSchema<any>> {
+  ): Promise<CoreApiResponseSchema<any>> {
     const updateUserDto = new CreateUserDto();
     updateUserDto.id = params.id;
     updateUserDto.email = user.email;
@@ -116,7 +116,7 @@ export class UsersController {
     updateUserDto.name = user.name;
 
     updateUserDto.role = user.role;
-    return CoreApiResonseSchema.success(
+    return CoreApiResponseSchema.success(
       await this.updateUserUseCase.execute(updateUserDto),
     );
   }
@@ -130,7 +130,7 @@ export class UsersController {
   //     new ValidationPipe({ errorHttpStatusCode: HttpStatus.NOT_ACCEPTABLE }),
   //   )
   //   user: CreateUserSchema,
-  // ): Promise<CoreApiResonseSchema<any>> {
+  // ): Promise<CoreApiResponseSchema<any>> {
   //   this.createUserUseCase = new CreateUserUseCase(
   //     new PrismaUserRepository(new PrismaClient()),
   //   );
@@ -140,7 +140,7 @@ export class UsersController {
   //   createUserDto.password = user.password;
   //   createUserDto.role = user.role;
 
-  //   return CoreApiResonseSchema.success(
+  //   return CoreApiResponseSchema.success(
   //     await this.createUserUseCase.execute(createUserDto),
   //   );
   // }
