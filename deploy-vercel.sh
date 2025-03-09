@@ -10,6 +10,6 @@ npx prisma generate
 
 # Deploy to Vercel
 echo "Deploying to Vercel..."
-vercel --prod
+npx vercel --prod
 
 echo "Deployment process completed!" 
