@@ -6,6 +6,7 @@ export declare class DatabaseConnectionMiddleware implements NestMiddleware {
     private readonly logger;
     private lastConnectionAttempt;
     private readonly connectionRetryInterval;
+    private isDbConnected;
     constructor(prismaService: PrismaService);
-    use(req: Request, res: Response, next: NextFunction): Promise<void>;
+    use(req: Request, res: Response, next: NextFunction): Promise<void | Response<any, Record<string, any>>>;
 }

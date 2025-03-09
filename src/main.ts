@@ -85,6 +85,8 @@ async function createNestServer(expressInstance) {
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     credentials: true,
     allowedHeaders: ['Content-Type', 'Authorization'],
+    preflightContinue: false,
+    optionsSuccessStatus: 204,
   });
 
   app.useGlobalFilters(new GlobalExceptionFilter(logger));
