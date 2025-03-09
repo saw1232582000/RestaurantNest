@@ -10,23 +10,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 var PrismaService_1;
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.PrismaService = exports.prisma = void 0;
+exports.PrismaService = void 0;
 const common_1 = require("@nestjs/common");
 const client_1 = require("@prisma/client");
-const prismaClientSingleton = () => {
-    return new client_1.PrismaClient({
-        log: ['error', 'warn'],
-        datasources: {
-            db: {
-                url: process.env.DATABASE_URL,
-            },
-        },
-    });
-};
-const globalForPrisma = globalThis;
-exports.prisma = globalForPrisma.prisma ?? prismaClientSingleton();
-if (process.env.NODE_ENV !== 'production')
-    globalForPrisma.prisma = exports.prisma;
+const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 let PrismaService = PrismaService_1 = class PrismaService extends client_1.PrismaClient {
     constructor() {
         super({
@@ -40,12 +27,25 @@ let PrismaService = PrismaService_1 = class PrismaService extends client_1.Prism
         this.logger = new common_1.Logger(PrismaService_1.name);
     }
     async onModuleInit() {
-        try {
-            await this.$connect();
-            this.logger.log('Successfully connected to the database');
-        }
-        catch (error) {
-            this.logger.error('Failed to connect to the database', error);
+        await this.connectWithRetry();
+    }
+    async connectWithRetry(retries = 5, delay = 2000) {
+        for (let attempt = 1; attempt <= retries; attempt++) {
+            try {
+                await this.$connect();
+                this.logger.log('Successfully connected to the database');
+                return;
+            }
+            catch (error) {
+                this.logger.error(`Failed to connect to the database (attempt ${attempt}/${retries}): ${error.message}`);
+                if (attempt === retries) {
+                    this.logger.error('Max connection attempts reached. Continuing without database connection.');
+                    return;
+                }
+                this.logger.log(`Retrying in ${delay}ms...`);
+                await sleep(delay);
+                delay = Math.min(delay * 1.5, 10000);
+            }
         }
     }
     async onModuleDestroy() {
