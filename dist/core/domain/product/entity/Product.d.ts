@@ -8,6 +8,5 @@ export declare class ProductEntity {
     category: string;
     createdDate: Date;
     updatedDate: Date;
-    constructor(id: string, userId: string, name: string, price: number, image: string, category: string, description: string, createdDate?: Date, updatedDate?: Date);
-    static toEntity(user: any): ProductEntity;
+    constructor(data: Partial<ProductEntity>);
 }

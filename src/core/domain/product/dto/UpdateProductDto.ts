@@ -1,39 +1,94 @@
-import { Expose, plainToInstance } from 'class-transformer';
+// import { Expose, plainToInstance } from 'class-transformer';
 
-import { ProductEntity } from '../entity/Product';
-import { Nullable } from 'src/core/common/type/CommonTypes';
+// import { ProductEntity } from '../entity/Product';
+// import { Nullable } from 'src/core/common/type/CommonTypes';
+
+// export class UpdateProductDto {
+//   @Expose()
+//   id: Nullable<string>;
+
+//   @Expose()
+//   userId: string;
+
+//   @Expose()
+//   name: string;
+
+//   @Expose()
+//   price: number;
+
+//   @Expose()
+//   image: string;
+
+//   @Expose()
+//   description: string;
+
+//   @Expose()
+//   category: string;
+
+//   @Expose()
+//   createdDate: Nullable<Date>;
+
+//   @Expose()
+//   updatedDate: Nullable<Date>;
+
+//   public static convertToClass(product: ProductEntity) {
+//     return plainToInstance(UpdateProductDto, product, {
+//       excludeExtraneousValues: true,
+//     });
+//   }
+// }
+
+// src/product/dto/update-product.dto.ts
+// src/product/dto/update-product.dto.ts
+import { ApiProperty } from '@nestjs/swagger';
+import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
 
 export class UpdateProductDto {
-  @Expose()
-  id: Nullable<string>;
+  @ApiProperty({ description: 'Product ID', example: 'cuid123' })
+  @IsString()
+  @IsNotEmpty()
+  id: string;
 
-  @Expose()
-  userId: string;
-
-  @Expose()
+  @ApiProperty({ description: 'Product name', example: 'Pizza' })
+  @IsString()
+  @IsNotEmpty()
   name: string;
 
-  @Expose()
-  price: number;
-
-  @Expose()
+  @ApiProperty({
+    description: 'Product image URL',
+    example: 'https://example.com/pizza.jpg',
+  })
+  @IsString()
+  @IsNotEmpty()
   image: string;
 
-  @Expose()
+  @ApiProperty({ description: 'Product price', example: 10 })
+  @IsNumber()
+  @IsNotEmpty()
+  price: number;
+
+  @ApiProperty({
+    description: 'Product description',
+    example: 'Delicious cheese pizza',
+  })
+  @IsString()
+  @IsNotEmpty()
   description: string;
 
-  @Expose()
+  @ApiProperty({ description: 'Product category', example: 'Food' })
+  @IsString()
+  @IsNotEmpty()
   category: string;
 
-  @Expose()
-  createdDate: Nullable<Date>;
+  userId?: string; // Hidden, injected from auth
 
-  @Expose()
-  updatedDate: Nullable<Date>;
-
-  public static convertToClass(product: ProductEntity) {
-    return plainToInstance(UpdateProductDto, product, {
-      excludeExtraneousValues: true,
-    });
+  constructor(data: Partial<UpdateProductDto>) {
+    this.id = data.id || '';
+    this.name = data.name || '';
+    this.image = data.image || '';
+    this.price = data.price || 0;
+    this.description = data.description || '';
+    this.category = data.category || '';
+    this.userId = data.userId;
   }
 }

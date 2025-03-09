@@ -1,7 +1,7 @@
 import { CreateorderUseCase } from 'src/core/domain/order/service/CreateOrderUseCase';
 import { GetOrderUseCase } from 'src/core/domain/order/service/GetOrderUseCase';
 import { GetOrderListWithFilterUseCase } from 'src/core/domain/order/service/GetOrderListUseCase';
-import { CoreApiResonseSchema } from 'src/core/common/schema/ApiResponseSchema';
+import { CoreApiResponseSchema } from 'src/core/common/schema/ApiResponseSchema';
 import { CreateOrderRequestSchema } from './documentation/order/RequestSchema/CreateOrderRequestSchema';
 import { OrderFilterSchama } from './documentation/order/RequestSchema/OrderFilterSchema';
 import { UpdateOrderStatusRequestSchema } from './documentation/order/RequestSchema/UpdateOrderStatusRequestSchema';
@@ -15,17 +15,17 @@ export declare class OrderController {
     private updateOrderStatusUseCase;
     private updateOrderItemUseCase;
     constructor(createOrderUseCase: CreateorderUseCase, getOrderUseCase: GetOrderUseCase, getOrderListUseCase: GetOrderListWithFilterUseCase, updateOrderStatusUseCase: UpdateOrderStatusUseCase, updateOrderItemUseCase: UpdateOrderItemUseCase);
-    createOrder(order: CreateOrderRequestSchema, req: any): Promise<CoreApiResonseSchema<unknown>>;
+    createOrder(order: CreateOrderRequestSchema, req: any): Promise<CoreApiResponseSchema<unknown>>;
     update(order: UpdateOrderStatusRequestSchema, req: any, params: {
         id: string;
-    }): Promise<CoreApiResonseSchema<{
+    }): Promise<CoreApiResponseSchema<{
         result: string;
     }>>;
     updateOrderItems(order: UpdateOrderItemRequestSchema, req: any, params: {
         id: string;
-    }): Promise<CoreApiResonseSchema<any>>;
+    }): Promise<CoreApiResponseSchema<any>>;
     getOrder(req: any, params: {
         id: string;
-    }): Promise<CoreApiResonseSchema<any>>;
-    getOrderList(params: OrderFilterSchama, req: any): Promise<CoreApiResonseSchema<any>>;
+    }): Promise<CoreApiResponseSchema<any>>;
+    getOrderList(params: OrderFilterSchama, req: any): Promise<CoreApiResponseSchema<any>>;
 }

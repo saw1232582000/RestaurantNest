@@ -21,6 +21,10 @@ const chat_module_1 = require("./application/module/chat.module");
 const prisma_module_1 = require("./application/module/prisma.module");
 const notification_module_1 = require("./application/module/notification.module");
 const daily_buying_module_1 = require("./application/module/daily-buying.module");
+const bill_module_1 = require("./application/module/bill.module");
+const voucher_module_1 = require("./application/module/voucher.module");
+const reservation_module_1 = require("./application/module/reservation.module");
+const stock_module_1 = require("./application/module/stock.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -36,6 +40,10 @@ exports.AppModule = AppModule = __decorate([
             prisma_module_1.PrismaModule,
             notification_module_1.NotificationModule,
             daily_buying_module_1.DailyBuyingModule,
+            bill_module_1.BillModule,
+            voucher_module_1.VoucherModule,
+            reservation_module_1.ReservationModule,
+            stock_module_1.StockModule,
             throttler_1.ThrottlerModule.forRoot([
                 {
                     name: 'short',

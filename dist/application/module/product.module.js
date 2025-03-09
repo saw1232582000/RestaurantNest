@@ -8,15 +8,14 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ProductModule = void 0;
 const common_1 = require("@nestjs/common");
-const jwt_guard_1 = require("../auth/guard/jwt.guard");
 const product_controller_1 = require("../controller/product.controller");
-const CreateProductUseCase_1 = require("../../core/domain/product/service/CreateProductUseCase");
-const IProductRepository_1 = require("../../core/domain/product/port/repository-port/IProductRepository");
+const ProductUseCases_1 = require("../../core/domain/product/service/ProductUseCases");
 const PrismaProductRepository_1 = require("../../core/domain/product/repository/PrismaProductRepository");
-const UpdateProductUseCase_1 = require("../../core/domain/product/service/UpdateProductUseCase");
-const GetProductUseCase_1 = require("../../core/domain/product/service/GetProductUseCase");
-const GetProductListUseCase_1 = require("../../core/domain/product/service/GetProductListUseCase");
+const PrismaService_1 = require("../../core/common/prisma/PrismaService");
 const UploadS3Service_1 = require("../../core/common/file-upload/UploadS3Service");
+const jwt_guard_1 = require("../auth/guard/jwt.guard");
+const IProductRepository_1 = require("../../core/domain/product/port/repository-port/IProductRepository");
+const IProductUseCase_1 = require("../../core/domain/product/port/service-port/IProductUseCase");
 let ProductModule = class ProductModule {
 };
 exports.ProductModule = ProductModule;
@@ -24,17 +23,18 @@ exports.ProductModule = ProductModule = __decorate([
     (0, common_1.Module)({
         controllers: [product_controller_1.ProductController],
         providers: [
-            CreateProductUseCase_1.CreateProductUseCase,
-            UpdateProductUseCase_1.UpdateProductUseCase,
-            GetProductUseCase_1.GetProductUseCase,
-            GetProductListUseCase_1.GetProductListUseCase,
-            GetProductListUseCase_1.GetProductListWithFilterUseCase,
-            jwt_guard_1.JwtGuard,
-            UploadS3Service_1.S3Service,
+            { provide: IProductUseCase_1.CreateProductUseCase, useClass: ProductUseCases_1.CreateProductUseCaseImpl },
+            { provide: IProductUseCase_1.UpdateProductUseCase, useClass: ProductUseCases_1.UpdateProductUseCaseImpl },
+            { provide: IProductUseCase_1.GetProductUseCase, useClass: ProductUseCases_1.GetProductUseCaseImpl },
+            { provide: IProductUseCase_1.GetProductListUseCase, useClass: ProductUseCases_1.GetProductListUseCaseImpl },
             {
-                provide: IProductRepository_1.IProductRepository,
-                useClass: PrismaProductRepository_1.PrismaProductRepository,
+                provide: IProductUseCase_1.GetProductListWithFilterUseCase,
+                useClass: ProductUseCases_1.GetProductListWithFilterUseCaseImpl,
             },
+            { provide: IProductRepository_1.ProductRepository, useClass: PrismaProductRepository_1.PrismaProductRepository },
+            PrismaService_1.PrismaService,
+            UploadS3Service_1.S3Service,
+            jwt_guard_1.JwtGuard,
         ],
     })
 ], ProductModule);

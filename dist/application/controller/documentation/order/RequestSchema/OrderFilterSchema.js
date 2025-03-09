@@ -19,19 +19,21 @@ class OrderFilterSchama extends BaseFilterSchema_1.BaseFilterSchema {
 exports.OrderFilterSchama = OrderFilterSchama;
 __decorate([
     (0, swagger_1.ApiPropertyOptional)(),
+    (0, class_validator_1.IsOptional)(),
     __metadata("design:type", String)
 ], OrderFilterSchama.prototype, "startDate", void 0);
 __decorate([
     (0, swagger_1.ApiPropertyOptional)(),
+    (0, class_validator_1.IsOptional)(),
     __metadata("design:type", String)
 ], OrderFilterSchama.prototype, "endDate", void 0);
 __decorate([
-    (0, swagger_1.ApiPropertyOptional)(),
-    (0, swagger_1.ApiProperty)({
+    (0, swagger_1.ApiPropertyOptional)({
         enum: StatusEnum_1.Status,
         enumName: 'StatusValue',
     }),
     (0, class_validator_1.IsEnum)(StatusEnum_1.Status, { message: 'Valid Status value is required' }),
+    (0, class_validator_1.IsOptional)(),
     __metadata("design:type", String)
 ], OrderFilterSchama.prototype, "status", void 0);
 //# sourceMappingURL=OrderFilterSchema.js.map

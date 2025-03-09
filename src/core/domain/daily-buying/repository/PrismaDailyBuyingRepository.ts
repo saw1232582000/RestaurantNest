@@ -13,7 +13,7 @@ import {
   PrismaClientValidationError,
 } from '@prisma/client/runtime/library';
 
-import { CoreApiResonseSchema } from 'src/core/common/schema/ApiResponseSchema';
+import { CoreApiResponseSchema } from 'src/core/common/schema/ApiResponseSchema';
 
 import { DailyBuyingEntity } from '../entity/DailyBuying';
 import { DailyBuyingFilter } from '../dto/DailyBuyingFilter';
@@ -42,7 +42,7 @@ export class PrismaDailyBuyingRepository implements IDailyBuyingRepository {
       if (e instanceof PrismaClientKnownRequestError) {
         if (e.code == 'P2002') {
           throw new BadRequestException(
-            CoreApiResonseSchema.error(
+            CoreApiResponseSchema.error(
               HttpStatus.BAD_REQUEST,
               'Bad Request',
               'Email already used',
@@ -81,7 +81,7 @@ export class PrismaDailyBuyingRepository implements IDailyBuyingRepository {
       if (e instanceof PrismaClientKnownRequestError) {
         if (e.code == 'P2002') {
           throw new BadRequestException(
-            CoreApiResonseSchema.error(
+            CoreApiResponseSchema.error(
               HttpStatus.BAD_REQUEST,
               'Bad Request',
               'Email already used',

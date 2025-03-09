@@ -35,7 +35,7 @@ let CartController = class CartController {
         addToCartDto.productId = product.productId;
         addToCartDto.userId = req.user?.user?.id;
         this.addToCartUseCase.execute(addToCartDto);
-        return ApiResponseSchema_1.CoreApiResonseSchema.success({
+        return ApiResponseSchema_1.CoreApiResponseSchema.success({
             message: 'Item added to cart successfully',
         });
     }
@@ -44,7 +44,7 @@ let CartController = class CartController {
         removeFromCartDto.productId = product.productId;
         removeFromCartDto.userId = req.user?.user?.id;
         this.addToCartUseCase.execute(removeFromCartDto);
-        return ApiResponseSchema_1.CoreApiResonseSchema.success({
+        return ApiResponseSchema_1.CoreApiResponseSchema.success({
             message: 'Item removed from cart successfully',
         });
     }

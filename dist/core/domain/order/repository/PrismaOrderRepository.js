@@ -48,7 +48,7 @@ let PrismaOrderRepository = class PrismaOrderRepository {
         catch (e) {
             if (e instanceof library_1.PrismaClientKnownRequestError) {
                 if (e.code == 'P2002') {
-                    throw new common_1.BadRequestException(ApiResponseSchema_1.CoreApiResonseSchema.error(common_1.HttpStatus.BAD_REQUEST, 'Bad Request', 'Email already used'));
+                    throw new common_1.BadRequestException(ApiResponseSchema_1.CoreApiResponseSchema.error(common_1.HttpStatus.BAD_REQUEST, 'Bad Request', 'Email already used'));
                 }
                 else {
                     throw new common_1.BadRequestException('Bad Request', {

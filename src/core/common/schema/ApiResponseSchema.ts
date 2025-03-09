@@ -1,5 +1,9 @@
-export class CoreApiResonseSchema<T> {
+import { ApiProperty } from '@nestjs/swagger';
+
+export class CoreApiResponseSchema<T> {
+  @ApiProperty()
   public readonly code: number;
+  @ApiProperty()
   public readonly message: string;
   public readonly data: NonNullable<T>;
   public readonly error: NonNullable<T>;
@@ -14,16 +18,16 @@ export class CoreApiResonseSchema<T> {
   public static success<T>(
     data?: T,
     message?: string,
-  ): CoreApiResonseSchema<T> {
-    return new CoreApiResonseSchema(200, message || 'Success', data);
+  ): CoreApiResponseSchema<T> {
+    return new CoreApiResponseSchema(200, message || 'Success', data);
   }
 
   public static error<T>(
     code?: number,
     message?: string,
     error?: T,
-  ): CoreApiResonseSchema<T> {
-    return new CoreApiResonseSchema(
+  ): CoreApiResponseSchema<T> {
+    return new CoreApiResponseSchema(
       code || 500,
       message || 'Internal Server Error',
       undefined,
