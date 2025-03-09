@@ -1,0 +1,14 @@
+.git
+node_modules
+test
+coverage
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+README.md
+.gitignore
+.prettierrc
+.eslintrc.js
+jest.config.js
+tsconfig.build.json 
