@@ -8,6 +8,7 @@ import express from 'express';
 
 // Create Express instance
 const server = express();
+let cachedApp: any = null;
 
 // For local development
 async function bootstrap() {
@@ -41,19 +42,32 @@ async function bootstrap() {
 
 // For Vercel serverless deployment
 async function createNestServer(expressInstance) {
+  if (cachedApp) {
+    return cachedApp;
+  }
+
   const app = await NestFactory.create(
     AppModule,
     new ExpressAdapter(expressInstance),
+    {
+      logger: ['error', 'warn', 'log'],
+      bodyParser: true,
+    },
   );
   const logger = new Logger('Main');
-  const config = new DocumentBuilder()
-    .setTitle('Restaurant')
-    .setDescription('This is Restaurant REST API')
-    .setVersion('1.0')
-    .addBearerAuth()
-    .build();
-  const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api', app, document);
+
+  // Skip Swagger in production for faster cold starts
+  if (process.env.NODE_ENV !== 'production') {
+    const config = new DocumentBuilder()
+      .setTitle('Restaurant')
+      .setDescription('This is Restaurant REST API')
+      .setVersion('1.0')
+      .addBearerAuth()
+      .build();
+    const document = SwaggerModule.createDocument(app, config);
+    SwaggerModule.setup('api', app, document);
+  }
+
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
@@ -61,14 +75,23 @@ async function createNestServer(expressInstance) {
       transform: true,
     }),
   );
+
   app.enableCors({
-    origin: '*',
+    origin: [
+      'https://restaurant-pos-virid.vercel.app',
+      'http://localhost:3000',
+      '*',
+    ],
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     credentials: true,
     allowedHeaders: ['Content-Type', 'Authorization'],
   });
+
   app.useGlobalFilters(new GlobalExceptionFilter(logger));
-  return app.init();
+  await app.init();
+
+  cachedApp = app;
+  return app;
 }
 
 // Bootstrap the app if not in production
@@ -78,7 +101,16 @@ if (process.env.NODE_ENV !== 'production') {
 
 // Export the Express instance for Vercel
 export default async (req, res) => {
-  // Initialize the NestJS app only once
-  const app = await createNestServer(server);
-  return app.getHttpAdapter().getInstance()(req, res);
+  try {
+    // Initialize the NestJS app only once
+    const app = await createNestServer(server);
+    return app.getHttpAdapter().getInstance()(req, res);
+  } catch (error) {
+    console.error('Error handling request:', error);
+    res.status(500).json({
+      statusCode: 500,
+      message: 'Internal Server Error',
+      error: process.env.NODE_ENV === 'production' ? undefined : error.message,
+    });
+  }
 };
