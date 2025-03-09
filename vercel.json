@@ -1,5 +1,7 @@
 {
   "version": 2,
+  "buildCommand": "node vercel-build.js",
+  "outputDirectory": "dist",
   "functions": {
     "api/*.js": {
       "memory": 1024,
