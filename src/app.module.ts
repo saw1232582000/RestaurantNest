@@ -1,4 +1,9 @@
-import { Module } from '@nestjs/common';
+import {
+  Module,
+  MiddlewareConsumer,
+  RequestMethod,
+  NestModule,
+} from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UsersModule } from './application/module/users.module';
@@ -16,6 +21,7 @@ import { BillModule } from './application/module/bill.module';
 import { VoucherModule } from './application/module/voucher.module';
 import { ReservationModule } from './application/module/reservation.module';
 import { StockModule } from './application/module/stock.module';
+import { DatabaseConnectionMiddleware } from './core/common/middleware/database-connection.middleware';
 
 @Module({
   imports: [
@@ -49,4 +55,10 @@ import { StockModule } from './application/module/stock.module';
     },
   ],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(DatabaseConnectionMiddleware)
+      .forRoutes({ path: '*', method: RequestMethod.ALL });
+  }
+}
