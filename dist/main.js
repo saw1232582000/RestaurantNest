@@ -21,14 +21,30 @@ async function bootstrap() {
         forbidNonWhitelisted: true,
         transform: true,
     }));
+    const allowedOrigins = [
+        process.env.FRONTEND_URL || 'https://your-frontend.com',
+        process.env.LOCAL_FRONTEND_URL || 'http://localhost:3000',
+    ];
     app.enableCors({
-        origin: '*',
+        origin: (requestOrigin, callback) => {
+            if (!requestOrigin || allowedOrigins.includes(requestOrigin)) {
+                callback(null, true);
+            }
+            else {
+                callback(new Error('Not allowed by CORS'));
+            }
+        },
         methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
         credentials: true,
         allowedHeaders: ['Content-Type', 'Authorization'],
     });
     app.useGlobalFilters(new global_exception_filter_1.GlobalExceptionFilter(logger));
-    await app.listen(3000);
+    await app.init();
+    return app;
 }
-bootstrap();
+exports.default = async (req, res) => {
+    const app = await bootstrap();
+    const server = app.getHttpAdapter().getInstance();
+    return server(req, res);
+};
 //# sourceMappingURL=main.js.map
