@@ -65,10 +65,10 @@ exports.StockResponseDto = StockResponseDto = __decorate([
     (0, class_transformer_1.Exclude)()
 ], StockResponseDto);
 let StockListResponseDto = class StockListResponseDto {
-    static fromEntities(entities) {
+    static fromEntities(entities, total) {
         return {
             items: entities.map((entity) => StockResponseDto.fromEntity(entity)),
-            total: entities.length,
+            total: total,
         };
     }
 };

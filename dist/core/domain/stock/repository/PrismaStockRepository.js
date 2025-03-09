@@ -61,6 +61,7 @@ let PrismaStockRepository = class PrismaStockRepository {
     async findAll(filter) {
         try {
             const where = {};
+            console.log(filter);
             if (filter?.ingredientName) {
                 where.ingredientName = {
                     contains: filter.ingredientName,
@@ -73,14 +74,20 @@ let PrismaStockRepository = class PrismaStockRepository {
                     mode: 'insensitive',
                 };
             }
+            let total = await this.prisma.stock.count({ where });
             let results = await this.prisma.stock.findMany({
                 where,
                 orderBy: { ingredientName: 'asc' },
+                take: filter?.take,
+                skip: filter?.skip,
             });
             if (filter?.belowThreshold) {
                 results = results.filter((stock) => stock.threshold !== null && stock.quantity < stock.threshold);
             }
-            return results.map((result) => new Stock_1.StockEntity(result));
+            return {
+                stocks: results.map((result) => new Stock_1.StockEntity(result)),
+                total: total,
+            };
         }
         catch (e) {
             this.handlePrismaError(e, 'Cannot find stocks');

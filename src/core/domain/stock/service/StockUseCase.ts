@@ -59,7 +59,9 @@ export class GetStockListUseCaseImpl implements GetStockListUseCase {
       ingredientName: filter?.ingredientName,
       unit: filter?.unit,
       belowThreshold: filter?.belowThreshold,
+      skip: filter?.skip,
+      take: filter?.take,
     });
-    return StockListResponseDto.fromEntities(stocks);
+    return StockListResponseDto.fromEntities(stocks.stocks, stocks.total);
   }
 }

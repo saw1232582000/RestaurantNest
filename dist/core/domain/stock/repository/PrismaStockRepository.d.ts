@@ -9,6 +9,9 @@ export declare class PrismaStockRepository implements StockRepository {
     find(by: {
         id?: string;
     }): Promise<StockEntity | null>;
-    findAll(filter?: StockFilter): Promise<StockEntity[]>;
+    findAll(filter?: StockFilter): Promise<{
+        stocks: StockEntity[];
+        total: number;
+    }>;
     private handlePrismaError;
 }

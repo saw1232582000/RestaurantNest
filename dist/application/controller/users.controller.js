@@ -43,7 +43,6 @@ let UsersController = class UsersController {
         return ApiResponseSchema_1.CoreApiResponseSchema.success(await this.getUserUseCase.execute(params.id));
     }
     async getAllByFilter(params) {
-        console.log(params);
         const filter = new UserFilter_1.UserFilter(params.name, params.role, parseInt(params?.take.toString()), parseInt(params?.skip.toString()));
         return ApiResponseSchema_1.CoreApiResponseSchema.success(await this.getUserListWithFilter.execute(filter));
     }

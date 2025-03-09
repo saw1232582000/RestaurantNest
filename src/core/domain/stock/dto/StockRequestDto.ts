@@ -1,7 +1,7 @@
 // src/stock/dto/create-stock.dto.ts
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
-
+import { Transform } from 'class-transformer';
 export class CreateStockDto {
   @ApiProperty({
     description: 'Ingredient Name',
@@ -97,9 +97,21 @@ export class GetStockListDto {
   @IsOptional()
   belowThreshold?: boolean;
 
-  constructor(data: Partial<GetStockListDto>) {
-    this.ingredientName = data.ingredientName;
-    this.unit = data.unit;
-    this.belowThreshold = data.belowThreshold;
-  }
+  @ApiProperty({ required: false, example: 10 })
+  @Transform(({ value }) => parseInt(value, 10))
+  @IsNumber({}, { message: 'take must be a number' })
+  @IsOptional()
+  take?: number;
+
+  @ApiProperty({ required: false, example: 0 })
+  @Transform(({ value }) => parseInt(value, 10))
+  @IsNumber({}, { message: 'skip must be a number' })
+  @IsOptional()
+  skip?: number;
+
+  // constructor(data: Partial<GetStockListDto>) {
+  //   this.ingredientName = data.ingredientName;
+  //   this.unit = data.unit;
+  //   this.belowThreshold = data.belowThreshold;
+  // }
 }

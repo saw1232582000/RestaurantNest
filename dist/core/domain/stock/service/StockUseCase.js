@@ -69,8 +69,10 @@ let GetStockListUseCaseImpl = class GetStockListUseCaseImpl {
             ingredientName: filter?.ingredientName,
             unit: filter?.unit,
             belowThreshold: filter?.belowThreshold,
+            skip: filter?.skip,
+            take: filter?.take,
         });
-        return StockResponseDto_1.StockListResponseDto.fromEntities(stocks);
+        return StockResponseDto_1.StockListResponseDto.fromEntities(stocks.stocks, stocks.total);
     }
 };
 exports.GetStockListUseCaseImpl = GetStockListUseCaseImpl;

@@ -56,10 +56,13 @@ export class StockListResponseDto {
   @Expose()
   total: number;
 
-  static fromEntities(entities: StockEntity[]): StockListResponseDto {
+  static fromEntities(
+    entities: StockEntity[],
+    total: number,
+  ): StockListResponseDto {
     return {
       items: entities.map((entity) => StockResponseDto.fromEntity(entity)),
-      total: entities.length,
+      total: total,
     };
   }
 }

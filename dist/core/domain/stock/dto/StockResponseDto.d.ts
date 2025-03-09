@@ -12,5 +12,5 @@ export declare class StockResponseDto {
 export declare class StockListResponseDto {
     items: StockResponseDto[];
     total: number;
-    static fromEntities(entities: StockEntity[]): StockListResponseDto;
+    static fromEntities(entities: StockEntity[], total: number): StockListResponseDto;
 }

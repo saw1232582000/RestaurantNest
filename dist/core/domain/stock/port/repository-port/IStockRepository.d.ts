@@ -3,6 +3,8 @@ export type StockFilter = {
     ingredientName?: string;
     unit?: string;
     belowThreshold?: boolean;
+    skip?: number;
+    take?: number;
 };
 export declare abstract class StockRepository {
     abstract create(entity: StockEntity): Promise<StockEntity>;
@@ -10,5 +12,8 @@ export declare abstract class StockRepository {
     abstract find(by: {
         id?: string;
     }): Promise<StockEntity | null>;
-    abstract findAll(filter?: StockFilter): Promise<StockEntity[]>;
+    abstract findAll(filter?: StockFilter): Promise<{
+        stocks: StockEntity[];
+        total: number;
+    }>;
 }

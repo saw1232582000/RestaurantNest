@@ -16,5 +16,6 @@ export declare class GetStockListDto {
     ingredientName?: string;
     unit?: string;
     belowThreshold?: boolean;
-    constructor(data: Partial<GetStockListDto>);
+    take?: number;
+    skip?: number;
 }

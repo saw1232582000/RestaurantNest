@@ -56,10 +56,13 @@ export class PrismaStockRepository implements StockRepository {
     }
   }
 
-  async findAll(filter?: StockFilter): Promise<StockEntity[]> {
+  async findAll(filter?: StockFilter): Promise<{
+    stocks: StockEntity[];
+    total: number;
+  }> {
     try {
       const where: any = {};
-
+      console.log(filter);
       if (filter?.ingredientName) {
         where.ingredientName = {
           contains: filter.ingredientName,
@@ -73,10 +76,13 @@ export class PrismaStockRepository implements StockRepository {
           mode: 'insensitive',
         };
       }
+      let total = await this.prisma.stock.count({ where });
 
       let results = await this.prisma.stock.findMany({
         where,
         orderBy: { ingredientName: 'asc' },
+        take: filter?.take,
+        skip: filter?.skip,
       });
 
       // Filter for below threshold items if requested
@@ -87,7 +93,10 @@ export class PrismaStockRepository implements StockRepository {
         );
       }
 
-      return results.map((result) => new StockEntity(result));
+      return {
+        stocks: results.map((result) => new StockEntity(result)),
+        total: total,
+      };
     } catch (e) {
       this.handlePrismaError(e, 'Cannot find stocks');
     }

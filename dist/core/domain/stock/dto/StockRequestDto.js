@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.GetStockListDto = exports.UpdateStockDto = exports.CreateStockDto = void 0;
 const swagger_1 = require("@nestjs/swagger");
 const class_validator_1 = require("class-validator");
+const class_transformer_1 = require("class-transformer");
 class CreateStockDto {
 }
 exports.CreateStockDto = CreateStockDto;
@@ -87,11 +88,6 @@ __decorate([
     __metadata("design:type", Number)
 ], UpdateStockDto.prototype, "threshold", void 0);
 class GetStockListDto {
-    constructor(data) {
-        this.ingredientName = data.ingredientName;
-        this.unit = data.unit;
-        this.belowThreshold = data.belowThreshold;
-    }
 }
 exports.GetStockListDto = GetStockListDto;
 __decorate([
@@ -119,4 +115,18 @@ __decorate([
     (0, class_validator_1.IsOptional)(),
     __metadata("design:type", Boolean)
 ], GetStockListDto.prototype, "belowThreshold", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ required: false, example: 10 }),
+    (0, class_transformer_1.Transform)(({ value }) => parseInt(value, 10)),
+    (0, class_validator_1.IsNumber)({}, { message: 'take must be a number' }),
+    (0, class_validator_1.IsOptional)(),
+    __metadata("design:type", Number)
+], GetStockListDto.prototype, "take", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ required: false, example: 0 }),
+    (0, class_transformer_1.Transform)(({ value }) => parseInt(value, 10)),
+    (0, class_validator_1.IsNumber)({}, { message: 'skip must be a number' }),
+    (0, class_validator_1.IsOptional)(),
+    __metadata("design:type", Number)
+], GetStockListDto.prototype, "skip", void 0);
 //# sourceMappingURL=StockRequestDto.js.map

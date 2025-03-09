@@ -83,7 +83,7 @@ export class UsersController {
   @ApiResponse({ type: GetUserListResponseSchema })
   @Get('/getUserList')
   public async getAllByFilter(@Query() params: UserFilterSchama) {
-    console.log(params);
+    //console.log(params);
     const filter = new UserFilter(
       params.name,
       params.role,

@@ -51,13 +51,13 @@ let StockController = class StockController {
         const result = await this.getStockUseCase.execute(id);
         return ApiResponseSchema_1.CoreApiResponseSchema.success(result);
     }
-    async getList(ingredientName, unit, belowThreshold) {
-        console.log(ingredientName, unit, belowThreshold);
-        const filter = new StockRequestDto_1.GetStockListDto({
-            ingredientName,
-            unit,
-            belowThreshold: belowThreshold === 'true',
-        });
+    async getList(ingredientName, unit, belowThreshold, take, skip) {
+        const filter = new StockRequestDto_1.GetStockListDto();
+        filter.ingredientName = ingredientName;
+        filter.unit = unit;
+        filter.belowThreshold = belowThreshold === 'true';
+        filter.take = take;
+        filter.skip = skip;
         const result = await this.getStockListUseCase.execute(filter);
         return ApiResponseSchema_1.CoreApiResponseSchema.success(result);
     }
@@ -107,8 +107,10 @@ __decorate([
     __param(0, (0, common_1.Query)('ingredientName')),
     __param(1, (0, common_1.Query)('unit')),
     __param(2, (0, common_1.Query)('belowThreshold')),
+    __param(3, (0, common_1.Query)('take')),
+    __param(4, (0, common_1.Query)('skip')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, String, String]),
+    __metadata("design:paramtypes", [String, String, String, Number, Number]),
     __metadata("design:returntype", Promise)
 ], StockController.prototype, "getList", null);
 exports.StockController = StockController = __decorate([

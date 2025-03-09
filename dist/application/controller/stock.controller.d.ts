@@ -11,5 +11,5 @@ export declare class StockController {
     create(dto: CreateStockDto): Promise<CoreApiResponseSchema<StockResponseDto>>;
     update(dto: UpdateStockDto): Promise<CoreApiResponseSchema<StockResponseDto>>;
     get(id: string): Promise<CoreApiResponseSchema<StockResponseDto>>;
-    getList(ingredientName?: string, unit?: string, belowThreshold?: string): Promise<CoreApiResponseSchema<StockListResponseDto>>;
+    getList(ingredientName?: string, unit?: string, belowThreshold?: string, take?: number, skip?: number): Promise<CoreApiResponseSchema<StockListResponseDto>>;
 }

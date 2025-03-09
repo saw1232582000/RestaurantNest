@@ -100,13 +100,17 @@ export class StockController {
     @Query('ingredientName') ingredientName?: string,
     @Query('unit') unit?: string,
     @Query('belowThreshold') belowThreshold?: string,
+    @Query('take') take?: number,
+    @Query('skip') skip?: number,
   ): Promise<CoreApiResponseSchema<StockListResponseDto>> {
-    console.log(ingredientName, unit, belowThreshold);
-    const filter = new GetStockListDto({
-      ingredientName,
-      unit,
-      belowThreshold: belowThreshold === 'true',
-    });
+    //console.log(ingredientName, unit, belowThreshold);
+    // console.log(take, skip);
+    const filter = new GetStockListDto();
+    filter.ingredientName = ingredientName;
+    filter.unit = unit;
+    filter.belowThreshold = belowThreshold === 'true';
+    filter.take = take;
+    filter.skip = skip;
     const result = await this.getStockListUseCase.execute(filter);
     return CoreApiResponseSchema.success(result);
   }
