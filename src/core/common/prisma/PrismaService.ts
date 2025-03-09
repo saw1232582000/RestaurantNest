@@ -7,32 +7,8 @@ import {
 } from '@nestjs/common';
 import { PrismaClient } from '@prisma/client';
 
-// For serverless environments, we need to ensure connections are properly managed
-const prismaClientSingleton = () => {
-  return new PrismaClient({
-    log: ['error', 'warn'],
-    // Optimize connection for serverless
-    datasources: {
-      db: {
-        url: process.env.DATABASE_URL,
-      },
-    },
-  });
-};
-
-// Use global type for PrismaClient
-type PrismaClientSingleton = ReturnType<typeof prismaClientSingleton>;
-
-// Create global variable for PrismaClient
-const globalForPrisma = globalThis as unknown as {
-  prisma: PrismaClientSingleton | undefined;
-};
-
-// Export prisma client
-export const prisma = globalForPrisma.prisma ?? prismaClientSingleton();
-
-// Set prisma to global in non-production environments
-if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma;
+// Helper function to sleep
+const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 @Global()
 @Injectable()
@@ -45,7 +21,6 @@ export class PrismaService
   constructor() {
     super({
       log: ['error', 'warn'],
-      // Optimize connection for serverless
       datasources: {
         db: {
           url: process.env.DATABASE_URL,
@@ -55,13 +30,32 @@ export class PrismaService
   }
 
   async onModuleInit() {
-    try {
-      await this.$connect();
-      this.logger.log('Successfully connected to the database');
-    } catch (error) {
-      this.logger.error('Failed to connect to the database', error);
-      // Don't throw here to allow the app to start even if DB connection fails initially
-      // It will retry on the first query
+    await this.connectWithRetry();
+  }
+
+  async connectWithRetry(retries = 5, delay = 2000) {
+    for (let attempt = 1; attempt <= retries; attempt++) {
+      try {
+        await this.$connect();
+        this.logger.log('Successfully connected to the database');
+        return;
+      } catch (error) {
+        this.logger.error(
+          `Failed to connect to the database (attempt ${attempt}/${retries}): ${error.message}`,
+        );
+
+        if (attempt === retries) {
+          this.logger.error(
+            'Max connection attempts reached. Continuing without database connection.',
+          );
+          return;
+        }
+
+        this.logger.log(`Retrying in ${delay}ms...`);
+        await sleep(delay);
+        // Exponential backoff
+        delay = Math.min(delay * 1.5, 10000);
+      }
     }
   }
 

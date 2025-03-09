@@ -25,7 +25,13 @@ const bill_module_1 = require("./application/module/bill.module");
 const voucher_module_1 = require("./application/module/voucher.module");
 const reservation_module_1 = require("./application/module/reservation.module");
 const stock_module_1 = require("./application/module/stock.module");
+const database_connection_middleware_1 = require("./core/common/middleware/database-connection.middleware");
 let AppModule = class AppModule {
+    configure(consumer) {
+        consumer
+            .apply(database_connection_middleware_1.DatabaseConnectionMiddleware)
+            .forRoutes({ path: '*', method: common_1.RequestMethod.ALL });
+    }
 };
 exports.AppModule = AppModule;
 exports.AppModule = AppModule = __decorate([
