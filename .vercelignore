@@ -11,4 +11,7 @@ README.md
 .prettierrc
 .eslintrc.js
 jest.config.js
-tsconfig.build.json 
+tsconfig.build.json
+# Don't ignore the dist and api directories
+!dist
+!api 
