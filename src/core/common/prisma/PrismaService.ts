@@ -3,6 +3,7 @@ import {
   Injectable,
   OnModuleDestroy,
   OnModuleInit,
+  Logger,
 } from '@nestjs/common';
 import { PrismaClient } from '@prisma/client';
 
@@ -10,6 +11,12 @@ import { PrismaClient } from '@prisma/client';
 const prismaClientSingleton = () => {
   return new PrismaClient({
     log: ['error', 'warn'],
+    // Optimize connection for serverless
+    datasources: {
+      db: {
+        url: process.env.DATABASE_URL,
+      },
+    },
   });
 };
 
@@ -33,18 +40,33 @@ export class PrismaService
   extends PrismaClient
   implements OnModuleInit, OnModuleDestroy
 {
+  private readonly logger = new Logger(PrismaService.name);
+
   constructor() {
     super({
       log: ['error', 'warn'],
+      // Optimize connection for serverless
+      datasources: {
+        db: {
+          url: process.env.DATABASE_URL,
+        },
+      },
     });
   }
 
   async onModuleInit() {
-    await this.$connect();
-    //console.log('Successfully connected to the database');
+    try {
+      await this.$connect();
+      this.logger.log('Successfully connected to the database');
+    } catch (error) {
+      this.logger.error('Failed to connect to the database', error);
+      // Don't throw here to allow the app to start even if DB connection fails initially
+      // It will retry on the first query
+    }
   }
 
   async onModuleDestroy() {
     await this.$disconnect();
+    this.logger.log('Successfully disconnected from the database');
   }
 }
