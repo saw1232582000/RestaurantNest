@@ -48,7 +48,7 @@ let OrderController = class OrderController {
         try {
             const createOrderDto = new CreateOrderDto_1.CreateOrderDto();
             createOrderDto.table = order.table;
-            createOrderDto.status = order.status;
+            createOrderDto.status = order.status || 'PROCESSING';
             createOrderDto.userId = req.user?.user?.id;
             createOrderDto.orderItems = order.orderItems.map((orderItem) => {
                 return OrderItem_1.OrderItemEntity.toEntity(orderItem);
