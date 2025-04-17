@@ -92,7 +92,11 @@ __decorate([
     (0, common_1.Post)('/create'),
     (0, swagger_1.ApiBody)({ type: CreateProductDto_1.CreateProductDto }),
     (0, swagger_1.ApiResponse)({ status: 201, type: ProductResponseSchema }),
-    __param(0, (0, common_1.Body)()),
+    __param(0, (0, common_1.Body)(new pipes_1.ValidationPipe({
+        transform: true,
+        whitelist: true,
+        forbidNonWhitelisted: true,
+    }))),
     __param(1, (0, common_1.Req)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [CreateProductDto_1.CreateProductDto, Object]),
@@ -105,8 +109,14 @@ __decorate([
     (0, swagger_1.ApiBody)({ type: CreateProductDto_1.CreateProductDto }),
     (0, swagger_1.ApiQuery)({ name: 'id', type: String }),
     (0, swagger_1.ApiResponse)({ status: 200, type: ProductResponseSchema }),
-    __param(0, (0, common_1.Body)()),
-    __param(1, (0, common_1.Query)('id')),
+    __param(0, (0, common_1.Body)(new pipes_1.ValidationPipe({
+        transform: true,
+        whitelist: true,
+        forbidNonWhitelisted: true,
+    }))),
+    __param(1, (0, common_1.Query)('id', new pipes_1.ValidationPipe({
+        transform: true,
+    }))),
     __param(2, (0, common_1.Req)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [CreateProductDto_1.CreateProductDto, String, Object]),
@@ -118,7 +128,9 @@ __decorate([
     (0, common_1.Get)('/get'),
     (0, swagger_1.ApiQuery)({ name: 'id', type: String }),
     (0, swagger_1.ApiResponse)({ status: 200, type: ProductResponseSchema }),
-    __param(0, (0, common_1.Query)('id')),
+    __param(0, (0, common_1.Query)('id', new pipes_1.ValidationPipe({
+        transform: true,
+    }))),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
