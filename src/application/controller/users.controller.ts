@@ -71,7 +71,12 @@ export class UsersController {
   @Get('/getUserById')
   async findOneById(
     @Request() req,
-    @Query() params: { id: string },
+    @Query(
+      new ValidationPipe({
+        transform: true,
+      }),
+    )
+    params: BaseRequestQuerySchema,
   ): Promise<CoreApiResponseSchema<any>> {
     return CoreApiResponseSchema.success(
       await this.getUserUseCase.execute(params.id),
@@ -82,7 +87,14 @@ export class UsersController {
   @UseGuards(JwtGuard)
   @ApiResponse({ type: GetUserListResponseSchema })
   @Get('/getUserList')
-  public async getAllByFilter(@Query() params: UserFilterSchama) {
+  public async getAllByFilter(
+    @Query(
+      new ValidationPipe({
+        transform: true,
+      }),
+    )
+    params: UserFilterSchama,
+  ) {
     //console.log(params);
     const filter = new UserFilter(
       params.name,
@@ -104,10 +116,20 @@ export class UsersController {
   @HttpCode(HttpStatus.OK)
   async updateUser(
     @Body(
-      new ValidationPipe({ errorHttpStatusCode: HttpStatus.NOT_ACCEPTABLE }),
+      new ValidationPipe({
+        transform: true,
+        whitelist: true,
+        forbidNonWhitelisted: true,
+        errorHttpStatusCode: HttpStatus.NOT_ACCEPTABLE,
+      }),
     )
     user: UpdateUserRequestSchema,
-    @Query() params: { id: string },
+    @Query(
+      new ValidationPipe({
+        transform: true,
+      }),
+    )
+    params: BaseRequestQuerySchema,
   ): Promise<CoreApiResponseSchema<any>> {
     const updateUserDto = new CreateUserDto();
     updateUserDto.id = params.id;

@@ -11,11 +11,14 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.BaseRequestQuerySchema = void 0;
 const swagger_1 = require("@nestjs/swagger");
+const class_validator_1 = require("class-validator");
 class BaseRequestQuerySchema {
 }
 exports.BaseRequestQuerySchema = BaseRequestQuerySchema;
 __decorate([
     (0, swagger_1.ApiProperty)(),
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsNotEmpty)(),
     __metadata("design:type", String)
 ], BaseRequestQuerySchema.prototype, "id", void 0);
 //# sourceMappingURL=BaseRequestQuerySchema.js.map
