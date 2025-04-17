@@ -272,7 +272,14 @@ export class ProductController {
   @ApiBody({ type: CreateProductDto })
   @ApiResponse({ status: 201, type: ProductResponseSchema })
   async create(
-    @Body() dto: CreateProductDto,
+    @Body(
+      new ValidationPipe({
+        transform: true,
+        whitelist: true,
+        forbidNonWhitelisted: true,
+      }),
+    )
+    dto: CreateProductDto,
     @Req() req,
   ): Promise<CoreApiResponseSchema<ProductResponseDto>> {
     dto.userId = req.user?.user?.id || '';
@@ -289,8 +296,21 @@ export class ProductController {
   @ApiQuery({ name: 'id', type: String })
   @ApiResponse({ status: 200, type: ProductResponseSchema })
   async update(
-    @Body() body: CreateProductDto,
-    @Query('id') id: string,
+    @Body(
+      new ValidationPipe({
+        transform: true,
+        whitelist: true,
+        forbidNonWhitelisted: true,
+      }),
+    )
+    body: CreateProductDto,
+    @Query(
+      'id',
+      new ValidationPipe({
+        transform: true,
+      }),
+    )
+    id: string,
     @Req() req,
   ): Promise<CoreApiResponseSchema<ProductResponseDto>> {
     const userId = req.user?.user?.id || '';
@@ -306,7 +326,13 @@ export class ProductController {
   @ApiQuery({ name: 'id', type: String })
   @ApiResponse({ status: 200, type: ProductResponseSchema })
   async get(
-    @Query('id') id: string,
+    @Query(
+      'id',
+      new ValidationPipe({
+        transform: true,
+      }),
+    )
+    id: string,
   ): Promise<CoreApiResponseSchema<ProductResponseDto>> {
     const result = await this.getProductUseCase.execute(id);
     return CoreApiResponseSchema.success(result);

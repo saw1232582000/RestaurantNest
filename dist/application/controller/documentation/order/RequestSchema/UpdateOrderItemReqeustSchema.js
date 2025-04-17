@@ -11,18 +11,25 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UpdateOrderItemRequestSchema = void 0;
 const swagger_1 = require("@nestjs/swagger");
+const class_transformer_1 = require("class-transformer");
+const class_validator_1 = require("class-validator");
 class UpdateOrderItemRequest {
 }
 __decorate([
     (0, swagger_1.ApiProperty)(),
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsNotEmpty)(),
     __metadata("design:type", String)
 ], UpdateOrderItemRequest.prototype, "Id", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)(),
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsNotEmpty)(),
     __metadata("design:type", String)
 ], UpdateOrderItemRequest.prototype, "productId", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)(),
+    (0, class_validator_1.IsNotEmpty)(),
     __metadata("design:type", Number)
 ], UpdateOrderItemRequest.prototype, "quantity", void 0);
 class UpdateOrderItemRequestSchema {
@@ -30,10 +37,15 @@ class UpdateOrderItemRequestSchema {
 exports.UpdateOrderItemRequestSchema = UpdateOrderItemRequestSchema;
 __decorate([
     (0, swagger_1.ApiProperty)(),
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsNotEmpty)(),
     __metadata("design:type", String)
 ], UpdateOrderItemRequestSchema.prototype, "table", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)({ type: [UpdateOrderItemRequest] }),
+    (0, class_validator_1.IsArray)(),
+    (0, class_validator_1.ValidateNested)({ each: true }),
+    (0, class_transformer_1.Type)(() => UpdateOrderItemRequest),
     __metadata("design:type", Array)
 ], UpdateOrderItemRequestSchema.prototype, "orderItems", void 0);
 //# sourceMappingURL=UpdateOrderItemReqeustSchema.js.map

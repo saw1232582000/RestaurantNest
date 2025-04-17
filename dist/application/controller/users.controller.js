@@ -74,9 +74,11 @@ __decorate([
     (0, swagger_1.ApiResponse)({ type: GetUserResponseSchema_1.GetUserResonseSchema }),
     (0, common_1.Get)('/getUserById'),
     __param(0, (0, common_1.Request)()),
-    __param(1, (0, common_1.Query)()),
+    __param(1, (0, common_1.Query)(new common_1.ValidationPipe({
+        transform: true,
+    }))),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, Object]),
+    __metadata("design:paramtypes", [Object, BaseRequestQuerySchema_1.BaseRequestQuerySchema]),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "findOneById", null);
 __decorate([
@@ -84,7 +86,9 @@ __decorate([
     (0, common_1.UseGuards)(jwt_guard_1.JwtGuard),
     (0, swagger_1.ApiResponse)({ type: GetUserListResponseSchema_1.GetUserListResponseSchema }),
     (0, common_1.Get)('/getUserList'),
-    __param(0, (0, common_1.Query)()),
+    __param(0, (0, common_1.Query)(new common_1.ValidationPipe({
+        transform: true,
+    }))),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [UserFilterSchema_1.UserFilterSchama]),
     __metadata("design:returntype", Promise)
@@ -97,10 +101,18 @@ __decorate([
     (0, swagger_1.ApiResponse)({ type: CreateUserResponseSchema_1.CreateUserResonseSchema }),
     (0, swagger_1.ApiQuery)({ type: BaseRequestQuerySchema_1.BaseRequestQuerySchema }),
     (0, common_1.HttpCode)(common_1.HttpStatus.OK),
-    __param(0, (0, common_1.Body)(new common_1.ValidationPipe({ errorHttpStatusCode: common_1.HttpStatus.NOT_ACCEPTABLE }))),
-    __param(1, (0, common_1.Query)()),
+    __param(0, (0, common_1.Body)(new common_1.ValidationPipe({
+        transform: true,
+        whitelist: true,
+        forbidNonWhitelisted: true,
+        errorHttpStatusCode: common_1.HttpStatus.NOT_ACCEPTABLE,
+    }))),
+    __param(1, (0, common_1.Query)(new common_1.ValidationPipe({
+        transform: true,
+    }))),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [UpdateUserRequestSchema_1.UpdateUserRequestSchema, Object]),
+    __metadata("design:paramtypes", [UpdateUserRequestSchema_1.UpdateUserRequestSchema,
+        BaseRequestQuerySchema_1.BaseRequestQuerySchema]),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "updateUser", null);
 exports.UsersController = UsersController = __decorate([

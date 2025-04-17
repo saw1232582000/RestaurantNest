@@ -47,18 +47,20 @@ let OrderController = class OrderController {
     async createOrder(order, req) {
         try {
             const createOrderDto = new CreateOrderDto_1.CreateOrderDto();
-            createOrderDto.table = order?.table;
+            createOrderDto.table = order.table;
             createOrderDto.status = order.status;
             createOrderDto.userId = req.user?.user?.id;
             createOrderDto.orderItems = order.orderItems.map((orderItem) => {
                 return OrderItem_1.OrderItemEntity.toEntity(orderItem);
             });
-            await this.createOrderUseCase.execute(createOrderDto);
+            const result = await this.createOrderUseCase.execute(createOrderDto);
             return ApiResponseSchema_1.CoreApiResponseSchema.success({
                 message: 'Order Created Successfully',
+                data: result,
             });
         }
         catch (error) {
+            console.error('Create order error:', error);
             return ApiResponseSchema_1.CoreApiResponseSchema.error(error);
         }
     }
@@ -71,7 +73,7 @@ let OrderController = class OrderController {
     async updateOrderItems(order, req, params) {
         try {
             const updateOrderDto = new UpdateOrderItemDto_1.UpdateOrderItemDto();
-            updateOrderDto.table = order?.table;
+            updateOrderDto.table = order.table;
             updateOrderDto.Id = params.id;
             updateOrderDto.status = '';
             updateOrderDto.orderItems = order.orderItems.map((orderItem) => {
@@ -83,6 +85,7 @@ let OrderController = class OrderController {
             });
         }
         catch (error) {
+            console.error('Update order item error:', error);
             return ApiResponseSchema_1.CoreApiResponseSchema.error(500, 'Order Item Update Error', error);
         }
     }
@@ -100,9 +103,14 @@ exports.OrderController = OrderController;
 __decorate([
     (0, swagger_1.ApiBearerAuth)(),
     (0, common_1.UseGuards)(jwt_guard_1.JwtGuard),
+    (0, swagger_1.ApiBody)({ type: CreateOrderRequestSchema_1.CreateOrderRequestSchema }),
     (0, swagger_1.ApiResponse)({ type: CreateOrderResponseSchema_1.CreateOrderResponseSchema }),
     (0, common_1.Post)('/create'),
-    __param(0, (0, common_1.Body)()),
+    __param(0, (0, common_1.Body)(new common_1.ValidationPipe({
+        transform: true,
+        whitelist: true,
+        forbidNonWhitelisted: true,
+    }))),
     __param(1, (0, common_1.Req)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [CreateOrderRequestSchema_1.CreateOrderRequestSchema, Object]),
@@ -115,11 +123,17 @@ __decorate([
     (0, swagger_1.ApiQuery)({ type: BaseRequestQuerySchema_1.BaseRequestQuerySchema }),
     (0, swagger_1.ApiResponse)({ type: UpdateOrderStatusResponseSchema_1.UpdateOrderStatusResponseSchema }),
     (0, common_1.Put)('/update'),
-    __param(0, (0, common_1.Body)()),
+    __param(0, (0, common_1.Body)(new common_1.ValidationPipe({
+        transform: true,
+        whitelist: true,
+        forbidNonWhitelisted: true,
+    }))),
     __param(1, (0, common_1.Req)()),
-    __param(2, (0, common_1.Query)()),
+    __param(2, (0, common_1.Query)(new common_1.ValidationPipe({
+        transform: true,
+    }))),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [UpdateOrderStatusRequestSchema_1.UpdateOrderStatusRequestSchema, Object, Object]),
+    __metadata("design:paramtypes", [UpdateOrderStatusRequestSchema_1.UpdateOrderStatusRequestSchema, Object, BaseRequestQuerySchema_1.BaseRequestQuerySchema]),
     __metadata("design:returntype", Promise)
 ], OrderController.prototype, "update", null);
 __decorate([
@@ -129,11 +143,17 @@ __decorate([
     (0, swagger_1.ApiResponse)({ type: CreateOrderResponseSchema_1.CreateOrderResponseSchema }),
     (0, swagger_1.ApiQuery)({ type: BaseRequestQuerySchema_1.BaseRequestQuerySchema }),
     (0, common_1.Put)('/updateOrderItems'),
-    __param(0, (0, common_1.Body)()),
+    __param(0, (0, common_1.Body)(new common_1.ValidationPipe({
+        transform: true,
+        whitelist: true,
+        forbidNonWhitelisted: true,
+    }))),
     __param(1, (0, common_1.Req)()),
-    __param(2, (0, common_1.Query)()),
+    __param(2, (0, common_1.Query)(new common_1.ValidationPipe({
+        transform: true,
+    }))),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [UpdateOrderItemReqeustSchema_1.UpdateOrderItemRequestSchema, Object, Object]),
+    __metadata("design:paramtypes", [UpdateOrderItemReqeustSchema_1.UpdateOrderItemRequestSchema, Object, BaseRequestQuerySchema_1.BaseRequestQuerySchema]),
     __metadata("design:returntype", Promise)
 ], OrderController.prototype, "updateOrderItems", null);
 __decorate([
@@ -143,9 +163,11 @@ __decorate([
     (0, swagger_1.ApiResponse)({ type: GetOrderResponseSchema_1.GetOrderResponseSchema }),
     (0, common_1.Get)('/get'),
     __param(0, (0, common_1.Req)()),
-    __param(1, (0, common_1.Query)()),
+    __param(1, (0, common_1.Query)(new common_1.ValidationPipe({
+        transform: true,
+    }))),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, Object]),
+    __metadata("design:paramtypes", [Object, BaseRequestQuerySchema_1.BaseRequestQuerySchema]),
     __metadata("design:returntype", Promise)
 ], OrderController.prototype, "getOrder", null);
 __decorate([
@@ -153,7 +175,9 @@ __decorate([
     (0, common_1.UseGuards)(jwt_guard_1.JwtGuard),
     (0, swagger_1.ApiResponse)({ type: GetOrderListResponseSchema_1.GetOrderListResponseSchema }),
     (0, common_1.Get)('/getList'),
-    __param(0, (0, common_1.Query)()),
+    __param(0, (0, common_1.Query)(new common_1.ValidationPipe({
+        transform: true,
+    }))),
     __param(1, (0, common_1.Req)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [OrderFilterSchema_1.OrderFilterSchama, Object]),

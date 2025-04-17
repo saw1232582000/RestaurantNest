@@ -13,6 +13,7 @@ import {
   UploadedFile,
   UseGuards,
   UseInterceptors,
+  ValidationPipe,
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
@@ -64,28 +65,36 @@ export class OrderController {
 
   @ApiBearerAuth()
   @UseGuards(JwtGuard)
-  //   @ApiBody({ type: CreateorderSchema })
+  @ApiBody({ type: CreateOrderRequestSchema })
   @ApiResponse({ type: CreateOrderResponseSchema })
   @Post('/create')
   public async createOrder(
-    @Body() order: CreateOrderRequestSchema,
+    @Body(
+      new ValidationPipe({
+        transform: true,
+        whitelist: true,
+        forbidNonWhitelisted: true,
+      }),
+    )
+    order: CreateOrderRequestSchema,
     @Req() req,
   ) {
     try {
       const createOrderDto = new CreateOrderDto();
-      createOrderDto.table = order?.table;
-
+      createOrderDto.table = order.table;
       createOrderDto.status = order.status;
       createOrderDto.userId = req.user?.user?.id;
       createOrderDto.orderItems = order.orderItems.map((orderItem) => {
         return OrderItemEntity.toEntity(orderItem);
       });
-      //this.chatGateWay.setNewOrder('New Order submitted');
-      await this.createOrderUseCase.execute(createOrderDto);
+
+      const result = await this.createOrderUseCase.execute(createOrderDto);
       return CoreApiResponseSchema.success({
         message: 'Order Created Successfully',
+        data: result,
       });
     } catch (error) {
+      console.error('Create order error:', error);
       return CoreApiResponseSchema.error(error);
     }
   }
@@ -97,13 +106,22 @@ export class OrderController {
   @ApiResponse({ type: UpdateOrderStatusResponseSchema })
   @Put('/update')
   public async update(
-    @Body() order: UpdateOrderStatusRequestSchema,
+    @Body(
+      new ValidationPipe({
+        transform: true,
+        whitelist: true,
+        forbidNonWhitelisted: true,
+      }),
+    )
+    order: UpdateOrderStatusRequestSchema,
     @Req() req,
-    @Query() params: { id: string },
+    @Query(
+      new ValidationPipe({
+        transform: true,
+      }),
+    )
+    params: BaseRequestQuerySchema,
   ) {
-    // this.updateProductUsecase = new UpdateProductUseCase(
-    //   new PrismaProductRepository(new PrismaClient()),
-    // );
     const updateOrderStatusDto = new UpdateOrderStatusDto();
     updateOrderStatusDto.id = params.id;
     updateOrderStatusDto.status = order.status;
@@ -120,46 +138,73 @@ export class OrderController {
   @ApiQuery({ type: BaseRequestQuerySchema })
   @Put('/updateOrderItems')
   public async updateOrderItems(
-    @Body() order: UpdateOrderItemRequestSchema,
+    @Body(
+      new ValidationPipe({
+        transform: true,
+        whitelist: true,
+        forbidNonWhitelisted: true,
+      }),
+    )
+    order: UpdateOrderItemRequestSchema,
     @Req() req,
-    @Query() params: { id: string },
+    @Query(
+      new ValidationPipe({
+        transform: true,
+      }),
+    )
+    params: BaseRequestQuerySchema,
   ) {
     try {
       const updateOrderDto = new UpdateOrderItemDto();
-      updateOrderDto.table = order?.table;
+      updateOrderDto.table = order.table;
       updateOrderDto.Id = params.id;
       updateOrderDto.status = '';
 
       updateOrderDto.orderItems = order.orderItems.map((orderItem) => {
         return OrderItemEntity.toEntity(orderItem);
       });
-      //this.chatGateWay.setNewOrder('New Order submitted');
+
       await this.updateOrderItemUseCase.execute(updateOrderDto);
       return CoreApiResponseSchema.success({
         message: 'Order updated Successfully',
       });
     } catch (error) {
+      console.error('Update order item error:', error);
       return CoreApiResponseSchema.error(500, 'Order Item Update Error', error);
     }
   }
 
   @ApiBearerAuth()
   @UseGuards(JwtGuard)
-  //   @ApiBody({ type: CreateorderSchema })
   @ApiQuery({ type: BaseRequestQuerySchema })
   @ApiResponse({ type: GetOrderResponseSchema })
   @Get('/get')
-  public async getOrder(@Req() req, @Query() params: { id: string }) {
+  public async getOrder(
+    @Req() req,
+    @Query(
+      new ValidationPipe({
+        transform: true,
+      }),
+    )
+    params: BaseRequestQuerySchema,
+  ) {
     const order = await this.getOrderUseCase.execute(params.id);
     return CoreApiResponseSchema.success(order);
   }
 
   @ApiBearerAuth()
   @UseGuards(JwtGuard)
-  // @ApiBody({ type: OrderFilterSchama })
   @ApiResponse({ type: GetOrderListResponseSchema })
   @Get('/getList')
-  public async getOrderList(@Query() params: OrderFilterSchama, @Req() req) {
+  public async getOrderList(
+    @Query(
+      new ValidationPipe({
+        transform: true,
+      }),
+    )
+    params: OrderFilterSchama,
+    @Req() req,
+  ) {
     const orderFilter = new OrderFilter(
       params.startDate,
       params.endDate,
