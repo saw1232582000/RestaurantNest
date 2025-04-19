@@ -250,7 +250,20 @@ let PrismaOrderRepository = class PrismaOrderRepository {
             if (!targetOrder) {
                 throw new common_1.NotFoundException('Order not found');
             }
-            updateOrderItemDto.orderItems.forEach(async (orderItem) => {
+            const updatedItemIds = updateOrderItemDto.orderItems
+                .filter((item) => item.Id)
+                .map((item) => item.Id);
+            const itemsToDelete = targetOrder.orderItems.filter((item) => !updatedItemIds.includes(item.Id));
+            if (itemsToDelete.length > 0) {
+                await this.prisma.orderItem.deleteMany({
+                    where: {
+                        Id: {
+                            in: itemsToDelete.map((item) => item.Id),
+                        },
+                    },
+                });
+            }
+            for (const orderItem of updateOrderItemDto.orderItems) {
                 if (targetOrder.orderItems.find((item) => item.Id === orderItem.Id) !==
                     undefined) {
                     await this.prisma.orderItem.update({
@@ -270,7 +283,7 @@ let PrismaOrderRepository = class PrismaOrderRepository {
                         },
                     });
                 }
-            });
+            }
             return true;
         }
         catch (e) {
