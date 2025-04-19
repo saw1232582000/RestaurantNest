@@ -1,5 +1,5 @@
 declare class UpdateOrderItemRequest {
-    Id: string;
+    Id?: string;
     productId: string;
     quantity: number;
 }
