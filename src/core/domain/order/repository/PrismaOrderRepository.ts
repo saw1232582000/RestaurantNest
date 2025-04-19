@@ -279,8 +279,30 @@ export class PrismaOrderRepository implements IOrderRepository {
       if (!targetOrder) {
         throw new NotFoundException('Order not found');
       }
-      // console.log(updateOrderItemDto.orderItems);
-      updateOrderItemDto.orderItems.forEach(async (orderItem) => {
+
+      // Get IDs of items in the update request
+      const updatedItemIds = updateOrderItemDto.orderItems
+        .filter((item) => item.Id)
+        .map((item) => item.Id);
+
+      // Find items to delete (items in DB but not in the update request)
+      const itemsToDelete = targetOrder.orderItems.filter(
+        (item) => !updatedItemIds.includes(item.Id),
+      );
+
+      // Delete items that are not in the update request
+      if (itemsToDelete.length > 0) {
+        await this.prisma.orderItem.deleteMany({
+          where: {
+            Id: {
+              in: itemsToDelete.map((item) => item.Id),
+            },
+          },
+        });
+      }
+
+      // Update existing items and create new ones
+      for (const orderItem of updateOrderItemDto.orderItems) {
         if (
           targetOrder.orderItems.find((item) => item.Id === orderItem.Id) !==
           undefined
@@ -302,7 +324,7 @@ export class PrismaOrderRepository implements IOrderRepository {
             },
           });
         }
-      });
+      }
       return true;
     } catch (e) {
       if (e instanceof PrismaClientValidationError) {
