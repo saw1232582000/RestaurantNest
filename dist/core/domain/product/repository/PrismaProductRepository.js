@@ -21,8 +21,12 @@ let PrismaProductRepository = class PrismaProductRepository {
     }
     async create(entity) {
         try {
+            const data = { ...entity };
+            if (!data.id) {
+                delete data.id;
+            }
             const result = await this.prisma.product.create({
-                data: { ...entity },
+                data,
             });
             return new Product_1.ProductEntity(result);
         }

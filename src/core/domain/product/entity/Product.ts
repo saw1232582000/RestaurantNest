@@ -70,7 +70,8 @@ export class ProductEntity {
 
   constructor(data: Partial<ProductEntity>) {
     Object.assign(this, {
-      id: data.id || '',
+      // Only include id if it exists and is not empty
+      ...(data.id ? { id: data.id } : {}),
       userId: data.userId || '',
       name: data.name || '',
       price: data.price || 0,
