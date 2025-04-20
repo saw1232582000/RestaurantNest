@@ -174,7 +174,7 @@ export class DailyBuyingController {
 
   @ApiBearerAuth()
   @UseGuards(JwtGuard)
-  // @ApiQuery({ type: ProdcutFilterSchama })
+  @ApiQuery({ type: DailyBuyingFilterSchama })
   @ApiResponse({ type: GetDailyBuyingListResponseSchema })
   @Get('/getDailyBuyingListByName')
   public async getAllByFilter(@Query() params: DailyBuyingFilterSchama) {
@@ -183,9 +183,9 @@ export class DailyBuyingController {
     // );
 
     const filter: DailyBuyingFilter = {
-      particular: params.particular,
-      take: parseInt(params?.take.toString()),
-      skip: parseInt(params?.skip.toString()),
+      particular: params.particular || '',
+      take: parseInt(params?.take?.toString() || '10'),
+      skip: parseInt(params?.skip?.toString() || '0'),
     };
 
     return CoreApiResponseSchema.success(

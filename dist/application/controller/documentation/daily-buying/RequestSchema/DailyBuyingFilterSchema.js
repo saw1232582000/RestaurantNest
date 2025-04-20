@@ -12,11 +12,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.DailyBuyingFilterSchama = void 0;
 const swagger_1 = require("@nestjs/swagger");
 const BaseFilterSchema_1 = require("../../common/BaseFilterSchema");
+const class_validator_1 = require("class-validator");
 class DailyBuyingFilterSchama extends BaseFilterSchema_1.BaseFilterSchema {
 }
 exports.DailyBuyingFilterSchama = DailyBuyingFilterSchama;
 __decorate([
     (0, swagger_1.ApiPropertyOptional)(),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], DailyBuyingFilterSchama.prototype, "particular", void 0);
 //# sourceMappingURL=DailyBuyingFilterSchema.js.map

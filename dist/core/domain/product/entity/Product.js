@@ -4,7 +4,7 @@ exports.ProductEntity = void 0;
 class ProductEntity {
     constructor(data) {
         Object.assign(this, {
-            id: data.id || '',
+            ...(data.id ? { id: data.id } : {}),
             userId: data.userId || '',
             name: data.name || '',
             price: data.price || 0,
