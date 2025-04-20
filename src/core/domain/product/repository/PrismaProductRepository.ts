@@ -198,8 +198,16 @@ export class PrismaProductRepository implements ProductRepository {
 
   async create(entity: ProductEntity): Promise<ProductEntity> {
     try {
+      // Create a data object for product creation, omitting id if it's empty
+      const data = { ...entity };
+
+      // Remove id if it's empty so Prisma can generate one
+      if (!data.id) {
+        delete data.id;
+      }
+
       const result = await this.prisma.product.create({
-        data: { ...entity },
+        data,
       });
       return new ProductEntity(result);
     } catch (e) {

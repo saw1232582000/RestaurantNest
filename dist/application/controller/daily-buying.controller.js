@@ -82,9 +82,9 @@ let DailyBuyingController = class DailyBuyingController {
     }
     async getAllByFilter(params) {
         const filter = {
-            particular: params.particular,
-            take: parseInt(params?.take.toString()),
-            skip: parseInt(params?.skip.toString()),
+            particular: params.particular || '',
+            take: parseInt(params?.take?.toString() || '10'),
+            skip: parseInt(params?.skip?.toString() || '0'),
         };
         return ApiResponseSchema_1.CoreApiResponseSchema.success(await this.getDailyBuyingListWithFilter.execute(filter));
     }
@@ -152,6 +152,7 @@ __decorate([
 __decorate([
     (0, swagger_1.ApiBearerAuth)(),
     (0, common_1.UseGuards)(jwt_guard_1.JwtGuard),
+    (0, swagger_1.ApiQuery)({ type: DailyBuyingFilterSchema_1.DailyBuyingFilterSchama }),
     (0, swagger_1.ApiResponse)({ type: GetDailyBuyingListResponseSchema_1.GetDailyBuyingListResponseSchema }),
     (0, common_1.Get)('/getDailyBuyingListByName'),
     __param(0, (0, common_1.Query)()),
