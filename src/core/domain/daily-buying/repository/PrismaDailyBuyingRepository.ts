@@ -192,9 +192,24 @@ export class PrismaDailyBuyingRepository implements IDailyBuyingRepository {
     totalPrice: number;
   }> {
     // console.log(filter)
-    const whereClause = filter.particular
-      ? { particular: { contains: filter.particular } }
-      : {};
+
+    // Construct the base where clause
+    let whereClause: any = {};
+    if (filter.particular) {
+      whereClause.particular = { contains: filter.particular };
+    }
+
+    // Add date filtering if a date is provided in the filter
+    if (filter.date) {
+      const startDate = new Date(filter.date); // Already set to 00:00:00 in controller
+      const endDate = new Date(filter.date);
+      endDate.setHours(23, 59, 59, 999); // End of the day
+
+      whereClause.createdDate = {
+        gte: startDate, // Greater than or equal to the start of the day
+        lte: endDate, // Less than or equal to the end of the day
+      };
+    }
 
     const totalCounts = await this.prisma.dailyBuying.count({
       where: whereClause,

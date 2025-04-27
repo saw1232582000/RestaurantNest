@@ -7,7 +7,7 @@ class OrderFilter extends BaseFilterSchema_1.BaseFilterSchema {
         super(take, skip);
         this.startDate = startDate;
         this.endDate = endDate;
-        this.status = status;
+        this.status = status ?? null;
     }
 }
 exports.OrderFilter = OrderFilter;

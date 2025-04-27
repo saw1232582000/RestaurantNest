@@ -175,9 +175,19 @@ let PrismaDailyBuyingRepository = class PrismaDailyBuyingRepository {
         return dailyBuyings.map((DailyBuying) => DailyBuying_1.DailyBuyingEntity.toEntity(DailyBuying));
     }
     async findAllWithSchema(filter) {
-        const whereClause = filter.particular
-            ? { particular: { contains: filter.particular } }
-            : {};
+        let whereClause = {};
+        if (filter.particular) {
+            whereClause.particular = { contains: filter.particular };
+        }
+        if (filter.date) {
+            const startDate = new Date(filter.date);
+            const endDate = new Date(filter.date);
+            endDate.setHours(23, 59, 59, 999);
+            whereClause.createdDate = {
+                gte: startDate,
+                lte: endDate,
+            };
+        }
         const totalCounts = await this.prisma.dailyBuying.count({
             where: whereClause,
         });

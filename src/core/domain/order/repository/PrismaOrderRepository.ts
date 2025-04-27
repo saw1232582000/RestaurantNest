@@ -195,27 +195,33 @@ export class PrismaOrderRepository implements IOrderRepository {
     totalCounts: number;
     totalPrice: number;
   }> {
-    const filterValue =
-      filter?.startDate && filter?.endDate
-        ? {
-            status: { contains: filter.status },
-            createdDate: {
-              gte: new Date(filter.startDate),
-              lte: new Date(filter.endDate),
-            },
-          }
-        : {
-            status: { contains: filter.status },
-          };
+    // Dynamically build the where clause
+    const whereClause: any = {};
+
+    if (filter.status) {
+      whereClause.status = filter.status; // Use exact match for status enum
+    }
+
+    // Add date filtering if start or end date is provided
+    if (filter.startDate || filter.endDate) {
+      whereClause.createdDate = {};
+      if (filter.startDate) {
+        // Assumes startDate is already set to 00:00:00 in controller
+        whereClause.createdDate.gte = filter.startDate;
+      }
+      if (filter.endDate) {
+        // Assumes endDate is already set to 23:59:59 in controller
+        whereClause.createdDate.lte = filter.endDate;
+      }
+    }
+    // If neither date is provided, no date filter is applied (fetches all dates)
+
     const totalCounts = await this.prisma.order.count({
-      where: {
-        ...filterValue,
-      },
+      where: whereClause, // Use the dynamically built where clause
     });
+
     const priceList = await this.prisma.order.findMany({
-      where: {
-        ...filterValue,
-      },
+      where: whereClause, // Use the dynamically built where clause
       select: {
         orderItems: {
           select: {
@@ -241,9 +247,7 @@ export class PrismaOrderRepository implements IOrderRepository {
     }, 0);
 
     const products = await this.prisma.order.findMany({
-      where: {
-        ...filterValue,
-      },
+      where: whereClause, // Use the dynamically built where clause
       take: filter.take,
       skip: filter.skip,
       include: {

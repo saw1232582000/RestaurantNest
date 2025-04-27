@@ -174,7 +174,6 @@ export class DailyBuyingController {
 
   @ApiBearerAuth()
   @UseGuards(JwtGuard)
-  @ApiQuery({ type: DailyBuyingFilterSchama })
   @ApiResponse({ type: GetDailyBuyingListResponseSchema })
   @Get('/getDailyBuyingListByName')
   public async getAllByFilter(@Query() params: DailyBuyingFilterSchama) {
@@ -182,10 +181,31 @@ export class DailyBuyingController {
     //   new PrismaDailyBuyingRepository(new PrismaClient()),
     // );
 
+    let filterDate: Date | undefined = undefined;
+    if (params.date) {
+      // Basic validation for YYYY-MM-DD format
+      if (/^\d{4}-\d{2}-\d{2}$/.test(params.date)) {
+        filterDate = new Date(params.date);
+        // Set time to start of the day in local timezone
+        filterDate.setHours(0, 0, 0, 0);
+      } else {
+        // Handle invalid date format if needed, e.g., throw BadRequestException
+        // For now, we'll ignore invalid formats and proceed without date filter
+        console.warn(
+          `Invalid date format received: ${params.date}. Expected YYYY-MM-DD.`,
+        );
+      }
+    } else {
+      // Default to current day if no date is provided
+      filterDate = new Date();
+      filterDate.setHours(0, 0, 0, 0); // Set to start of current day
+    }
+
     const filter: DailyBuyingFilter = {
       particular: params.particular || '',
       take: parseInt(params?.take?.toString() || '10'),
       skip: parseInt(params?.skip?.toString() || '0'),
+      date: filterDate, // Pass the date object
     };
 
     return CoreApiResponseSchema.success(

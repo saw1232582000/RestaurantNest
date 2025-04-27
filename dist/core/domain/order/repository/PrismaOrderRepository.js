@@ -176,26 +176,24 @@ let PrismaOrderRepository = class PrismaOrderRepository {
         return orders.map((order) => Order_1.OrderEntity.toEntity(order));
     }
     async findAllWithSchema(filter) {
-        const filterValue = filter?.startDate && filter?.endDate
-            ? {
-                status: { contains: filter.status },
-                createdDate: {
-                    gte: new Date(filter.startDate),
-                    lte: new Date(filter.endDate),
-                },
+        const whereClause = {};
+        if (filter.status) {
+            whereClause.status = filter.status;
+        }
+        if (filter.startDate || filter.endDate) {
+            whereClause.createdDate = {};
+            if (filter.startDate) {
+                whereClause.createdDate.gte = filter.startDate;
             }
-            : {
-                status: { contains: filter.status },
-            };
+            if (filter.endDate) {
+                whereClause.createdDate.lte = filter.endDate;
+            }
+        }
         const totalCounts = await this.prisma.order.count({
-            where: {
-                ...filterValue,
-            },
+            where: whereClause,
         });
         const priceList = await this.prisma.order.findMany({
-            where: {
-                ...filterValue,
-            },
+            where: whereClause,
             select: {
                 orderItems: {
                     select: {
@@ -216,9 +214,7 @@ let PrismaOrderRepository = class PrismaOrderRepository {
             return previous + orderTotal;
         }, 0);
         const products = await this.prisma.order.findMany({
-            where: {
-                ...filterValue,
-            },
+            where: whereClause,
             take: filter.take,
             skip: filter.skip,
             include: {
