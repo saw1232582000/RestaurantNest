@@ -81,10 +81,25 @@ let DailyBuyingController = class DailyBuyingController {
         return ApiResponseSchema_1.CoreApiResponseSchema.success(await this.getDailyBuyingListUsecase.execute());
     }
     async getAllByFilter(params) {
+        let filterDate = undefined;
+        if (params.date) {
+            if (/^\d{4}-\d{2}-\d{2}$/.test(params.date)) {
+                filterDate = new Date(params.date);
+                filterDate.setHours(0, 0, 0, 0);
+            }
+            else {
+                console.warn(`Invalid date format received: ${params.date}. Expected YYYY-MM-DD.`);
+            }
+        }
+        else {
+            filterDate = new Date();
+            filterDate.setHours(0, 0, 0, 0);
+        }
         const filter = {
             particular: params.particular || '',
             take: parseInt(params?.take?.toString() || '10'),
             skip: parseInt(params?.skip?.toString() || '0'),
+            date: filterDate,
         };
         return ApiResponseSchema_1.CoreApiResponseSchema.success(await this.getDailyBuyingListWithFilter.execute(filter));
     }
@@ -152,7 +167,6 @@ __decorate([
 __decorate([
     (0, swagger_1.ApiBearerAuth)(),
     (0, common_1.UseGuards)(jwt_guard_1.JwtGuard),
-    (0, swagger_1.ApiQuery)({ type: DailyBuyingFilterSchema_1.DailyBuyingFilterSchama }),
     (0, swagger_1.ApiResponse)({ type: GetDailyBuyingListResponseSchema_1.GetDailyBuyingListResponseSchema }),
     (0, common_1.Get)('/getDailyBuyingListByName'),
     __param(0, (0, common_1.Query)()),

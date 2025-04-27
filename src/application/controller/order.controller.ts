@@ -205,9 +205,66 @@ export class OrderController {
     params: OrderFilterSchama,
     @Req() req,
   ) {
+    let filterStartDate: Date | undefined = undefined;
+    let filterEndDate: Date | undefined = undefined;
+
+    // Helper function to parse date strings
+    const parseDate = (dateString: string): Date | undefined => {
+      if (/^\d{4}-\d{2}-\d{2}$/.test(dateString)) {
+        const date = new Date(dateString);
+        date.setHours(0, 0, 0, 0); // Set to start of the day
+        return date;
+      } else {
+        console.warn(
+          `Invalid date format received: ${dateString}. Expected YYYY-MM-DD. Ignoring.`,
+        );
+        return undefined;
+      }
+    };
+
+    if (params.startDate) {
+      filterStartDate = parseDate(params.startDate);
+    }
+    if (params.endDate) {
+      filterEndDate = parseDate(params.endDate);
+    }
+
+    // Defaulting logic
+    if (!filterStartDate && !filterEndDate) {
+      // Neither provided: return all dates (no date filter applied)
+      // Previously was defaulting to current day, now we'll leave both undefined
+      filterStartDate = undefined;
+      filterEndDate = undefined;
+    } else if (filterStartDate && !filterEndDate) {
+      // Only start date provided: default end date to end of start date
+      filterEndDate = new Date(filterStartDate);
+      filterEndDate.setHours(23, 59, 59, 999);
+    } else if (!filterStartDate && filterEndDate) {
+      // Only end date provided: default start date to start of end date
+      filterStartDate = new Date(filterEndDate);
+      filterStartDate.setHours(0, 0, 0, 0); // Ensure start is at the beginning of the day
+      // Adjust end date to ensure it's the end of the day
+      filterEndDate.setHours(23, 59, 59, 999);
+    } else if (filterStartDate && filterEndDate) {
+      // Both provided: ensure endDate is end of day
+      filterEndDate.setHours(23, 59, 59, 999);
+      // Optional: Check if startDate is after endDate and handle (e.g., swap or throw error)
+      if (filterStartDate > filterEndDate) {
+        // Option 1: Swap them
+        // [filterStartDate, filterEndDate] = [filterEndDate, filterStartDate];
+        // filterStartDate.setHours(0, 0, 0, 0); // Reset times after potential swap
+        // filterEndDate.setHours(23, 59, 59, 999);
+        // Option 2: Throw error (example)
+        // throw new BadRequestException('Start date cannot be after end date');
+        console.warn(
+          'Start date is after end date. Filtering might yield no results.',
+        );
+      }
+    }
+
     const orderFilter = new OrderFilter(
-      params.startDate,
-      params.endDate,
+      filterStartDate, // Pass Date object or undefined
+      filterEndDate, // Pass Date object or undefined
       params.take ? parseInt(params.take.toString()) : 10,
       params.skip ? parseInt(params.skip.toString()) : 0,
       params.status,

@@ -94,7 +94,45 @@ let OrderController = class OrderController {
         return ApiResponseSchema_1.CoreApiResponseSchema.success(order);
     }
     async getOrderList(params, req) {
-        const orderFilter = new OrderFilter_1.OrderFilter(params.startDate, params.endDate, params.take ? parseInt(params.take.toString()) : 10, params.skip ? parseInt(params.skip.toString()) : 0, params.status);
+        let filterStartDate = undefined;
+        let filterEndDate = undefined;
+        const parseDate = (dateString) => {
+            if (/^\d{4}-\d{2}-\d{2}$/.test(dateString)) {
+                const date = new Date(dateString);
+                date.setHours(0, 0, 0, 0);
+                return date;
+            }
+            else {
+                console.warn(`Invalid date format received: ${dateString}. Expected YYYY-MM-DD. Ignoring.`);
+                return undefined;
+            }
+        };
+        if (params.startDate) {
+            filterStartDate = parseDate(params.startDate);
+        }
+        if (params.endDate) {
+            filterEndDate = parseDate(params.endDate);
+        }
+        if (!filterStartDate && !filterEndDate) {
+            filterStartDate = undefined;
+            filterEndDate = undefined;
+        }
+        else if (filterStartDate && !filterEndDate) {
+            filterEndDate = new Date(filterStartDate);
+            filterEndDate.setHours(23, 59, 59, 999);
+        }
+        else if (!filterStartDate && filterEndDate) {
+            filterStartDate = new Date(filterEndDate);
+            filterStartDate.setHours(0, 0, 0, 0);
+            filterEndDate.setHours(23, 59, 59, 999);
+        }
+        else if (filterStartDate && filterEndDate) {
+            filterEndDate.setHours(23, 59, 59, 999);
+            if (filterStartDate > filterEndDate) {
+                console.warn('Start date is after end date. Filtering might yield no results.');
+            }
+        }
+        const orderFilter = new OrderFilter_1.OrderFilter(filterStartDate, filterEndDate, params.take ? parseInt(params.take.toString()) : 10, params.skip ? parseInt(params.skip.toString()) : 0, params.status);
         const orderList = await this.getOrderListUseCase.execute(orderFilter);
         return ApiResponseSchema_1.CoreApiResponseSchema.success(orderList);
     }
