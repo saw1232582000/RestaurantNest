@@ -37,7 +37,7 @@ export class CreateManyDailyBuyingUseCase
     @Inject() private readonly DailyBuyingRepository: IDailyBuyingRepository,
   ) {}
   public async execute(data?: CreateManyDailyBuyingDto): Promise<any> {
-    const newDailyBuying = data.dailyBuyings.map((db) => {
+    const newDailyBuying = data.DailyBuyings.map((db) => {
       return new DailyBuyingEntity(
         db?.Id,
         db?.particular,

@@ -1,6 +1,14 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { BaseResponseSchema } from '../../common/BaseResponseSchema';
-import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import {
+  IsNotEmpty,
+  IsNumber,
+  IsString,
+  IsArray,
+  ValidateNested,
+  ArrayMinSize,
+} from 'class-validator';
+import { Type } from 'class-transformer';
 
 class DailyBuying {
   @ApiProperty()
@@ -30,6 +38,13 @@ class DailyBuying {
 }
 
 export class CreateManyDailyBuyingSchema {
-  @ApiProperty({ type: [DailyBuying] })
+  @ApiProperty({
+    type: [DailyBuying],
+    description: 'Array of daily buying items',
+  })
+  @IsArray()
+  @ArrayMinSize(1)
+  @ValidateNested({ each: true })
+  @Type(() => DailyBuying)
   DailyBuyings: DailyBuying[];
 }

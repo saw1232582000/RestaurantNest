@@ -38,7 +38,7 @@ let CreateManyDailyBuyingUseCase = class CreateManyDailyBuyingUseCase {
         this.DailyBuyingRepository = DailyBuyingRepository;
     }
     async execute(data) {
-        const newDailyBuying = data.dailyBuyings.map((db) => {
+        const newDailyBuying = data.DailyBuyings.map((db) => {
             return new DailyBuying_1.DailyBuyingEntity(db?.Id, db?.particular, db?.unit, db?.price, db?.quantity, db?.Amount, db?.createdDate, db?.updatedDate);
         });
         return await this.DailyBuyingRepository.createMany(newDailyBuying);

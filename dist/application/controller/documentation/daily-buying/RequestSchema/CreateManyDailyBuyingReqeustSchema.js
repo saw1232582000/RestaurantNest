@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.CreateManyDailyBuyingSchema = void 0;
 const swagger_1 = require("@nestjs/swagger");
 const class_validator_1 = require("class-validator");
+const class_transformer_1 = require("class-transformer");
 class DailyBuying {
 }
 __decorate([
@@ -48,7 +49,14 @@ class CreateManyDailyBuyingSchema {
 }
 exports.CreateManyDailyBuyingSchema = CreateManyDailyBuyingSchema;
 __decorate([
-    (0, swagger_1.ApiProperty)({ type: [DailyBuying] }),
+    (0, swagger_1.ApiProperty)({
+        type: [DailyBuying],
+        description: 'Array of daily buying items',
+    }),
+    (0, class_validator_1.IsArray)(),
+    (0, class_validator_1.ArrayMinSize)(1),
+    (0, class_validator_1.ValidateNested)({ each: true }),
+    (0, class_transformer_1.Type)(() => DailyBuying),
     __metadata("design:type", Array)
 ], CreateManyDailyBuyingSchema.prototype, "DailyBuyings", void 0);
 //# sourceMappingURL=CreateManyDailyBuyingReqeustSchema.js.map

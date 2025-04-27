@@ -13,6 +13,7 @@ import {
   UploadedFile,
   UseGuards,
   UseInterceptors,
+  ValidationPipe,
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
@@ -93,14 +94,22 @@ export class DailyBuyingController {
   @ApiResponse({ type: CreateDailyBuyingResponseSchema })
   @Post('/createMany')
   public async createMany(
-    @Body() dailyBuyings: CreateManyDailyBuyingSchema,
+    @Body(
+      new ValidationPipe({
+        whitelist: true,
+        forbidNonWhitelisted: false, // Allow extra properties
+        transform: true,
+        transformOptions: { enableImplicitConversion: true },
+      }),
+    )
+    dailyBuyings: CreateManyDailyBuyingSchema,
     @Req() req,
   ) {
     // this.createDailyBuyingUseCase = new CreateDailyBuyingUseCase(
     //   new PrismaDailyBuyingRepository(new PrismaClient()),
     // );
     const createManyDailyBuyingDto = new CreateManyDailyBuyingDto();
-    createManyDailyBuyingDto.dailyBuyings = dailyBuyings.DailyBuyings.map(
+    createManyDailyBuyingDto.DailyBuyings = dailyBuyings.DailyBuyings.map(
       (dailyBuying) => {
         const createDailyBuyingDto = new CreateDailyBuyingDto();
         createDailyBuyingDto.particular = dailyBuying.particular;

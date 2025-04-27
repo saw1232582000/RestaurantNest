@@ -53,7 +53,7 @@ let DailyBuyingController = class DailyBuyingController {
     }
     async createMany(dailyBuyings, req) {
         const createManyDailyBuyingDto = new CreateManyDailyBuyingDto_1.CreateManyDailyBuyingDto();
-        createManyDailyBuyingDto.dailyBuyings = dailyBuyings.DailyBuyings.map((dailyBuying) => {
+        createManyDailyBuyingDto.DailyBuyings = dailyBuyings.DailyBuyings.map((dailyBuying) => {
             const createDailyBuyingDto = new CreateDailyBuyingDto_1.CreateDailyBuyingDto();
             createDailyBuyingDto.particular = dailyBuying.particular;
             createDailyBuyingDto.unit = dailyBuying.unit;
@@ -123,7 +123,12 @@ __decorate([
     (0, swagger_1.ApiBody)({ type: CreateManyDailyBuyingReqeustSchema_1.CreateManyDailyBuyingSchema }),
     (0, swagger_1.ApiResponse)({ type: CreateDailyBuyingResponseSchema_1.CreateDailyBuyingResponseSchema }),
     (0, common_1.Post)('/createMany'),
-    __param(0, (0, common_1.Body)()),
+    __param(0, (0, common_1.Body)(new common_1.ValidationPipe({
+        whitelist: true,
+        forbidNonWhitelisted: false,
+        transform: true,
+        transformOptions: { enableImplicitConversion: true },
+    }))),
     __param(1, (0, common_1.Req)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [CreateManyDailyBuyingReqeustSchema_1.CreateManyDailyBuyingSchema, Object]),
