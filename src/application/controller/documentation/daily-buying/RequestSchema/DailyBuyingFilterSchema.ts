@@ -7,4 +7,12 @@ export class DailyBuyingFilterSchama extends BaseFilterSchema {
   @IsOptional()
   @IsString()
   particular?: string;
+
+  @ApiPropertyOptional({
+    description: 'Filter by date (YYYY-MM-DD)',
+    example: '2024-07-28',
+  })
+  @IsOptional()
+  @IsString() // Validate as string initially, parse in controller
+  date?: string;
 }

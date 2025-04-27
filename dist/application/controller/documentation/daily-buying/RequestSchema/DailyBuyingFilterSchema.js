@@ -22,4 +22,13 @@ __decorate([
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], DailyBuyingFilterSchama.prototype, "particular", void 0);
+__decorate([
+    (0, swagger_1.ApiPropertyOptional)({
+        description: 'Filter by date (YYYY-MM-DD)',
+        example: '2024-07-28',
+    }),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], DailyBuyingFilterSchama.prototype, "date", void 0);
 //# sourceMappingURL=DailyBuyingFilterSchema.js.map
